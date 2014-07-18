@@ -1,0 +1,28 @@
+<div class="field form-group">
+	<%= f.label field.name, :class => "col-sm-2 control-label" %>
+</div>
+
+<div class="field form-group">
+    <div class="col-sm-2">
+      <%= link_to_add_fields "Add a recipient", f, :contacts %>
+    </div>
+	<div class="col-sm-10" id="field_fields">
+		<%#= raise @dynamic_form_entry.contacts.inspect %>
+		<% if @dynamic_form_entry.contacts.any? %>
+
+			<% @dynamic_form_entry.contacts.each do |contact| %>
+				<% id = SecureRandom.random_number(1000000) %>
+				<% contact = Contact.new(contact.attributes.slice(*%w[first_name company email phone contact_type])) %>
+				
+			    <%= fields_for "dynamic_form_entry[contacts_attributes][#{id}]", contact do |builder| %>
+			    	<%= render 'contacts/contact_fields', f: builder %>
+			    <% end %>
+			<% end %>
+		<% else %>
+			<% id = SecureRandom.random_number(1000000) %>
+		    <%= fields_for "dynamic_form_entry[contacts_attributes][#{id}]", Contact.new do |builder| %>
+		    	<%= render 'contacts/contact_fields', f: builder %>
+		    <% end %>
+	    <% end %>
+	</div>
+</div>

@@ -1,0 +1,37 @@
+<fieldset class="row">
+	<div class="col-sm-1">
+		<h3 style="
+		    background: #f1f1f1;
+		    border-radius: 50%;
+		    width: 40px;
+		    height: 40px;
+		    text-align: center;
+		    padding-top: 7px;
+		    margin: 0;
+		    cursor: move;">1</h3>
+		<%= f.hidden_field :field_order, :class => "field_order" %>
+	</div>
+	<div class="col-sm-2">
+		<%= f.select :field_type, %w[text_field text_area large_header medium_header small_header check_box file_upload options_select description contacts], {:include_blank => 'Select a field', disabled: ''}, {:class => "field_type form-control"}  %>
+	</div>
+	<div class="col-sm-3 field-popover">
+		<%= f.text_field :name, placeholder: "Name of field", :class => "form-control"  %>
+	</div>
+	<div class="options_select">
+		<div class="options_field col-sm-3">
+			<%= f.text_field :content_meta, placeholder: "Option 1, Option 2, Option 3", :class => "form-control"  %>
+		</div>
+	</div>
+	<div class="col-sm-1">
+		<div class="checkbox">
+			<label>
+			<%= f.check_box :required %>Required?
+			</label>
+		</div>
+	</div>
+
+	<div class="col-sm-2" style="float:right; padding-left:25px;">
+		<%= f.hidden_field :_destroy %>
+		<%= link_to "Remove Field", '#', class: "remove_fields btn btn-danger" %>
+	</div>
+</fieldset>

@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  dynamic_form_type_id: 1
+  field_order: 1
+  name: MyString
+  field_type: MyString
+  required: false
+  content_meta: MyText
+
+two:
+  dynamic_form_type_id: 1
+  field_order: 1
+  name: MyString
+  field_type: MyString
+  required: false
+  content_meta: MyText

@@ -1,0 +1,32 @@
+
+
+<h1 class="col-xs-12 col-sm-6 col-md-8">
+	<%= @dynamic_form_type.name %>
+</h1>
+<h3 class="col-xs-12 col-sm-6 col-md-8">
+	<%= @dynamic_form_type.description %>
+</h3>
+
+
+  
+<table class="table table-striped table-hover">
+  <thead>
+    <tr>
+      <th>Field Type</th>
+      <th>Field name</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @form_fields.each do |fields| %>
+      <tr>
+        <td><%= fields.field_type %></td>
+      	<td><%= fields.name %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to "New #{@dynamic_form_type.name}", new_dynamic_form_entry_path(:dynamic_form_type_id => params[:id]),:class => "btn btn-success" %>
+<!-- link_to "Edit #{@dynamic_form_type.name}", edit_dynamic_form_type_path(@dynamic_form_type), :class => "btn btn-info" %>  -->
+
