@@ -7,6 +7,10 @@ gemspec
 
 gem "jquery-rails"
 gem 'jquery-ui-rails'
+gem "sass-rails", '~> 4.0.2'
+gem 'bootstrap-sass', '~> 3.0.3.0'
+gem 'less-rails-bootstrap'
+gem "therubyracer"
 
 # Declare any dependencies that are still in development here instead of in
 # your gemspec. These might include edge Rails or gems from your path or

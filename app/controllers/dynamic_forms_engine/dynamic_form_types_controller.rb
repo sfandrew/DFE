@@ -45,7 +45,6 @@ module DynamicFormsEngine
         end
       end
     end
-    def
 
     # PATCH/PUT /dynamic_form_types/1
     # PATCH/PUT /dynamic_form_types/1.json
