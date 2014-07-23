@@ -79,9 +79,10 @@ module DynamicFormsEngine
     # DELETE /dynamic_form_entries/1
     # DELETE /dynamic_form_entries/1.json
     def destroy
+      @dynamic_form_type = @dynamic_form_entry.dynamic_form_type
       @dynamic_form_entry.destroy
       respond_to do |format|
-        format.html { redirect_to dynamic_form_entries_url }
+        format.html { redirect_to form_entries_path(@dynamic_form_type) }
         format.json { head :no_content }
       end
     end
