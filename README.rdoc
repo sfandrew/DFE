@@ -1,3 +1,13 @@
 = DynamicFormsEngine
 
-This project rocks and uses MIT-LICENSE.
+#Installation
+
+1. In your Gemfile:
+> gem 'dynamic_forms_engine', path: "path/to/gem"
+2. `bundle install`
+3. Install migrations:
+> rake dynamic_forms_engine:install:migrations
+4. `rake db:migrate`
+5. in `config/routes.rb`: 
+> mount DynamicFormsEngine::Engine => "/dynamic_forms_engine"
+
