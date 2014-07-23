@@ -2,12 +2,12 @@
 
 #Installation
 
-1. In your Gemfile:
-> gem 'dynamic_forms_engine', path: "path/to/gem"
-2. `bundle install`
-3. Install migrations:
-> rake dynamic_forms_engine:install:migrations
-4. `rake db:migrate`
-5. in `config/routes.rb`: 
-> mount DynamicFormsEngine::Engine => "/dynamic_forms_engine"
+- In your Gemfile: gem 'dynamic_forms_engine', path: "path/to/gem"
+- bundle install
+- Install migrations: rake dynamic_forms_engine:install:migrations
+- rake db:migrate
+- add has_many :dynamic_form_entries, class_name: "DynamicFormsEngine::DynamicFormEntry" to User model
+- in config/routes.rb: mount DynamicFormsEngine::Engine => "/dynamic_forms_engine"
+- prepend any link paths in application layouts with "main_app.", e.g. "main_app.new_foo_path" instead of "new_foo_path"
 
+To extend controllers or models, put decorators in i.e. app/decorators/controllers/dynamic_forms_engine/foobars_controller_decorator.rb where it will be included automatically by the engine.
