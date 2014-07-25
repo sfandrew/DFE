@@ -1,5 +1,21 @@
 module DynamicFormsEngine
   module ApplicationHelper
+
+  	def sign_form_field_tag(name, data)
+      return hidden_field_tag(name,"", :hidden => true)+content_tag(:div,"",:id => "#{name}_sig")+
+		      content_tag(:script,("jQuery(document).ready(function() {
+		      		    var x = jQuery('##{name}_sig');
+		      		    x.jSignature();" + 
+		      		    (!data.blank?  ? ("x.jSignature('setData', '#{data}', 'base30');" ) : "\n") + 
+		      		    "jQuery('##{name}').val(x.jSignature('getData', 'base30'));
+		      		    x.change(function(){
+		      		      jQuery('##{name}').val(x.jSignature('getData', 'base30'));
+		      		    });
+		      		    
+		      		  });").html_safe)
+    end
+
+  	
   	# Adds n-th number of contacts
 	def link_to_add_fields(name, f, association)
 		

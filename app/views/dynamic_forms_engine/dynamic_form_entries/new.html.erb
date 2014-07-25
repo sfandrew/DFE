@@ -1,13 +1,12 @@
-<h1>New <%= @dynamic_form_entry.dynamic_form_type.name %></h1>
+<div align="center">
+	<h1 id="main-header"><%= @dynamic_form_entry.dynamic_form_type.name %></h1>
+</div>
 <%= render 'form' %>
 
 <script type="text/javascript">
-$('input[type="checkbox"]').click(function() {
-    if (this.checked) {
-    	$(this).parent().parent().find('label.checkbox-label').css('text-decoration','line-through');
-    }
-    else{
-    	$(this).parent().parent().find('label.checkbox-label').css('text-decoration','none');
-    }
-});
+  $(document).ready(function(){
+    $('.datepicker input').datepicker({
+    });
+  });
 </script>
+

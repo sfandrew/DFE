@@ -2,6 +2,7 @@ PATH
   remote: .
   specs:
     dynamic_forms_engine (0.0.1)
+      bootstrap-datepicker-rails
       bootstrap-sass (~> 3.0.3.0)
       coffee-rails
       less-rails-bootstrap
@@ -37,6 +38,8 @@ GEM
       thread_safe (~> 0.1)
       tzinfo (~> 0.3.37)
     arel (4.0.2)
+    bootstrap-datepicker-rails (1.1.1.11)
+      railties (>= 3.0)
     bootstrap-sass (3.0.3.0)
       sass (~> 3.2)
     builder (3.1.4)
@@ -121,6 +124,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  bootstrap-datepicker-rails
   bootstrap-sass (~> 3.0.3.0)
   dynamic_forms_engine!
   jquery-rails

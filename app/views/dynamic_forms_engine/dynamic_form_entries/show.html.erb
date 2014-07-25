@@ -1,6 +1,6 @@
 
 <div class="row">
-	<h1 class="col-xs-12 col-sm-6 col-md-8"><%= @dynamic_form_entry.dynamic_form_type.name %> </h1>
+	<h1 class="col-xs-12 col-sm-6 col-md-8" id="main-header"><%= @dynamic_form_entry.dynamic_form_type.name %> </h1>
 	<div class="col-xs-6 col-md-4">
 		<%= link_to("New #{@dynamic_form_entry.dynamic_form_type.name}", 
 					new_form_entry_path(@dynamic_form_entry.dynamic_form_type), 
@@ -12,18 +12,81 @@
 	</div>
 
 </div>
-<div class="well col-lg-12">
+<div class="well col-lg-10">
 	<% @dynamic_form_entry.each_field_with_value do |field, value| %>
 		<div class="row row-table">
 			<label class="col-sm-2 control-label ">
 				<%= field.name %>:
 			</label>
-			<div class="col-sm-10">
-				<%= field.attachment? ? link_to("Download", value.filename.url) : value %>
-			</div>
+			<% if field.field_type == "phone_validation" %>
+				<div class="col-sm-10">
+					<%= number_to_phone(value) %>
+				</div>
+			<% elsif field.field_type == "currency" %>
+				<div class="col-sm-10">
+					<%= number_to_currency(value) %>
+				</div>
+			<% elsif field.field_type == "agreement" %>
+				<div class="col-sm-10">
+					<p>Approved</p>
+				</div>
+			<% else %>
+				<div class="col-sm-10">
+					<%= field.attachment? ? link_to("Download", value.filename.url) : value %>
+				</div>
+			<% end %>
 		</div>
 	<% end %>
 
-</div>
+	<% unless @contacts.empty? %>
+		<% @contacts.each do |contact| %>
+			<div class="row row-table">
+				<label class="col-sm-1 control-label">Contact Type: </label>
+				<div class="col-lg-1">
+					<%= contact.contact_type %>
+				</div>
+				<label class="col-md-1 control-label">First Name: </label>
+				<div class="col-sm-1">
+					<%= contact.first_name %>
+				</div>
+				<label class="col-sm-1 control-label">Company: </label>
+				<div class="col-sm-1">
+					<%= !contact.company.empty? ? contact.company : 'None' %>
+				</div>
+				<label class="col-sm-1 control-label">Email: </label>
+				<div class="col-sm-2">
+					<%= contact.email %>
+				</div>
+				<label class="col-sm-1 control-label">Phone: </label>
+				<div class="col-sm-1">
+					<%= !contact.phone.empty? ? contact.phone : 'None' %>
+				</div>
+			</div>
+		<% end %>
+	<% end %>
+	<% if @dynamic_form_entry.signature %>
+		<div class="col-lg-10">
+			<img id="signature_img" class="img-responsive" />
+			<div class="col-md-8 col-sm-offset-1">
+				<strong><em>The inspection above was inspected by <%= @current_user.email + " at " + @dynamic_form_entry.created_at.strftime('%A, %B %d %Y at %I:%M%p') %></em></strong>
+			</div>
+			<%= sign_form_field_tag(:signature, @dynamic_form_entry.signature || "") %>
+			<script type="text/javascript">
+	        	jQuery(function(){
+		            var $ = jQuery,
+		                $employee_sig_img = $('#signature_img'),
+		                $employee_sig = jQuery('#signature_sig');
+		                $employee_sig_img.attr('src', $employee_sig.jSignature('getData') );
+		                $employee_sig.remove();
+	            });
+	    	</script>
+	    </div>
+	<% end %>
 
+</div>
+<style type="text/css">
+    canvas {
+        
+    }   
+</style>
 

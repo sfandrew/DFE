@@ -11,8 +11,9 @@
 		    cursor: move;">1</h3>
 		<%= f.hidden_field :field_order, :class => "field_order" %>
 	</div>
+	
 	<div class="col-sm-2">
-		<%= f.select :field_type, %w[text_field text_area large_header medium_header small_header check_box file_upload options_select description contacts], {:include_blank => 'Select a field', disabled: ''}, {:class => "field_type form-control"}  %>
+		<%= f.select :field_type, %w[agreement calendar check_box contacts currency description email_validation file_upload large_header medium_header options_select phone_validation signature small_header text_area text_field], {:include_blank => 'Select a field', disabled: ''}, {:class => "field_type form-control"}  %>
 	</div>
 	<div class="col-sm-3 field-popover">
 		<%= f.text_field :name, placeholder: "Name of field", :class => "form-control"  %>

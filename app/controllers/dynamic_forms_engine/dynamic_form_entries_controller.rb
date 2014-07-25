@@ -19,13 +19,14 @@ module DynamicFormsEngine
     # GET /dynamic_form_entries/1
     # GET /dynamic_form_entries/1.json
     def show
-      
+      @contacts = []#Contact.where(id: Contactable.select(:contact_id).where(:contactable_type => "DynamicFormEntry",:contactable_id => params[:id]))
     end
 
     # GET /dynamic_form_entries/new
     def new
       @dynamic_form_type    = DynamicFormType.find(params[:dynamic_form_type_id])
       @dynamic_form_entry   = current_user.dynamic_form_entries.new(dynamic_form_type_id: params[:dynamic_form_type_id]) 
+
       #DynamicFormEntry.new(dynamic_form_type_id: params[:dynamic_form_type_id])
 
     end
@@ -41,23 +42,31 @@ module DynamicFormsEngine
     def create
       @dynamic_form_type  = DynamicFormType.find(params[:dynamic_form_entry][:dynamic_form_type_id])
       @dynamic_form_entry = current_user.dynamic_form_entries.new(dynamic_form_entry_params)
+      if params[:signature]
+        @dynamic_form_entry.signature = params[:signature]
+      end
       
-      @dynamic_form_entry.properties.each_pair do |property_id, property_value|
-        field = @dynamic_form_type.fields.find property_id
-        
-        if field.attachment?
-          file_attachment = Attachment.create!(attachable_id: params[:dynamic_form_entry][:dynamic_form_type_id],
-                                                attachable_type: 'DynamicFormEntry',
-                                                content_name: field.name, 
-                                                filename: property_value)
-          @dynamic_form_entry.properties[property_id] = file_attachment.id
+      # checks to see if contact exists for the current user
+      #@dynamic_form_entry.save_new_contacts(current_user)
+
+      
+      #check to see if user selected only contacts and or signature field
+      if !@dynamic_form_entry.properties.nil?
+        @dynamic_form_entry.properties.each_pair do |property_id, property_value|
+          field = @dynamic_form_type.fields.find property_id
+          
+          if field.attachment?
+            file_attachment = Attachment.create!(attachable_id: params[:dynamic_form_entry][:dynamic_form_type_id],
+                                                  attachable_type: 'DynamicFormEntry',
+                                                  content_name: field.name, 
+                                                  filename: property_value)
+            @dynamic_form_entry.properties[property_id] = file_attachment.id
+          end
         end
       end
-
       if @dynamic_form_entry.save
         redirect_to dynamic_form_entry_path(@dynamic_form_entry), notice: 'Dynamic form entry was successfully updated.' 
       else
-        autocomplete_feature
         render "new"
       end
     end
@@ -79,10 +88,9 @@ module DynamicFormsEngine
     # DELETE /dynamic_form_entries/1
     # DELETE /dynamic_form_entries/1.json
     def destroy
-      @dynamic_form_type = @dynamic_form_entry.dynamic_form_type
       @dynamic_form_entry.destroy
       respond_to do |format|
-        format.html { redirect_to form_entries_path(@dynamic_form_type) }
+        format.html { redirect_to dynamic_form_entries_url }
         format.json { head :no_content }
       end
     end
@@ -97,10 +105,9 @@ module DynamicFormsEngine
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def dynamic_form_entry_params
-      params.require(:dynamic_form_entry).permit(:dynamic_form_type_id,:contacts_attributes => [:phone, :contact_type,:user_id, :first_name, :company,:email,:uuid]).tap do |whitelisted|
+      params.require(:dynamic_form_entry).permit(:dynamic_form_type_id,:signature,:contacts_attributes => [:phone, :contact_type,:user_id, :first_name, :company,:email,:uuid]).tap do |whitelisted|
         whitelisted[:properties] = params[:dynamic_form_entry][:properties]
       end
     end
-  	
   end
 end
