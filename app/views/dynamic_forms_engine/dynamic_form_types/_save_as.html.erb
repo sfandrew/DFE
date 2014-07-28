@@ -47,10 +47,6 @@
 <% end %>
 
 
-<script type="text/javascript">
-  $('.btn-primary').tooltip();
-  $('.btn-success').tooltip();
-  </script>
 <style type="text/css">
 
 fieldset .checkbox{
@@ -59,6 +55,7 @@ fieldset .checkbox{
 fieldset .options_select {
   display: none;
 }
+
 fieldset[selection="text_field"] .options_select,{
   display:none;
 }
@@ -78,6 +75,9 @@ fieldset[selection="large_header"] .options_select,fieldset[selection="large_hea
   display: none;
 }
 fieldset[selection="options_select"] .options_select,fieldset[selection="options_select"]  {
+  display: block; 
+}
+fieldset[selection="options_select_with_other"] .options_select,fieldset[selection="options_select_with_other"]  {
   display: block; 
 }
 fieldset[selection="medium_header"] .options_select,fieldset[selection="medium_header"] .checkbox{
@@ -128,56 +128,47 @@ window.init = function() {
 
           case "large_header":
             updatePopover($container,'Give a LARGE header name');
-            // $container.find('.checkbox').hide();
-            // $container.children('.options_select').hide();
             break;
 
           case "medium_header":
           updatePopover($container,'Give a Medium size header');
-          // $container.find('.checkbox').hide();
-          // $container.children('.options_select').hide();
           break;
 
           case "small_header":
           updatePopover($container,'Give a small size header');
-          // $container.find('.checkbox').hide();
-          // $container.children('.options_select').hide();
           break;
 
           case "text_field":
-          updatePopover($container,'This give you a small text field to write in!');
-          // $container.find('.checkbox').hide();
-          // $container.children('.options_select').hide();
+          updatePopover($container,'Add a small text field');
+          break;
+
+          case "agreement":
+          updatePopover($container, 'Add a required checkbox where users must check to submit the form');
+          break;
+
+          case "signature":
+          updatePopover($container,'Add a signature field');
           break;
 
           case "text_area":
-          updatePopover($container,'This give you a large text field to write in!');
-          // $container.find('.checkbox').hide();
-          // $container.children('.options_select').hide();
+          updatePopover($container,'Add a large text field!');
           break;
 
           case "file_upload":
-          updatePopover($container,'Here you can enter a field to upload a file such as a picture!');
-          // $container.find('.checkbox').hide();
-          // $container.children('.options_select').hide();
+          updatePopover($container,'Add a field to upload a picture or PDF');
           break;
 
           case "description":
-            updatePopover($container,'Here you can enter a brief description');
+            updatePopover($container,'Add a short description field');
             $container.children("div.col-sm-3").addClass("col-md-5");
             $container.children("div.col-md-5").removeClass("col-sm-3");
-            // $container.children('.options_select').hide();
             break;
 
           case "contacts":
-            updatePopover($container,'Here you can search through your contacts and add them to this form');
-            // $container.children("div.col-sm-3").hide(".col-md-3");
-
+            updatePopover($container,'Add a contact information or search thru your saved contacts');
             break;
 
           default:
-            // $container.children('.options_select').hide();
-            // $container.find('.checkbox').show();
             updatePopover($container,'Enter Name of Field');
         }
 

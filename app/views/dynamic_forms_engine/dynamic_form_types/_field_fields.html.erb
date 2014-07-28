@@ -13,7 +13,7 @@
 	</div>
 	
 	<div class="col-sm-2">
-		<%= f.select :field_type, %w[agreement calendar check_box contacts currency description email_validation file_upload large_header medium_header options_select phone_validation signature small_header text_area text_field], {:include_blank => 'Select a field', disabled: ''}, {:class => "field_type form-control"}  %>
+		<%= f.select :field_type, %w[agreement calendar check_box contacts currency description email_validation file_upload large_header medium_header options_select options_select_with_other phone_validation signature small_header text_area text_field], {:include_blank => 'Select a field', disabled: ''}, {:class => "field_type form-control"}  %>
 	</div>
 	<div class="col-sm-3 field-popover">
 		<%= f.text_field :name, placeholder: "Name of field", :class => "form-control"  %>
