@@ -19,7 +19,7 @@ module DynamicFormsEngine
     # GET /dynamic_form_entries/1
     # GET /dynamic_form_entries/1.json
     def show
-      @contacts = []#Contact.where(id: Contactable.select(:contact_id).where(:contactable_type => "DynamicFormEntry",:contactable_id => params[:id]))
+      #@contacts = []#Contact.where(id: Contactable.select(:contact_id).where(:contactable_type => "DynamicFormEntry",:contactable_id => params[:id]))
     end
 
     # GET /dynamic_form_entries/new

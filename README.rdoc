@@ -10,4 +10,8 @@
 - in config/routes.rb: mount DynamicFormsEngine::Engine => "/dynamic_forms_engine"
 - prepend any link paths in application layouts with "main_app.", e.g. "main_app.new_foo_path" instead of "new_foo_path"
 
-To extend controllers or models, put decorators in i.e. app/decorators/controllers/dynamic_forms_engine/foobars_controller_decorator.rb where it will be included automatically by the engine.
+To extend controllers or models, put decorators in i.e. app/decorators/controllers/dynamic_forms_engine/foobars_controller_decorator.rb where it will be included automatically by the engine, e.g.: 
+# app/decorators/controllers/dynamic_forms_engine/dynamic_form_types_controller_decorator.rb
+DynamicFormsEngine::DynamicFormTypesController.class_eval do
+	<add stuff here>
+end

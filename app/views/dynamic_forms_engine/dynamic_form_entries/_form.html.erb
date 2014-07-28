@@ -14,9 +14,7 @@
       <%= f.hidden_field  :dynamic_form_type_id, :value => @dynamic_form_type.id %>
 
       <%= f.fields_for :properties, OpenStruct.new(@dynamic_form_entry.properties) do |builder| %>
-        <% @dynamic_form_entry.dynamic_form_type.fields.each do |field| %>
-          <%= render :partial => "dynamic_forms_engine/dynamic_form_entries/fields/#{field.field_type}", locals: {field: field, f: builder} %>
-        <% end %>
+        <%= render_fields(@dynamic_form_entry, builder) %>
       <% end %>
       
    
