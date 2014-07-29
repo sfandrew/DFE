@@ -18,7 +18,9 @@ module DynamicFormsEngine
       end
     end
 
-
+    def ordered_fields
+      fields.order("field_order ASC")
+    end
 
   end
 end

@@ -7,7 +7,7 @@ module DynamicFormsEngine
       return_html = ""
       form_group_exists = false
 
-      dynamic_form_entry.dynamic_form_type.fields.each do |field|
+      dynamic_form_entry.dynamic_form_type.ordered_fields.each do |field|
   
         # if one field_group already exists, end one fieldset for the start of the next one
         if field.field_type == "field_group"

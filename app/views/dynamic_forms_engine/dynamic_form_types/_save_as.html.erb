@@ -31,7 +31,7 @@
 
     <div class="col-sm-10" id="field_fields" >
       <%=raw "<em id='no_field_fields' style='width: 100%; color: red; text-align: center; padding-top: 13px;display: block;'>You need at least one field to submit this form!</em>" if @dynamic_form_type.fields.blank? %>
-      <%= f.fields_for :fields do |builder| %>
+      <%= f.fields_for :fields, @dynamic_form_type.ordered_fields do |builder| %>
         <%= render 'field_fields', f: builder %>
       <% end %>
     </div>

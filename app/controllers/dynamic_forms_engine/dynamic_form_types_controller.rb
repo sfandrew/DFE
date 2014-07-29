@@ -14,7 +14,7 @@ module DynamicFormsEngine
     # GET /dynamic_form_types/1
     # GET /dynamic_form_types/1.json
     def show
-      @form_fields = DynamicFormField.where(:dynamic_form_type_id => params[:id])
+      @form_fields = @dynamic_form_type.ordered_fields
     end
 
     # GET /dynamic_form_types/new
