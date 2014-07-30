@@ -8,6 +8,7 @@ module DynamicFormsEngine
     accepts_nested_attributes_for :fields, allow_destroy: true
 
     before_create :add_other_option
+    before_update :other_option_validate
 
     def add_other_option
       self.fields.each do |other_field|
@@ -22,5 +23,16 @@ module DynamicFormsEngine
       fields.order("field_order ASC")
     end
 
+    #checks to see if user deleted other option 
+    def other_option_validate
+      self.fields.each do |check_field|
+        if check_field.field_type == "options_select_with_other"
+          unless check_field.content_meta =~ /(,Other)/
+            check_field.content_meta << ",Other"
+          end
+        end
+      end
+    end
+    
   end
 end

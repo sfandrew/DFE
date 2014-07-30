@@ -56,6 +56,9 @@ module DynamicFormsEngine
         end
       end
     end
+    
+
+    end
 
     def save_new_contacts(current_user)
       if self.contacts
@@ -86,5 +89,5 @@ module DynamicFormsEngine
       end
     end
     
-  end
+  
 end

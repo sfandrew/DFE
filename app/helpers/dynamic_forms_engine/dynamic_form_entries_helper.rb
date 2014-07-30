@@ -6,7 +6,7 @@ module DynamicFormsEngine
     def render_fields(dynamic_form_entry, builder)
       return_html = ""
       form_group_exists = false
-
+      
       dynamic_form_entry.dynamic_form_type.ordered_fields.each do |field|
   
         # if one field_group already exists, end one fieldset for the start of the next one
@@ -17,6 +17,7 @@ module DynamicFormsEngine
           form_group_exists = true
           return_html += "<fieldset><legend>#{field.name.humanize}</legend>"
         end
+        
         
         return_html += render_individual_field(field, builder)
       end
