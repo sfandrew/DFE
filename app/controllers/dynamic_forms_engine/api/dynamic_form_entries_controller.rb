@@ -5,10 +5,17 @@ module DynamicFormsEngine
 
   	def get_many
   		if params[:form_type_id]
-  			render json: DynamicFormType.find(params[:form_type_id].to_i).entries.to_json
+  			render json: format_json_response(DynamicFormType.find(params[:form_type_id].to_i).entries.includes(:dynamic_form_type))
+  		else
+  			render json: format_json_response(nil)
   		end
-  	else
-  		render json: []
+  	end
+
+
+  	private
+
+  	def format_json_response(data, meta=nil)
+  		{data: data, meta: (meta || {code: 200})}.to_json
   	end
 
   end
