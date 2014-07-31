@@ -6,22 +6,13 @@ module DynamicFormsEngine
     # before_create :save_signature
 
     serialize :properties, Hash
-    # validate :validate_properties
+
     validate :validate_email_phone_currency
 
-    before_create :other_option
+    before_create :format_properties
 
-    def validate_properties
-      # Rails.logger.warn "\n\nproperties hash: #{properties}\n\n"
-      dynamic_form_type.fields.each do |field|
-        # Rails.logger.warn "\n\nfield: #{field.name} properties[field]: #{properties[field.name]}\n\n"
-        if field.required? && properties[field.name].blank?
-
-          errors.add field.name, "must not be blank"
-        end
-      end
-    end
    # http://stackoverflow.com/questions/8634139/phone-validation-regex
+   # This should be run before format_properties, so it relies on original properties format
     def validate_email_phone_currency
       if dynamic_form_type.fields
         dynamic_form_type.fields.each do |field|
@@ -45,20 +36,6 @@ module DynamicFormsEngine
         end
       end
     end
-    
-    #appends string 'other' if other option was selected
-    def other_option
-      if dynamic_form_type.fields
-        dynamic_form_type.fields.each do |field|
-          if field.field_type == "options_select_with_other" && !field.content_meta.include?(self.properties[field.id.to_s])
-            self.properties[field.id.to_s].insert(0,'Other: ')
-          end
-        end
-      end
-    end
-    
-
-    end
 
     def save_new_contacts(current_user)
       if self.contacts
@@ -76,17 +53,37 @@ module DynamicFormsEngine
       end
     end
 
+
     def each_field_with_value
-      properties.each_pair do |id, value|
-        field = self.dynamic_form_type.fields.find(id)
-        if field.attachment?
+      properties.each do |index, field|
+        if field[:type].to_s == 'file_upload'
           attachment_id = value
           attachment = Attachment.find(attachment_id)
-          yield field, attachment
+          yield index, attachment
         else
-          yield field, value
+          yield index, field
         end
       end
+    end
+
+
+    # Properties are initially saved as {"<field_id>" => "<field_value>"} 
+    # However, relying on the original field object is bad because it might change
+    #  This function transmutes the properties to a form that doesn't rely on the original field object
+    # Should be run as before_create filter
+    def format_properties
+      old_properties = self.properties
+      new_properties = {}
+      old_properties.each_with_index do |(field_id, field_value), index|
+        field = DynamicFormField.find(field_id.to_i)
+        
+        # Prepend "Other: " to options_select_with_other field types
+        if field.field_type == "options_select_with_other" && !field.content_meta.include?(field_value)
+          field_value = "Other: " + field_value
+        end
+        new_properties[index] = {name: field.name, type: field.field_type, value: field_value}
+      end
+      self.properties = new_properties
     end
     
   
