@@ -58,8 +58,6 @@ module DynamicFormsEngine
     end
     
 
-    end
-
     def save_new_contacts(current_user)
       if self.contacts
         current_user_contact_emails = current_user.contacts.pluck(:email)
@@ -89,5 +87,5 @@ module DynamicFormsEngine
       end
     end
     
-  
+  end
 end
