@@ -13,26 +13,26 @@
 
 </div>
 <div class="well col-lg-10">
-	<% @dynamic_form_entry.each_field_with_value do |field, value| %>
+	<% @dynamic_form_entry.each_field_with_value do |index, field| %>
 		<div class="row row-table">
 			<label class="col-sm-2 control-label ">
-				<%= field.name %>:
+				<%= field[:name] %>:
 			</label>
-			<% if field.field_type == "phone_validation" %>
+			<% if field[:type] == "phone_validation" %>
 				<div class="col-sm-10">
-					<%= number_to_phone(value) %>
+					<%= number_to_phone(field[:value]) %>
 				</div>
-			<% elsif field.field_type == "currency" %>
+			<% elsif field[:type] == "currency" %>
 				<div class="col-sm-10">
-					<%= number_to_currency(value) %>
+					<%= number_to_currency(field[:value]) %>
 				</div>
-			<% elsif field.field_type == "agreement" %>
+			<% elsif field[:type] == "agreement" %>
 				<div class="col-sm-10">
 					<p>Approved</p>
 				</div>
 			<% else %>
 				<div class="col-sm-10">
-					<%= field.attachment? ? link_to("Download", value.filename.url) : value %>
+					<%= field[:type].to_s == 'file_upload' ? link_to("Download", field[:value].filename.url) : field[:value] %>
 				</div>
 			<% end %>
 		</div>
