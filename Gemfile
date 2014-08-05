@@ -12,6 +12,7 @@ gem 'bootstrap-sass', '~> 3.0.3.0'
 gem 'less-rails-bootstrap'
 gem "therubyracer"
 gem 'bootstrap-datepicker-rails'
+gem 'ransack'
 
 # Declare any dependencies that are still in development here instead of in
 # your gemspec. These might include edge Rails or gems from your path or

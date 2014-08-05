@@ -8,6 +8,9 @@ module DynamicFormsEngine
     # GET /dynamic_form_entries.json
     def index
       @dynamic_form_entries = current_user.dynamic_form_entries.all #DynamicFormEntry.all
+      @entries_name = @dynamic_form_entries.map { |form_entry| [form_entry.dynamic_form_type.name, form_entry.id] }
+      # @search = current_user.dynamic_form_entries.all(params[:q])
+      # @dynamic_form_entries = @search.result
     end
 
     def form_entries

@@ -97,4 +97,24 @@ module DynamicFormsEngine
       self.properties = new_properties
     end
   end
+
+  def search(terms)
+    puts "\n\n\n\ Is this working? \n\n\n"
+    search_query = DynamicFormsEngine::DynamicFormEntry.includes(:dynamic_form_type).where(:user_id => self.user.id)
+
+    if(!terms[:terms].blank?)
+      search_query = DynamicFormsEngine::DynamicFormEntry.includes(:dynamic_form_type).where(:user_id => self.user.id).order("#{terms[:order_by]} #{terms[:order]}")
+    end
+
+    if !terms[:name].blank?
+      search_query = search_query.where(:dynamic_form_type_id => terms[:name])
+    end
+
+    if !terms[:properties].blank?
+      search_query = search_query.where("Properties like ?", terms[:property])
+    end
+
+    
+  end
+
 end
