@@ -121,9 +121,31 @@ window.init = function() {
                   });
             break;
 
-          case "large_header":
-            updatePopover($container,'Give a LARGE header name');
+          case "options_select_with_other":
+            updatePopover($container,'Same as options select but with other option and enter option');
+            $('.options_field').popver({
+                      placement: 'top',
+                      trigger: 'hover',
+                      title: 'Option field with other',
+                      content: 'Enter each option seperated by comma'
+                  });
             break;
+
+          case "phone_validation":
+          updatePopover($container,'Validate a phone number');
+          break;
+
+          case "signature":
+          updatePopover($container,'Add a signature field');
+          break;
+
+          case "field_group":
+          updatePopover($container,'Add a fieldset group');
+          break;
+
+          case "large_header":
+          updatePopover($container,'Give a LARGE header name');
+          break;
 
           case "medium_header":
           updatePopover($container,'Give a Medium size header');
@@ -138,11 +160,27 @@ window.init = function() {
           break;
 
           case "agreement":
-          updatePopover($container, 'Add a required checkbox where users must check to submit the form');
+          updatePopover($container, 'Add a required agreement where users must check to submit the form');
           break;
 
           case "signature":
           updatePopover($container,'Add a signature field');
+          break;
+
+          case "calendar":
+          updatePopover($container,'Add a calendar field');
+          break;
+
+          case "currency":
+          updatePopover($container, 'Add a currency field');
+          break;
+
+          case "email_validation":
+          updatePopover($container, 'Validate an email');
+          break;
+
+          case "check_box":
+          updatePopover($container, 'Add a checbox field');
           break;
 
           case "text_area":

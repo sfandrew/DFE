@@ -1,4 +1,10 @@
-
+<h1 id="main-header">
+  <% if @dynamic_form_type %>
+    <%= pluralize(@dynamic_form_entries.size, @dynamic_form_type.name) %>
+  <% else %>
+    <%= pluralize(@dynamic_form_entries.size, 'Entry') %>
+  <% end %>
+</h1>
 
 <fieldset>
   <%= form_for(:search, :url => dynamic_form_entries_path, :html => { :method => :get }) do  %>
@@ -33,6 +39,7 @@
   <thead>
     <tr>
       <th>Type</th>
+      <th>Properties</th>
       <th>Submitted</th>
       <th></th>
       <th></th>
@@ -45,7 +52,16 @@
     <% if @dynamic_form_entries %>
       <% @dynamic_form_entries.each do |dynamic_form_entry| %>
         <tr>
-          <td><%= dynamic_form_entry.dynamic_form_type.name if !dynamic_form_entry.dynamic_form_type.blank? %></td>
+          <td><%= dynamic_form_entry.dynamic_form_type.name %></td>
+          <td class="form-properties">
+            <% if !dynamic_form_entry.properties.empty? %>
+              <% dynamic_form_entry.properties.first(5).each do  |key,value| %>
+                <li><%= value[:type] %> field</li>
+              <% end %>
+            <% else %>
+              No Properties
+            <% end %>
+          </td>
           <td><%= dynamic_form_entry.created_at.strftime(" %l:%M %p %b. %d, %Y") %></td>
           <td><%= link_to 'Show', dynamic_form_entry, :class => 'btn btn-info' %></td>
           <!-- td><%= link_to 'Edit', edit_dynamic_form_entry_path(dynamic_form_entry) %></td -->

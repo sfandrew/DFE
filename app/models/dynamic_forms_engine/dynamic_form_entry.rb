@@ -99,11 +99,6 @@ module DynamicFormsEngine
       self.properties = new_properties
     end
 
-
-    def foo
-      puts "Is this working?"
-    end
-
     def self.search(terms)
       puts "\n\n\n\ Is this working? \n\n\n"
       search_query = DynamicFormsEngine::DynamicFormEntry.includes(:dynamic_form_type)
