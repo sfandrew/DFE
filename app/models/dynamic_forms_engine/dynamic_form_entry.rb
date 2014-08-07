@@ -7,10 +7,21 @@ module DynamicFormsEngine
 
     serialize :properties, Hash
 
-    validate :validate_email_phone_currency
+    validate :validate_email_phone_currency, :validate_properties
 
     before_create :format_properties
 
+    def validate_properties
+
+    # Rails.logger.warn "\n\nproperties hash: #{properties}\n\n"
+    dynamic_form_type.fields.each do |field|
+      # Rails.logger.warn "\n\nfield: #{field.name} properties[field]: #{properties[field.name]}\n\n"
+      if field.required? && properties[field.id.to_s].blank?
+        
+        errors.add field.name, "must not be blank"
+      end
+    end
+  end
 
 
    # http://stackoverflow.com/questions/8634139/phone-validation-regex

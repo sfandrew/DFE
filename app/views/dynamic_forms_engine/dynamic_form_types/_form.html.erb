@@ -62,10 +62,16 @@ fieldset[selection="text_field"] .checkbox,fieldset[selection="text_area"] .chec
 }
 fieldset[selection="options_select"] .options_select,fieldset[selection="options_select"] .checkbox {
   display: block; 
+}*/
+fieldset[selection="email_validation"] .checkbox,fieldset[selection="phone_validation"] .checkbox {
+  display: block; 
+}
+fieldset[selection="currency"] .checkbox,fieldset[selection="calendar"] .checkbox {
+  display: block; 
 }
 fieldset[selection="text_area"] .checkbox,fieldset[selection="text_field"] .checkbox {
   display: block; 
-}*/
+}
 fieldset[selection="large_header"] .options_select,fieldset[selection="large_header"] .checkbox{
   display: none;
 }
@@ -123,7 +129,7 @@ window.init = function() {
 
           case "options_select_with_other":
             updatePopover($container,'Same as options select but with other option and enter option');
-            $('.options_field').popver({
+            $('.options_field').popover({
                       placement: 'top',
                       trigger: 'hover',
                       title: 'Option field with other',
