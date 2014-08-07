@@ -11,6 +11,8 @@ module DynamicFormsEngine
 
     before_create :format_properties
 
+
+
    # http://stackoverflow.com/questions/8634139/phone-validation-regex
    # This should be run before format_properties, so it relies on original properties format
     def validate_email_phone_currency
@@ -96,25 +98,35 @@ module DynamicFormsEngine
       end
       self.properties = new_properties
     end
+
+
+    def foo
+      puts "Is this working?"
+    end
+
+    def self.search(terms)
+      puts "\n\n\n\ Is this working? \n\n\n"
+      search_query = DynamicFormsEngine::DynamicFormEntry.includes(:dynamic_form_type)
+
+      if(!terms[:terms].blank?)
+        search_query = DynamicFormsEngine::DynamicFormEntry.includes(:dynamic_form_type).order("#{terms[:order_by]} #{terms[:order]}")
+      end
+
+      if !terms[:name].blank?
+        search_query = search_query.where(:dynamic_form_type_id => terms[:name].to_i)
+      end
+
+      if !terms[:properties].blank?
+        search_query = search_query.where("properties like ?", "%#{terms[:properties]}%")
+      end
+
+      if !terms[:start].blank? && !terms[:end].blank?
+          date_start = Date.strptime(terms[:start], '%m/%d/%Y')
+          date_end = Date.strptime(terms[:end], '%m/%d/%Y')
+          search_query = search_query.where("created_at" => date_start..date_end)
+      end
+      return search_query
+    end
+
   end
-
-  def search(terms)
-    puts "\n\n\n\ Is this working? \n\n\n"
-    search_query = DynamicFormsEngine::DynamicFormEntry.includes(:dynamic_form_type).where(:user_id => self.user.id)
-
-    if(!terms[:terms].blank?)
-      search_query = DynamicFormsEngine::DynamicFormEntry.includes(:dynamic_form_type).where(:user_id => self.user.id).order("#{terms[:order_by]} #{terms[:order]}")
-    end
-
-    if !terms[:name].blank?
-      search_query = search_query.where(:dynamic_form_type_id => terms[:name])
-    end
-
-    if !terms[:properties].blank?
-      search_query = search_query.where("Properties like ?", terms[:property])
-    end
-
-    
-  end
-
 end
