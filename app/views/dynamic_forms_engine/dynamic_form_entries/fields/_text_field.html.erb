@@ -2,5 +2,8 @@
 	<%= f.label field.name, field.name.humanize, :class => "col-sm-2 control-label" %>
 	<div class="col-sm-8">
 	  <%= f.text_field field.id, :class => "form-control" %>
+	  <% if defined?(errors) and errors.present? %>
+		<small style="color:red"><%= errors.join(', ') %></small>
+	  <% end %>
 	</div>
 </div>

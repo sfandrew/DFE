@@ -6,5 +6,8 @@
 	  
 	  <%= sign_form_field_tag(:signature, @dynamic_form_entry.signature || "") %>
 	  <strong><em>I certify that all of the information above is to the best of my knowledge and belief true, correct and complete to the best of my knowledge.</em></strong>
+	  <% if defined?(errors) and errors.present? %>
+		<small style="color:red"><%= errors.join(', ') %></small>
+	  <% end %>
 	</div>
 </div>

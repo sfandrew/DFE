@@ -6,7 +6,7 @@ module DynamicFormsEngine
     def render_fields(dynamic_form_entry, builder)
       return_html = ""
       form_group_exists = false
-      
+      # raise keys: dynamic_form_entry.errors.keys, ids: dynamic_form_entry.ordered_fields.map(&:id)
       dynamic_form_entry.dynamic_form_type.ordered_fields.each do |field|
   
         # if one field_group already exists, end one fieldset for the start of the next one
@@ -18,8 +18,8 @@ module DynamicFormsEngine
           return_html += "<fieldset><legend>#{field.name.humanize}</legend>"
         end
         
-        
-        return_html += render_individual_field(field, builder)
+        errors = dynamic_form_entry.errors.full_messages_for(field.name.to_sym)
+        return_html += render_individual_field(field, errors, builder)
       end
 
       return_html += "</fieldset>" if form_group_exists #final closing fieldset tag
@@ -28,8 +28,9 @@ module DynamicFormsEngine
     end
 
     # Handles logic and rendering of individual field when creating dynamic form entries
-  	def render_individual_field(field, builder)
-  		render :partial => "dynamic_forms_engine/dynamic_form_entries/fields/#{field.field_type}", locals: {field: field, f: builder}
+  	def render_individual_field(field, errors, builder)
+  		render partial: "dynamic_forms_engine/dynamic_form_entries/fields/#{field.field_type}", 
+             locals: {field: field, f: builder, errors: errors}
   	end
 
 

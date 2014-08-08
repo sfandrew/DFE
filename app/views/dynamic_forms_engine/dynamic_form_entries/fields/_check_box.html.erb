@@ -2,5 +2,8 @@
   	<%= f.label field.id, field.name.humanize, :class => 'control-label col-sm-2' %>
 	<div class="col-sm-2">
   		<%= f.check_box field.id, :class => "form-control" %>
+  		<% if defined?(errors) and errors.present? %>
+			<small style="color:red"><%= errors.join(', ') %></small>
+	  	<% end %>
   	</div>
 </div>

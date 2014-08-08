@@ -42,5 +42,9 @@ $(document).ready(function(){
             .find(".other-select").attr('disabled','disabled');
       }
     });
+    if($('small').length > 0){
+      $('small').parent().parent().addClass('has-error');
+    }
+
 });
 </script>
