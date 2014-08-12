@@ -3,25 +3,20 @@ module DynamicFormsEngine
   	belongs_to :dynamic_form_type
     belongs_to :user
 
-    # before_create :save_signature
-
     serialize :properties, Hash
 
     validate :validate_email_phone_currency, :validate_properties
-
     before_create :format_properties
 
     def validate_properties
-
-    # Rails.logger.warn "\n\nproperties hash: #{properties}\n\n"
-    dynamic_form_type.fields.each do |field|
-      # Rails.logger.warn "\n\nfield: #{field.name} properties[field]: #{properties[field.name]}\n\n"
-      if field.required? && properties[field.id.to_s].blank?
-        
-        errors.add field.name, "must not be blank"
+      dynamic_form_type.fields.each do |field|
+        if field.field_type == "signature" && field.required? &&  self.signature.size < 25
+          errors.add field.name, "must not be blank"
+        elsif field.field_type != "signature" && field.required? && properties[field.id.to_s].blank?
+          errors.add field.name, "must not be blank"
+        end
       end
     end
-  end
 
 
    # http://stackoverflow.com/questions/8634139/phone-validation-regex
@@ -31,19 +26,19 @@ module DynamicFormsEngine
         dynamic_form_type.fields.each do |field|
           if field.field_type == "email_validation"
             unless self.properties[field.id.to_s] =~ /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i
-              errors[:base] << "Not a valid email!"
+              erros.add field.name, "Not a valid email!"
             end
           elsif field.field_type == "phone_validation"
             unless self.properties[field.id.to_s] =~ /(?:(?:\+?1\s*(?:[.-]\s*)?)?(?:(\s*([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]‌​)\s*)|([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]))\s*(?:[.-]\s*)?)([2-9]1[02-9]‌​|[2-9][02-9]1|[2-9][02-9]{2})\s*(?:[.-]\s*)?([0-9]{4})\s*(?:\s*(?:#|x\.?|ext\.?|extension)\s*(\d+)\s*)?$/
-              errors[:base] << "Enter a valid phone number including area code!"
+              erros.add field.name, "Enter a valid phone number including area code!"
             end
           elsif field.field_type == "currency"
             unless self.properties[field.id.to_s] =~ /\A\d+(?:\.\d{0,2})?\z/
-              errors[:base] << "Enter a valid amount!"
+              errors.add field.name, "Enter a valid amount!"
             end
           elsif field.field_type == "agreement"
             unless self.properties[field.id.to_s] == "1"
-              errors[:base] << "You must agree to the form before you can submit!"
+              errors.add field.name, "You must agree to the form before you can submit!"
             end
           end
         end
@@ -111,7 +106,6 @@ module DynamicFormsEngine
     end
 
     def self.search(terms)
-      puts "\n\n\n\ Is this working? \n\n\n"
       search_query = DynamicFormsEngine::DynamicFormEntry.includes(:dynamic_form_type)
 
       if(!terms[:terms].blank?)
