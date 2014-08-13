@@ -1,4 +1,4 @@
-<%= form_for(@dynamic_form_type, :html => {:class => "form-horizontal"}) do |f| %>
+
   <% if @dynamic_form_type.errors.any? %>
     <div class="well" id ="errors">
       <h2>This form type contains <%= pluralize(@dynamic_form_type.errors.count, "error") %></h2>
@@ -13,14 +13,14 @@
   <div class="form-group">
     <%= f.label :name, :class => "col-sm-2 control-label" %>
     <div class="col-sm-10">
-      <%= f.text_field :name, :class => "form-control", :required => true,:placeholder => 'Name of form' %>
+      <%= f.text_field :name, :class => "form-control", :placeholder => 'Name of form' %>
     </div>
   </div>
 
   <div class="field form-group">
     <%= f.label :description, :class => "col-sm-2 control-label" %>
     <div class="col-sm-10">
-      <%= f.text_area :description, :class => "form-control", :required => true, :placeholder => 'Description of form' %>
+      <%= f.text_area :description, :class => "form-control", :placeholder => 'Description of form' %>
     </div>
   </div>
 
@@ -40,7 +40,6 @@
   <div class="actions col-md-offset-2 col-sm-10">
     <%= f.submit "Save Form", :class => "btn btn-success btn-block btn-lg" %>
   </div>
-<% end %>
 
 <style type="text/css">
 
