@@ -1,0 +1,227 @@
+<%= form_for(@dynamic_form_type, :html => {:class => "form-horizontal"}) do |f| %>
+  <% if @dynamic_form_type.errors.any? %>
+    <div class="well" id ="errors">
+      <h2>This form type contains <%= pluralize(@dynamic_form_type.errors.count, "error") %></h2>
+      <ul>
+      <% @dynamic_form_type.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= f.label :name, :class => "col-sm-2 control-label" %>
+    <div class="col-sm-10">
+      <%= f.text_field :name, :class => "form-control", :required => true,:placeholder => 'Name of form' %>
+    </div>
+  </div>
+
+  <div class="field form-group">
+    <%= f.label :description, :class => "col-sm-2 control-label" %>
+    <div class="col-sm-10">
+      <%= f.text_area :description, :class => "form-control", :required => true, :placeholder => 'Description of form' %>
+    </div>
+  </div>
+
+  <div class="field form-group">
+    <div class="col-sm-2 control-label">
+      <%= link_to_add_many_fields "Add Field", f, :fields %>
+    </div>
+
+    <div class="col-sm-10" id="field_fields" >
+      <%=raw "<em id='no_field_fields' style='width: 100%; color: red; text-align: center; padding-top: 13px;display: block;'>You need at least one field to submit this form!</em>" if @dynamic_form_type.fields.blank? %>
+      <%= f.fields_for :fields do |builder| %>
+        <%= render 'field_fields', f: builder %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="actions col-md-offset-2 col-sm-10">
+    <%= f.submit "Save Form", :class => "btn btn-success btn-block btn-lg" %>
+  </div>
+<% end %>
+
+<style type="text/css">
+
+fieldset .checkbox{
+  display: none;
+}
+fieldset .options_select {
+  display: none;
+}
+
+fieldset[selection="text_field"] .options_select,{
+  display:none;
+}
+/*fieldset[selection="contacts"] .checkbox,fieldset[selection="file_upload"] .checkbox{
+  display: block; 
+}
+fieldset[selection="text_field"] .checkbox,fieldset[selection="text_area"] .checkbox {
+  display: block; 
+}
+fieldset[selection="options_select"] .options_select,fieldset[selection="options_select"] .checkbox {
+  display: block; 
+}*/
+fieldset[selection="email_validation"] .checkbox,fieldset[selection="phone_validation"] .checkbox {
+  display: block; 
+}
+fieldset[selection="currency"] .checkbox,fieldset[selection="calendar"] .checkbox {
+  display: block; 
+}
+fieldset[selection="text_area"] .checkbox,fieldset[selection="text_field"] .checkbox {
+  display: block; 
+}
+fieldset[selection="large_header"] .options_select,fieldset[selection="large_header"] .checkbox{
+  display: none;
+}
+fieldset[selection="options_select"] .options_select,fieldset[selection="options_select"]  {
+  display: block; 
+}
+fieldset[selection="options_select_with_other"] .options_select,fieldset[selection="options_select_with_other"]  {
+  display: block; 
+}
+fieldset[selection="medium_header"] .options_select,fieldset[selection="medium_header"] .checkbox{
+  display: none;
+}
+fieldset[selection="small_header"] .options_select,fieldset[selection="small_header"] .checkbox{
+  display: none;
+}
+fieldset[selection="contacts"] .options_select,fieldset[selection="contacts"] .checkbox{
+  display: none;
+}
+
+</style>
+<script type="text/javascript">
+// $(document).ready(function(){
+window.updatePopover = function($container, content){
+  //console.log('updatePopover : ',container);
+  $container.find('.field-popover').data('bs.popover').options.content = content; //this is defining the content params
+};
+
+window.init = function() {
+
+    $("body").on("change", '.field_type', function() {
+
+
+        var $this = $(this),                                // Field type drop down
+            $container = $this.closest("fieldset");           // Fieldset container
+            check_option = $this.val();                     // String with selected $this
+
+        $container.find('.field-popover').popover({
+                      trigger: 'hover',
+                      title: 'Name of Field', 
+                      placement: "top"});
+        $container.attr('selection',check_option);
+        switch (check_option)
+        {
+          case "options_select":
+            // $container.children('.options_select').show();
+            updatePopover($container,'Here you can create a drop down list with different options. Enter each option seperated by comma such as Option1, Option2, Option3');
+            // $container.find('.checkbox').show();
+            $('.options_field').popover({
+                      placement: 'top',
+                      trigger: 'hover',
+                      title: 'Option field',
+                      content: 'Enter each option seperated by comma'
+                  });
+            break;
+
+          case "options_select_with_other":
+            updatePopover($container,'Same as options select but with other option and enter option');
+            $('.options_field').popover({
+                      placement: 'top',
+                      trigger: 'hover',
+                      title: 'Option field with other',
+                      content: 'Enter each option seperated by comma'
+                  });
+            break;
+
+          case "phone_validation":
+          updatePopover($container,'Validate a phone number');
+          break;
+
+          case "signature":
+          updatePopover($container,'Add a signature field');
+          break;
+
+          case "field_group":
+          updatePopover($container,'Add a fieldset group');
+          break;
+
+          case "large_header":
+          updatePopover($container,'Give a LARGE header name');
+          break;
+
+          case "medium_header":
+          updatePopover($container,'Give a Medium size header');
+          break;
+
+          case "small_header":
+          updatePopover($container,'Give a small size header');
+          break;
+
+          case "text_field":
+          updatePopover($container,'Add a small text field');
+          break;
+
+          case "agreement":
+          updatePopover($container, 'Add a required agreement where users must check to submit the form');
+          break;
+
+          case "signature":
+          updatePopover($container,'Add a signature field');
+          break;
+
+          case "calendar":
+          updatePopover($container,'Add a calendar field');
+          break;
+
+          case "currency":
+          updatePopover($container, 'Add a currency field');
+          break;
+
+          case "email_validation":
+          updatePopover($container, 'Validate an email');
+          break;
+
+          case "check_box":
+          updatePopover($container, 'Add a checbox field');
+          break;
+
+          case "text_area":
+          updatePopover($container,'Add a large text field!');
+          break;
+
+          case "file_upload":
+          updatePopover($container,'Add a field to upload a picture or PDF');
+          break;
+
+          case "description":
+            updatePopover($container,'Add a short description field');
+            $container.children("div.col-sm-3").addClass("col-md-5");
+            $container.children("div.col-md-5").removeClass("col-sm-3");
+            break;
+
+          case "contacts":
+            updatePopover($container,'Add a contact information or search thru your saved contacts');
+            break;
+
+          default:
+            updatePopover($container,'Enter Name of Field');
+        }
+
+        if (check_option != "description") {
+          $container.children("div.col-md-5").addClass("col-sm-3");
+          $container.children("div.col-md-5").removeClass("col-md-5");
+          
+        }
+    });
+// ctrl f2 bookmark function
+  $('.field_type').trigger("change");
+}
+// // Doc rdy
+$(document).ready(window.init)
+// // Turbo links rdy (http://stackoverflow.com/questions/18770517/rails-4-how-to-use-document-ready-with-turbo-links)
+$(document).on('page:load', window.init)
+</script>

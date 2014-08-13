@@ -26,11 +26,11 @@ module DynamicFormsEngine
         dynamic_form_type.fields.each do |field|
           if field.field_type == "email_validation"
             unless self.properties[field.id.to_s] =~ /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i
-              erros.add field.name, "Not a valid email!"
+              errors.add field.name, "Not a valid email!"
             end
           elsif field.field_type == "phone_validation"
             unless self.properties[field.id.to_s] =~ /(?:(?:\+?1\s*(?:[.-]\s*)?)?(?:(\s*([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]‌​)\s*)|([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]))\s*(?:[.-]\s*)?)([2-9]1[02-9]‌​|[2-9][02-9]1|[2-9][02-9]{2})\s*(?:[.-]\s*)?([0-9]{4})\s*(?:\s*(?:#|x\.?|ext\.?|extension)\s*(\d+)\s*)?$/
-              erros.add field.name, "Enter a valid phone number including area code!"
+              errors.add field.name, "Enter a valid phone number including area code!"
             end
           elsif field.field_type == "currency"
             unless self.properties[field.id.to_s] =~ /\A\d+(?:\.\d{0,2})?\z/
