@@ -92,7 +92,7 @@ module DynamicFormsEngine
       end
       # Never trust parameters from the scary internet, only allow the white list through.
       def dynamic_form_type_params
-        params.require(:dynamic_form_type).permit(:name, :user_id, :description, :type).tap do |whitelisted|
+        params.require(:dynamic_form_type).permit(:name, :user_id, :description, :form_type).tap do |whitelisted|
           whitelisted[:fields_attributes] = params[:dynamic_form_type][:fields_attributes] if !params[:dynamic_form_type][:fields_attributes].blank?
         end
       end
