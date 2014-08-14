@@ -15,7 +15,7 @@ module DynamicFormsEngine
             return_html += "</fieldset>"
           end
           form_group_exists = true
-          return_html += "<fieldset><legend>#{field.name.humanize}</legend>"
+          return_html += "<fieldset class='field-group'><legend>#{field.name.humanize}</legend>"
         end
         
         errors = dynamic_form_entry.errors.full_messages_for(field.name.to_sym)
