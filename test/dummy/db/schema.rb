@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140725192514) do
+ActiveRecord::Schema.define(version: 20140812231234) do
 
   create_table "dynamic_forms_engine_dynamic_form_entries", force: true do |t|
     t.integer  "dynamic_form_type_id"
@@ -41,12 +41,7 @@ ActiveRecord::Schema.define(version: 20140725192514) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "user_id"
-  end
-
-  create_table "dynamic_forms_engine_users", force: true do |t|
-    t.string   "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.string   "type"
   end
 
   create_table "users", force: true do |t|
