@@ -3,44 +3,54 @@
   <li class="next"><a href="#">Newer &rarr;</a></li>
 </ul>
 
-<script src="http://jsconsole.com/remote.js?AAAAFAE031CD-74A0-46D3-AE36-757BAB262BEA"></script>
 <script type="text/javascript">
 $(document).ready(function(){
 
 	$('.field-group, .field-group-save').hide();
 	$('.field-group').first().show();
-	field_group_size = $('.field-group');
+	
 	var field_group_position = 0;
 	function step_panes(){
 		$('.btn-breadcrumb a:nth-child(2)').removeClass("btn-default");
 		$('.btn-breadcrumb a:nth-child(2)').addClass("btn-primary");
 		var $field_group = $('.field-group');
-		
-		$field
-		i = 0;
-		$('.next').on('click',function(){
+		field_group_size = $('.field-group').length;
+		starting_index = 0;
+		$('.next').on('click',function(){	
+			// $('.field-group').each(function(i,obj) { console.log("this is Object:", obj) } );
+			$('.field-group').eq(starting_index - 0).hide();
+			$('.field-group').eq(starting_index + 1).show();
+			$('.btn-breadcrumb a:nth-child(3)').removeClass("btn-default");
+			$('.btn-breadcrumb a:nth-child(3)').addClass("btn-primary");
+			starting_index ++;
 
-		
-$('.field-group').each(function(i,obj) { console.log(obj) } );
+		});
+		$('.previous').on('click',function(){	
+			// $('.field-group').each(function(i,obj) { console.log("this is Object:", obj) } );
+			$('.field-group').eq(field_group_size - 1).hide();
+			$('.field-group').eq(field_group_size - field_group_size).show();
+			$('.btn-breadcrumb a:nth-child(3)').removeClass("btn-primary");
+			$('.btn-breadcrumb a:nth-child(3)').addClass("btn-default");
 
-		})
+
+		});
 	}
 	step_panes();
 
 });
-var current_step = {},
-  			previous_step = {},
-			go_to_step;
+// var current_step = {},
+//   			previous_step = {},
+// 			go_to_step;
           
- 		  go_to_step = function(step) {  
- 		  	debugger;
-          	current_step.hide();
-          	previous_step = current_step;
-          	current_step = $('.field-group').get(step);
-		  	current_step.show();
-          	$('.btn-breadcrumb a:nth-child(step)').removeClass("btn-default");
-          	$('.btn-breadcrumb a:nth-child(step)').addClass("btn-primary");
-          };
+//  		  go_to_step = function(step) {  
+//  		  	debugger;
+//           	current_step.hide();
+//           	previous_step = current_step;
+//           	current_step = $('.field-group').get(step);
+// 		  	current_step.show();
+//           	$('.btn-breadcrumb a:nth-child(step)').removeClass("btn-default");
+//           	$('.btn-breadcrumb a:nth-child(step)').addClass("btn-primary");
+//           };
 </script>
 
 <style type="text/css">
