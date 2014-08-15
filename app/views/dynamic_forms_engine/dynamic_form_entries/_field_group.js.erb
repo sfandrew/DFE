@@ -1,3 +1,101 @@
-$(document).ready(function(){
-	console.log('Is this working?');
-});	
+
+var DFE = DFE || {};  
+
+//doc rdy
+$(function(){
+	DFE.initStepForm();
+
+	//next step
+	$('.next').on('click', function(){
+		DFE.nextStep( $('.field-group') );
+	});
+
+	//prev
+	$('.previous').on('click', function(){
+		DFE.prevStep( $('.field-group') );
+	});
+
+	//breadcrumbs
+	$('.btn-breadcrumb a').on('click', function(){
+		var $this = $(this);
+		DFE.resetBreadcrumb();
+		DFE.toggleBreadcrumb( $this );
+		DFE.gotoStep( $this.data('step-id') );
+	});
+
+
+});
+
+
+
+DFE.initStepForm = function(){
+	$('.field-group:eq(0)').addClass('active');
+	DFE.toggleBreadcrumb( $('.btn-breadcrumb a:eq(0)') ) ;
+}
+
+DFE.toggleBreadcrumb = function($breadcrumb){
+
+	if( $breadcrumb.hasClass('btn-primary') ){
+		$breadcrumb.removeClass('btn-primary');
+		$breadcrumb.addClass('btn-default');
+	}else if( $breadcrumb.hasClass('btn-default') ){
+		$breadcrumb.removeClass('btn-default');
+		$breadcrumb.addClass('btn-primary');
+	}
+
+}
+
+DFE.resetBreadcrumb = function(){
+	$('.btn-breadcrumb a')
+		.removeClass('btn-primary')
+		.removeClass('btn-default')
+		.addClass('btn-default');
+}
+
+
+DFE.nextStep = function($field_group){
+	$.each( $field_group, function(i, field){
+		
+		var $field = $(field);
+
+		//if last
+		if(i+1 === $field_group.length){
+			DFE.resetBreadcrumb();
+			DFE.toggleBreadcrumb( $('.btn-breadcrumb a:eq(0)') );
+			DFE.gotoStep( $('.field-group:eq(0)').attr('id') );
+		}
+
+		if($field.hasClass('active')){
+			$field.removeClass('active');
+			$field_group.eq(i+1).addClass('active');
+			DFE.resetBreadcrumb();
+			DFE.toggleBreadcrumb( $('.btn-breadcrumb a').eq(i+1) );		
+			return false;
+		}
+
+	});
+}
+
+DFE.prevStep = function($field_group){
+	$.each( $field_group, function(i, field){
+		
+		var $field = $(field);
+
+		if($field.hasClass('active')){
+			$field.removeClass('active');
+			$field_group.eq(i-1).addClass('active');
+			DFE.resetBreadcrumb();
+			DFE.toggleBreadcrumb( $('.btn-breadcrumb a').eq(i-1) );
+			return false;
+		}
+
+	});
+}
+
+DFE.gotoStep = function(step_id){
+	var $step = $('#'+step_id);
+
+	$('.field-group').removeClass('active');
+	$step.addClass('active');
+
+}

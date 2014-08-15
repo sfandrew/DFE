@@ -1,15 +1,14 @@
 <div align="center">
 	<h1 id="main-header"><%= @dynamic_form_entry.dynamic_form_type.name %></h1>
 </div>
+
 <% if @dynamic_form_type.form_type == "Multi-step" %> 
 	<div align="center" class="row">
 		<div class="btn-group btn-breadcrumb">
-			<a href="#" class="btn btn-default"><i class="glyphicon glyphicon-home"></i></a>
-			<% count = 1 %>
 			<% @dynamic_form_type.fields.each do |type| %>
 				<% if type.field_type == "field_group" %>
-					<a href="#" class="btn btn-default">Step<%= count %></a>
-					<% count += 1 %>
+					<a href="#" class="btn btn-default" data-step-id="step_<%= type.id %>"><%= type.name %></a>
+
 				<% end %>
 			<% end %>
 		</div>
@@ -24,7 +23,6 @@
 
 <script type="text/javascript">
   $(document).ready(function(){
-    $('.datepicker input').datepicker({
-    });
+
   });
 </script>

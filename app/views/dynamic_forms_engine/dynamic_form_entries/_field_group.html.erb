@@ -1,59 +1,27 @@
-<ul class="pager">
-  <li class="previous"><a href="#">&larr; Older</a></li>
-  <li class="next"><a href="#">Newer &rarr;</a></li>
-</ul>
-
-<script type="text/javascript">
-$(document).ready(function(){
-
-	$('.field-group, .field-group-save').hide();
-	$('.field-group').first().show();
-	
-	var field_group_position = 0;
-	function step_panes(){
-		$('.btn-breadcrumb a:nth-child(2)').removeClass("btn-default");
-		$('.btn-breadcrumb a:nth-child(2)').addClass("btn-primary");
-		var $field_group = $('.field-group');
-		field_group_size = $('.field-group').length;
-		starting_index = 0;
-		$('.next').on('click',function(){	
-			// $('.field-group').each(function(i,obj) { console.log("this is Object:", obj) } );
-			$('.field-group').eq(starting_index - 0).hide();
-			$('.field-group').eq(starting_index + 1).show();
-			$('.btn-breadcrumb a:nth-child(3)').removeClass("btn-default");
-			$('.btn-breadcrumb a:nth-child(3)').addClass("btn-primary");
-			starting_index ++;
-
-		});
-		$('.previous').on('click',function(){	
-			// $('.field-group').each(function(i,obj) { console.log("this is Object:", obj) } );
-			$('.field-group').eq(field_group_size - 1).hide();
-			$('.field-group').eq(field_group_size - field_group_size).show();
-			$('.btn-breadcrumb a:nth-child(3)').removeClass("btn-primary");
-			$('.btn-breadcrumb a:nth-child(3)').addClass("btn-default");
-
-
-		});
-	}
-	step_panes();
-
-});
-// var current_step = {},
-//   			previous_step = {},
-// 			go_to_step;
-          
-//  		  go_to_step = function(step) {  
-//  		  	debugger;
-//           	current_step.hide();
-//           	previous_step = current_step;
-//           	current_step = $('.field-group').get(step);
-// 		  	current_step.show();
-//           	$('.btn-breadcrumb a:nth-child(step)').removeClass("btn-default");
-//           	$('.btn-breadcrumb a:nth-child(step)').addClass("btn-primary");
-//           };
-</script>
 
 <style type="text/css">
+
+fieldset{
+  display: none;
+}
+
+fieldset.active{
+  display: block;
+}
+
+ul.pager.next-prev-steps {
+  position: relative;
+  top: -54px;
+  z-index: 1;
+}
+
+
+input.btn.btn-success.btn-block.btn-lg.field-group-save {
+z-index: 2;
+position: relative;
+}
+
+
 /** The Magic **/
 .btn-breadcrumb .btn:not(:last-child):after {
   content: " ";
@@ -180,3 +148,82 @@ $(document).ready(function(){
   border-left: 10px solid #269abc;
 }
 </style>
+
+
+
+
+
+
+<ul class="pager next-prev-steps">
+  <li class="previous"><a href="#">&larr; Previous</a></li>
+  <li class="next"><a href="#">Next &rarr;</a></li>
+</ul>
+
+
+
+
+<script type="text/javascript">
+<%= render partial: 'field_group.js' %>
+
+// function handleNextClick() {
+// 				// $('.field-group').each(function(i,obj) { console.log("this is Object:", obj) } );
+// 			$('.field-group').eq(starting_index - 0).hide();
+// 			$('.field-group').eq(starting_index + 1).show();
+// 			$(".previous").removeClass("disabled");
+// 			$("btn-breadcrumb a:nth-child("+ step_index +")").removeClass("btn-default");
+// 			$(".btn-breadcrumb a:nth-child(" + step_index +")").addClass("btn-primary");
+// 			starting_index ++;
+// 			step_index ++;
+// 			if (starting_index === field_group_size - 1) {
+			
+
+// 				$(".next").off("click", handleNextClick);
+// 				$(".next").addClass("disabled");
+// 			}
+
+// }
+
+// $(document).ready(function(){
+
+// 	$('.field-group, .field-group-save').hide();
+// 	$('.field-group').first().show();
+	
+// 	var field_group_position = 0;
+// 	function step_panes(){
+// 		$('.btn-breadcrumb a:nth-child(2)').removeClass("btn-default");
+// 		$('.btn-breadcrumb a:nth-child(2)').addClass("btn-primary");
+// 		$(".previous").addClass("disabled");
+// 		var $field_group = $('.field-group');
+// 		field_group_size = $('.field-group').length;
+// 		starting_index = 0;
+// 		step_index = 3
+// 		$('.next').on('click', handleNextClick);
+// 		$('.previous').on('click',function(){	
+// 			var $disabledButton = $('.next.disabled');
+// 			if ( $disabledButton.length ) {
+// 				$disabledButton.removeClass('disabled');
+// 				$disabledButton.on('click', handleNextClick);
+// 			}
+
+// 			// $('.field-group').each(function(i,obj) { console.log("this is Object:", obj) } );
+// 			$('.next').removeClass("disabled");
+
+// 			$('.field-group').eq(starting_index).hide();
+// 			$('.field-group').eq(starting_index - 1).show();
+// 			$('.btn-breadcrumb a:nth-child(3)').removeClass("btn-primary");
+// 			$('.btn-breadcrumb a:nth-child(3)').addClass("btn-default");
+// 			starting_index --;
+// 			if (starting_index === 0){
+// 				$('.previous').off("click");
+// 				$('previous').addClass("disabled");
+// 			}
+			
+
+// 		});
+// 	}
+// 	step_panes();
+
+// });
+
+
+</script>

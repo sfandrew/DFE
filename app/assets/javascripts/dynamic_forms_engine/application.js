@@ -17,3 +17,7 @@
 //= require bootstrap-datepicker
 //= require_tree .
 //= require_self
+
+
+//Init Dynamic Forms Engine Namespace
+var DFE = {};
