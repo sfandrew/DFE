@@ -7,7 +7,7 @@ module DynamicFormsEngine
       return_html = ""
       form_group_exists = false
       # raise keys: dynamic_form_entry.errors.keys, ids: dynamic_form_entry.ordered_fields.map(&:id)
-      dynamic_form_entry.dynamic_form_type.ordered_fields.each do |field|
+      dynamic_form_entry.dynamic_form_type.ordered_fields.each_with_index do |field,i|
   
         # if one field_group already exists, end one fieldset for the start of the next one
         if field.field_type == "field_group"
@@ -15,7 +15,7 @@ module DynamicFormsEngine
             return_html += "</fieldset>"
           end
           form_group_exists = true
-          return_html += "<fieldset class='field-group'><legend>#{field.name.humanize}</legend>"
+          return_html += ("<fieldset id='step_#{i}' class='field-group'><legend>#{field.name.humanize}</legend>")
         end
         
         errors = dynamic_form_entry.errors.full_messages_for(field.name.to_sym)
