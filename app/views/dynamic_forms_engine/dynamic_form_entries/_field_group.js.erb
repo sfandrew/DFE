@@ -18,6 +18,7 @@ $(function(){
 	//breadcrumbs
 	$('.btn-breadcrumb a').on('click', function(){
 		var $this = $(this);
+		console.log($this);
 		DFE.resetBreadcrumb();
 		DFE.toggleBreadcrumb( $this );
 		DFE.gotoStep( $this.data('step-id') );
