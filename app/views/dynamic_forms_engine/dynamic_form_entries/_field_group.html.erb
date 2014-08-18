@@ -15,7 +15,6 @@ ul.pager.next-prev-steps {
   z-index: 1;
 }
 
-
 input.btn.btn-success.btn-block.btn-lg.field-group-save {
 z-index: 2;
 position: relative;
@@ -164,66 +163,4 @@ position: relative;
 
 <script type="text/javascript">
 <%= render partial: 'field_group.js' %>
-
-// function handleNextClick() {
-// 				// $('.field-group').each(function(i,obj) { console.log("this is Object:", obj) } );
-// 			$('.field-group').eq(starting_index - 0).hide();
-// 			$('.field-group').eq(starting_index + 1).show();
-// 			$(".previous").removeClass("disabled");
-// 			$("btn-breadcrumb a:nth-child("+ step_index +")").removeClass("btn-default");
-// 			$(".btn-breadcrumb a:nth-child(" + step_index +")").addClass("btn-primary");
-// 			starting_index ++;
-// 			step_index ++;
-// 			if (starting_index === field_group_size - 1) {
-			
-
-// 				$(".next").off("click", handleNextClick);
-// 				$(".next").addClass("disabled");
-// 			}
-
-// }
-
-// $(document).ready(function(){
-
-// 	$('.field-group, .field-group-save').hide();
-// 	$('.field-group').first().show();
-	
-// 	var field_group_position = 0;
-// 	function step_panes(){
-// 		$('.btn-breadcrumb a:nth-child(2)').removeClass("btn-default");
-// 		$('.btn-breadcrumb a:nth-child(2)').addClass("btn-primary");
-// 		$(".previous").addClass("disabled");
-// 		var $field_group = $('.field-group');
-// 		field_group_size = $('.field-group').length;
-// 		starting_index = 0;
-// 		step_index = 3
-// 		$('.next').on('click', handleNextClick);
-// 		$('.previous').on('click',function(){	
-// 			var $disabledButton = $('.next.disabled');
-// 			if ( $disabledButton.length ) {
-// 				$disabledButton.removeClass('disabled');
-// 				$disabledButton.on('click', handleNextClick);
-// 			}
-
-// 			// $('.field-group').each(function(i,obj) { console.log("this is Object:", obj) } );
-// 			$('.next').removeClass("disabled");
-
-// 			$('.field-group').eq(starting_index).hide();
-// 			$('.field-group').eq(starting_index - 1).show();
-// 			$('.btn-breadcrumb a:nth-child(3)').removeClass("btn-primary");
-// 			$('.btn-breadcrumb a:nth-child(3)').addClass("btn-default");
-// 			starting_index --;
-// 			if (starting_index === 0){
-// 				$('.previous').off("click");
-// 				$('previous').addClass("disabled");
-// 			}
-			
-
-// 		});
-// 	}
-// 	step_panes();
-
-// });
-
-
 </script>

@@ -1,8 +1,8 @@
-<div class="form-group">	
+<div class="form-group"id="parentofsignature">	
 	<%= f.label field.id, field.name.humanize, :class => 'col-sm-2 control-label' %>
-	<div class="well col-md-10 col-xs-6 col-xs-height col-md-offset-2">
+	<div class="well col-md-10 col-xs-6 col-xs-height col-md-offset-2 js-canvas">
 	  <button class="reset-canvas btn btn-default" onclick="jQuery('#signature_sig').jSignature('clear')" type="button">Reset</button>
-	  <!-- <div id="signature"></div> -->
+	  <div id="signature"></div>
 	  
 	  <%= sign_form_field_tag(:signature, @dynamic_form_entry.signature || "") %>
 	  <strong><em>I certify that all of the information above is to the best of my knowledge and belief true, correct and complete to the best of my knowledge.</em></strong>
