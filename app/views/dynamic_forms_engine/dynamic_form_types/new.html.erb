@@ -15,9 +15,11 @@
 		$('.default-form').hide();
 		$('.form-type').change(function(){
 			$('.default-form').show();
+			$('h3').hide();
 		});
 		if ( $('#errors').length > 0 ){
 			$('.default-form').show();
+			$('h3').hide();
 		}
 	});
 </script>
