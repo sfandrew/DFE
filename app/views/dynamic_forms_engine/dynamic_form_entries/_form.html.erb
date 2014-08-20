@@ -17,8 +17,12 @@
         <%= render_fields(@dynamic_form_entry, builder) %>
       <% end %>
   
-      <div class="actions col-md-offset-2 col-sm-8">
-        <%= f.submit "Save", :class => "btn btn-success btn-block btn-lg field-group-save" %>
+      <div class="actions col-md-offset-8 col-sm-8">
+        <%= submit_tag 'Save Draft', :class => "btn btn-danger  btn-md field-group-save",:name => "save_draft", :data => {:toggle => 
+                                      "tooltip", :placement => "left" }, :title => "Save the current state of the form" %> |     
+        <%= submit_tag 'Submit Form Entry', :class => "btn btn-primary  btn-md field-group-save", :data => {:toggle => 
+                                      "tooltip", :placement => "right"}, :title => "Save the current state of the form" %>
+        
       </div>
     </div>
   <% end %>

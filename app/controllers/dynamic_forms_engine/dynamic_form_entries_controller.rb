@@ -50,6 +50,12 @@ module DynamicFormsEngine
       if params[:signature]
         @dynamic_form_entry.signature = params[:signature]
       end
+
+      if params[:save_draft]
+        @dynamic_form_entry.in_progress = true
+
+      end
+
       
       # checks to see if contact exists for the current user
       #@dynamic_form_entry.save_new_contacts(current_user)
@@ -110,7 +116,7 @@ module DynamicFormsEngine
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def dynamic_form_entry_params
-      params.require(:dynamic_form_entry).permit(:dynamic_form_type_id,:signature,:contacts_attributes => [:phone, :contact_type,:user_id, :first_name, :company,:email,:uuid]).tap do |whitelisted|
+      params.require(:dynamic_form_entry).permit(:dynamic_form_type_id,:signature,:in_progress,:contacts_attributes => [:phone, :contact_type,:user_id, :first_name, :company,:email,:uuid]).tap do |whitelisted|
         whitelisted[:properties] = params[:dynamic_form_entry][:properties]
       end
     end

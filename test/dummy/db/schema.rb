@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140814005126) do
+ActiveRecord::Schema.define(version: 20140819203317) do
 
   create_table "dynamic_forms_engine_dynamic_form_entries", force: true do |t|
     t.integer  "dynamic_form_type_id"
@@ -21,6 +21,7 @@ ActiveRecord::Schema.define(version: 20140814005126) do
     t.datetime "updated_at"
     t.integer  "user_id"
     t.text     "signature"
+    t.boolean  "in_progress"
   end
 
   create_table "dynamic_forms_engine_dynamic_form_fields", force: true do |t|
@@ -42,6 +43,7 @@ ActiveRecord::Schema.define(version: 20140814005126) do
     t.datetime "updated_at"
     t.integer  "user_id"
     t.string   "form_type"
+    t.boolean  "in_progress"
   end
 
   create_table "users", force: true do |t|

@@ -5,9 +5,13 @@ module DynamicFormsEngine
 
     serialize :properties, Hash
 
-    validate :validate_email_phone_currency, :validate_properties
-    before_create :format_properties
+    validate :validate_email_phone_currency, :validate_properties, :if => Proc.new { |properties| properties.in_progress != true}
+    before_create :format_properties, :if => Proc.new { |properties| !properties.properties.nil? }
 
+    # def in_progress?
+    #   binding.pry
+    #   self.in_progress == true
+    # end
     def validate_properties
       dynamic_form_type.fields.each do |field|
         if field.field_type == "signature" && field.required? &&  self.signature.size < 25
