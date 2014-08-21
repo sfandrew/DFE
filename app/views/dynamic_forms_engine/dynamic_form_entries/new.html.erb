@@ -4,11 +4,11 @@
 
 <% if @dynamic_form_type.form_type == "Multi-step" %> 
 	<div align="center" class="row">
+		<span class="required">* </span>Indicates a required field!
 		<div class="btn-group btn-breadcrumb">
 			<% @dynamic_form_type.fields.each do |type| %>
 				<% if type.field_type == "field_group" %>
 					<a href="#" class="btn btn-default" data-step-id="step_<%= type.id %>"><%= type.name %></a>
-
 				<% end %>
 			<% end %>
 		</div>

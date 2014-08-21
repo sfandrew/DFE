@@ -4,14 +4,32 @@ module DynamicFormsEngine
     belongs_to :user
 
     serialize :properties, Hash
-
+    validate :in_progress_validation, :if => Proc.new { |properties| properties.in_progress == true }
     validate :validate_email_phone_currency, :validate_properties, :if => Proc.new { |properties| properties.in_progress != true}
     before_create :format_properties, :if => Proc.new { |properties| !properties.properties.nil? }
 
-    # def in_progress?
-    #   binding.pry
-    #   self.in_progress == true
-    # end
+    def in_progress_validation
+      dynamic_form_type.fields.each do |field|
+        if field.field_type == "email_validation" && !self.properties[field.id.to_s].blank?
+          unless self.properties[field.id.to_s] =~ /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i
+            errors.add field.name, "Not a valid email!"
+          end
+        elsif field.field_type == "phone_validation" && !self.properties[field.id.to_s].blank?
+          unless self.properties[field.id.to_s] =~ /(?:(?:\+?1\s*(?:[.-]\s*)?)?(?:(\s*([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]‌​)\s*)|([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]))\s*(?:[.-]\s*)?)([2-9]1[02-9]‌​|[2-9][02-9]1|[2-9][02-9]{2})\s*(?:[.-]\s*)?([0-9]{4})\s*(?:\s*(?:#|x\.?|ext\.?|extension)\s*(\d+)\s*)?$/
+            errors.add field.name, "Enter a valid phone number including area code!"
+          end
+        elsif field.field_type == "currency" && !self.properties[field.id.to_s].blank?
+          unless self.properties[field.id.to_s] =~ /\A\d+(?:\.\d{0,2})?\z/
+            errors.add field.name, "Enter a valid amount!"
+          end
+        elsif field.field_type == "agreement" && !self.properties[field.id.to_s].blank?
+          unless self.properties[field.id.to_s] == "1"
+            errors.add field.name, "You must agree to the form before you can submit!"
+          end
+        end
+      end
+    end
+
     def validate_properties
       dynamic_form_type.fields.each do |field|
         if field.field_type == "signature" && field.required? &&  self.signature.size < 25
@@ -50,15 +68,15 @@ module DynamicFormsEngine
     end
     
     #appends string 'other' if other option was selected
-    def other_option
-      if dynamic_form_type.fields
-        dynamic_form_type.fields.each do |field|
-          if field.field_type == "options_select_with_other" && !field.content_meta.include?(self.properties[field.id.to_s])
-            self.properties[field.id.to_s].insert(0,'Other: ')
-          end
-        end
-      end
-    end
+    # def other_option
+    #   if dynamic_form_type.fields
+    #     dynamic_form_type.fields.each do |field|
+    #       if field.field_type == "options_select_with_other" && !field.content_meta.include?(self.properties[field.id.to_s])
+    #         self.properties[field.id.to_s].insert(0,'Other: ')
+    #       end
+    #     end
+    #   end
+    # end
     
     def save_new_contacts(current_user)
       if self.contacts

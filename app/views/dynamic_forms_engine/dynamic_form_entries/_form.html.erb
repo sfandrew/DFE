@@ -14,6 +14,7 @@
       <%= f.hidden_field  :dynamic_form_type_id, :value => @dynamic_form_type.id %>
 
       <%= f.fields_for :properties, OpenStruct.new(@dynamic_form_entry.properties) do |builder| %>
+      <%# f.fields_for :properties, OpenStruct.new(Hash[@dynamic_form_entry.properties.map{|k,v| [k.to_s, v]}]) do |builder| %>
         <%= render_fields(@dynamic_form_entry, builder) %>
       <% end %>
   
@@ -30,7 +31,7 @@
 <script type="text/javascript">
 $(document).ready(function(){
 
-    $('.datepicker input').datepicker({ });
+    $('.datepicker').datepicker();
 
     $('.option-other').on('change', function(){
       if($(this).val() == "Other"){

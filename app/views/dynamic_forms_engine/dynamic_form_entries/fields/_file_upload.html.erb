@@ -6,5 +6,8 @@
 		<small style="color:red"><%= errors.join(', ') %></small>
 	 <% end %>
   </div>
+  <% if field.required? %>
+	<span class="col-xs-1 required required-field">*</span>
+  <% end %>
 </div>
 

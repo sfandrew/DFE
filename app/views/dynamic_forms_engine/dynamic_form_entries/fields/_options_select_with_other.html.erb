@@ -1,5 +1,6 @@
 <div class="options_select_container">
 	<div class="form-group">
+
 	 	<%= f.label field.id, field.name.humanize, :class => "col-sm-2 control-label" %>
 	<div class="col-sm-10">
 	  <%= f.select field.id, options_for_select(field.content_meta.split(",")),{},{:class => "option-other form-control", :style => "width: 154px;"} %>
