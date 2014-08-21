@@ -42,6 +42,7 @@ ActiveRecord::Schema.define(version: 20140814005126) do
     t.datetime "updated_at"
     t.integer  "user_id"
     t.string   "form_type"
+
   end
 
   create_table "users", force: true do |t|
