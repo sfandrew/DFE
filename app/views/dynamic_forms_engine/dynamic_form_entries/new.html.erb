@@ -1,6 +1,9 @@
 <div align="center">
 	<h1 id="main-header"><%= @dynamic_form_entry.dynamic_form_type.name %></h1>
+	<p><%= @dynamic_form_entry.dynamic_form_type.description %></p>
 </div>
+
+<div class="clear spacer"></div>
 
 <% if @dynamic_form_type.form_type == "Multi-step" %> 
 	<div align="center" class="row">
