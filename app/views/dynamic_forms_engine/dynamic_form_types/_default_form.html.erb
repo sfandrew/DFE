@@ -25,6 +25,13 @@
   </div>
 
   <div class="field form-group">
+    <%= f.label :form_type, :class => "col-sm-2 control-label" %>
+    <div class="col-sm-10">
+      <%= f.select :form_type,['Default-form','Multi-step'],{:disabled => 'Choose Form', :include_blank => 'Choose form'}, {:class => 'form-control input-medium form-type'} %>
+    </div>
+  </div>
+
+  <div class="field form-group">
     <div class="col-sm-2 control-label">
       <%= link_to_add_many_fields "Add Field", f, :fields %>
     </div>

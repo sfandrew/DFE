@@ -53,7 +53,9 @@ module DynamicFormsEngine
 
       if params[:save_draft]
         @dynamic_form_entry.in_progress = true
-
+        # if @dynamic_form_entry.save 
+        #   redirect_to dynamic_form_entries_path, notice: 'Your form entry has been temporary saved'
+        # end
       end
 
       
@@ -75,8 +77,10 @@ module DynamicFormsEngine
           end
         end
       end
-      if @dynamic_form_entry.save
-        redirect_to dynamic_form_entry_path(@dynamic_form_entry), notice: 'Dynamic form entry was successfully updated.' 
+      if @dynamic_form_entry.save && params[:submit_entry]
+        redirect_to dynamic_form_entry_path(@dynamic_form_entry), notice: 'Below is your current Form Entry Submission'
+      elsif @dynamic_form_type.save && params[:save_draft]
+         redirect_to dynamic_form_entry_path(@dynamic_form_entry), notice: 'You have saved your draft.'
       else
         render "new"
       end

@@ -1,3 +1,13 @@
+<style type="text/css">
+.required{
+  color: red;
+  font-size: 22px;
+  text-shadow: 0 0 5px red;
+}
+.required-field{
+  margin-left: -25px;
+}
+</style>
 <div class="row">
   <%= form_for(@dynamic_form_entry, :html => {:class => "form-horizontal", :multipart => true}) do |f| %>
     <% if @dynamic_form_entry.errors.any? %>
@@ -18,11 +28,20 @@
         <%= render_fields(@dynamic_form_entry, builder) %>
       <% end %>
   
-      <div class="actions col-md-offset-8 col-sm-8">
-        <%= submit_tag 'Save Draft', :class => "btn btn-danger  btn-md field-group-save",:name => "save_draft", :data => {:toggle => 
-                                      "tooltip", :placement => "left" }, :title => "Save the current state of the form" %> |     
-        <%= submit_tag 'Submit Form Entry', :class => "btn btn-primary  btn-md field-group-save", :data => {:toggle => 
-                                      "tooltip", :placement => "right"}, :title => "Save the current state of the form" %>
+      <% if @dynamic_form_type.form_type == "Multi-step" %>
+        <div class="actions col-md-offset-8 col-sm-8">
+            <span class="required required-tag">* </span>Indicates a required field!
+            <%= submit_tag 'Save Draft', :class => "btn btn-danger  btn-md field-group-save",:name => "save_draft", :data => {:toggle => 
+                                          "tooltip", :placement => "left" }, :title => "Save the current state of the form" %> |     
+            <%= submit_tag 'Submit Form Entry', :class => "btn btn-primary  btn-md field-group-submit", :name => "submit_entry", :data => {:toggle => 
+                                        "tooltip", :placement => "right", :confirm => "Are you sure you want to submit this entry?"}, :title => "Save the current state of the form" %>
+        </div>
+      <% else %>
+        <div class="actions col-md-offset-2 col-sm-8">
+          <%= submit_tag "Save Form", :class => "btn btn-success btn-block btn-lg" %>
+          <span class="required required-tag">* </span>Indicates a required field!
+        </div>
+      <% end %>
         
       </div>
     </div>

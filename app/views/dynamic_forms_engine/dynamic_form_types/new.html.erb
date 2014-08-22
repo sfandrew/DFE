@@ -1,26 +1,25 @@
-<%= form_for(@dynamic_form_type, :html => {:class => "form-horizontal"}) do |f| %>
-	<h3>What type of form is this?</h3>
-	<div class="col-sm-2">
-		<%= f.select :form_type,['Default-form','Multi-step'],{:disabled => 'Choose Form', :include_blank => 'Choose form'}, {:class => 'form-control input-medium form-type'} %>
-	</div>
-	<div class="default-form">
-		<h1>New Form</h1>
-		<%= render 'default_form' %>
-	</div>
-
-<% end %>
+<h1>New Form</h1>
+<%= render 'form' %>
 
 <script type="text/javascript">
 	$(document).ready(function(){
-		$('.default-form').hide();
-		$('.form-type').change(function(){
-			$('.default-form').show();
-			$('h3').hide();
+		$('.form-type').on('change',function(){
+			if($(this).val() == "Multi-step"){
+				console.log($(this).val());
+				$('.form-type').popover({
+					content : 'Create a Multiple step form where you can save a draft and come back to it later to submit. Each step must be wrap in a field_group field below',
+					placement : 'top',
+					trigger : 'click'
+				});
+			}else if ($(this).val() == "Default-form"){
+				console.log($(this).val());
+				$('.form-type').popover({
+					content : 'Create a normal regular form',
+					placement : 'top',
+					click : 'click'
+				});
+			}
 		});
-		if ( $('#errors').length > 0 ){
-			$('.default-form').show();
-			$('h3').hide();
-		}
 	});
 </script>
 
