@@ -1,52 +1,70 @@
 <style type="text/css">
-.required{
-  color: red;
-  font-size: 22px;
-  text-shadow: 0 0 5px red;
-}
-.required-field{
-  margin-left: -25px;
-}
+    .required{
+      color: red;
+      font-size: 22px;
+      text-shadow: 0 0 5px red;
+    }
+    .required-field{
+      margin-left: -25px;
+    }
 </style>
 <div class="row">
-  <%= form_for(@dynamic_form_entry, :html => {:class => "form-horizontal", :multipart => true}) do |f| %>
-    <% if @dynamic_form_entry.errors.any? %>
-      <div class="well" id ="errors">
-        <h2>This form contains <%= pluralize(@dynamic_form_entry.errors.count, "error") %></h2>
-        <ul>
-        <% @dynamic_form_entry.errors.full_messages.each do |msg| %>
-          <li><%= msg %></li>
-        <% end %>
-        </ul>
-      </div>
-    <% end %>
-    <div class="col-md-12">
-      <%= f.hidden_field  :dynamic_form_type_id, :value => @dynamic_form_type.id %>
+    <%= form_for(@dynamic_form_entry, 
+    :html => {:class => "form-horizontal", :multipart => true}) do |f| %>
 
-      <%= f.fields_for :properties, OpenStruct.new(@dynamic_form_entry.properties) do |builder| %>
-      <%# f.fields_for :properties, OpenStruct.new(Hash[@dynamic_form_entry.properties.map{|k,v| [k.to_s, v]}]) do |builder| %>
-        <%= render_fields(@dynamic_form_entry, builder) %>
-      <% end %>
-  
-      <% if @dynamic_form_type.form_type == "Multi-step" %>
-        <div class="actions col-md-offset-8 col-sm-8">
-            <span class="required required-tag">* </span>Indicates a required field!
-            <%= submit_tag 'Save Draft', :class => "btn btn-danger  btn-md field-group-save",:name => "save_draft", :data => {:toggle => 
-                                          "tooltip", :placement => "left" }, :title => "Save the current state of the form" %> |     
-            <%= submit_tag 'Submit Form Entry', :class => "btn btn-primary  btn-md field-group-submit", :name => "submit_entry", :data => {:toggle => 
-                                        "tooltip", :placement => "right", :confirm => "Are you sure you want to submit this entry?"}, :title => "Save the current state of the form" %>
-        </div>
-      <% else %>
-        <div class="actions col-md-offset-2 col-sm-8">
-          <%= submit_tag "Save Form", :class => "btn btn-success btn-block btn-lg" %>
-          <span class="required required-tag">* </span>Indicates a required field!
-        </div>
-      <% end %>
-        
-      </div>
-    </div>
-  <% end %>
-</div>
+        <% if @dynamic_form_entry.errors.any? %>
+            <div class="well" id ="errors">
+                <h2>This form contains <%= pluralize(@dynamic_form_entry.errors.count, "error") %></h2>
+                <ul>
+                    <% @dynamic_form_entry.errors.full_messages.each do |msg| %>
+                      <li><%= msg %></li>
+                    <% end %>
+                </ul>
+            </div>
+        <% end %>
+
+        <div class="col-md-12">
+            <%= f.hidden_field  :dynamic_form_type_id, :value => @dynamic_form_type.id %>
+
+            <%= f.fields_for :properties, OpenStruct.new(@dynamic_form_entry.properties) do |builder| %>
+          <%# f.fields_for :properties, OpenStruct.new(Hash[@dynamic_form_entry.properties.map{|k,v| [k.to_s, v]}]) do |builder| %>
+                <%= render_fields(@dynamic_form_entry, builder) %>
+            <% end %>
+
+            <% if @dynamic_form_type.form_type == "Multi-step" %>
+                <div class="actions col-md-offset-8 col-sm-8">
+                    <span class="required required-tag">* </span>Indicates a required field!
+                    <%= submit_tag 'Save Draft', 
+                            :class => "btn btn-danger  btn-md field-group-save",
+                            :name => "save_draft", 
+                            :title => "Save the current state of the form",
+                            :data => {
+                                :toggle => "tooltip", 
+                                :placement => "left" }
+                            %> |     
+                    <%= submit_tag 'Submit Form Entry', 
+                            :class => "btn btn-primary btn-md field-group-submit", 
+                            :name => "submit_entry", 
+                            :title => "Save the current state of the form",
+                            :data => {
+                                :toggle => "tooltip", 
+                                :placement => "right", 
+                                :confirm => "Are you sure you want to submit this entry?"}
+                             %>
+                </div>
+            <% else %>
+                <div class="actions col-md-offset-2 col-sm-8">
+                  <%= submit_tag "Save Form", :class => "btn btn-success btn-block btn-lg" %>
+                  <span class="required required-tag">* </span>Indicates a required field!
+                </div>
+            <% end %>
+            
+        </div> <!-- col -->
+
+    <% end %>
+
+</div><!-- /row -->
+
 <script type="text/javascript">
 $(document).ready(function(){
 
@@ -54,14 +72,14 @@ $(document).ready(function(){
 
     $('.option-other').on('change', function(){
       if($(this).val() == "Other"){
-        console.log($(this));
+        //console.log($(this));
        $(this).closest('.options_select_container')
           .find('.option-field').show()
           .find('.other-select').removeAttr('disabled');
-        console.log("The other options was selected!");
+        //console.log("The other options was selected!");
       }
       else if($(this).val() != "Other"){
-        console.log("The other option was not selected");
+        //console.log("The other option was not selected");
         $(this).closest('.options_select_container')
             .find('.option-field').hide()
             .find(".other-select").attr('disabled','disabled');
