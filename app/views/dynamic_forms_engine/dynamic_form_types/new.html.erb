@@ -3,21 +3,17 @@
 
 <script type="text/javascript">
 	$(document).ready(function(){
-		$('.form-type').on('change',function(){
-			if($(this).val() == "Multi-step"){
-				console.log($(this).val());
-				$('.form-type').popover({
-					content : 'Create a Multiple step form where you can save a draft and come back to it later to submit. Each step must be wrap in a field_group field below',
-					placement : 'top',
-					trigger : 'click'
-				});
-			}else if ($(this).val() == "Default-form"){
-				console.log($(this).val());
-				$('.form-type').popover({
-					content : 'Create a normal regular form',
-					placement : 'top',
-					click : 'click'
-				});
+		$('.form-type').popover({
+			placement: 'top',
+			trigger: 'click',
+			content: function(){
+				if($(this).val() == 'Default-form'){
+					var	message = 'A normal regular form';
+					return message;
+				}else if($(this).val() == 'Multi-step'){
+					var message = 'Create a Multiple step form where you can add steps to each part of your form using the field_group field.';
+					return message;
+				}
 			}
 		});
 	});
