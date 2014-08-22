@@ -116,6 +116,7 @@ module DynamicFormsEngine
       old_properties = self.properties
       new_properties = {}
       old_properties.each_with_index do |(field_id, field_value), index|
+        
         field = DynamicFormField.find(field_id.to_i)
         
         # Prepend "Other: " to options_select_with_other field types
