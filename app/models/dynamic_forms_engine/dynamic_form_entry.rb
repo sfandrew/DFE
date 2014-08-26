@@ -7,6 +7,7 @@ module DynamicFormsEngine
     validate :in_progress_validation, :if => Proc.new { |properties| properties.in_progress == true }
     validate :validate_email_phone_currency, :validate_properties, :if => Proc.new { |properties| properties.in_progress != true}
     before_create :format_properties, :if => Proc.new { |properties| !properties.properties.nil? }
+    before_update :format_properties, :if => Proc.new { |properties| !properties.properties.nil? }
 
     def in_progress_validation
       dynamic_form_type.fields.each do |field|

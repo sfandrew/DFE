@@ -40,6 +40,7 @@
     <tr>
       <th>Type</th>
       <th>Properties</th>
+      <th>In Draft?</th>
       <th>Submitted</th>
       <th></th>
       <th></th>
@@ -60,6 +61,13 @@
               <% end %>
             <% else %>
               No Properties
+            <% end %>
+          </td>
+          <td>
+            <% if dynamic_form_entry.in_progress %>
+              In draft
+            <% else %>
+              Not in draft
             <% end %>
           </td>
           <td><%= dynamic_form_entry.created_at.strftime(" %l:%M %p %b. %d, %Y") %></td>

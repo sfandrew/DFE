@@ -1,6 +1,22 @@
-<h1>Editing dynamic_form_entry</h1>
+<div align="center">
+	<h1 id="main-header"><span class='text-danger'>Editing </span><%= @dynamic_form_entry.dynamic_form_type.name %></h1>
+	<p><%= @dynamic_form_entry.dynamic_form_type.description %></p>
+</div>
+
+<% if @dynamic_form_type.form_type == "Multi-step" %> 
+	<div align="center" class="row">		
+		<div class="btn-group btn-breadcrumb">
+			<% @dynamic_form_type.fields.each do |type| %>
+				<% if type.field_type == "field_group" %>
+					<a href="#" class="btn btn-default" data-step-id="step_<%= type.id %>"><%= type.name %></a>
+				<% end %>
+			<% end %>
+		</div>
+	</div>
+<% end %>
 
 <%= render 'form' %>
 
-<%= link_to 'Show', @dynamic_form_entry %> |
-<%= link_to 'Back', dynamic_form_entries_path %>
+<% if @dynamic_form_type.form_type == "Multi-step" %>
+	<%= render 'field_group' %>
+<% end %>

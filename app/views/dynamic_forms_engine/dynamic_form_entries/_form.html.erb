@@ -22,29 +22,16 @@
     <% end %>
     <div class="col-md-12">
       <%= f.hidden_field  :dynamic_form_type_id, :value => @dynamic_form_type.id %>
-      <%# if @dynamic_form_entry.nil? %>
-        <%# f.fields_for :properties, OpenStruct.new(@dynamic_form_entry.properties) do |builder| %>
-          <%# render_fields(@dynamic_form_entry, builder) %>
-          <%# end %>
-      <%# else %>
+
+      <% if @dynamic_form_entry.new_record? %>
+        <%= f.fields_for :properties, OpenStruct.new(@dynamic_form_entry.properties) do |builder| %>
+          <%= render_fields(@dynamic_form_entry, builder) %>
+          <% end %>
+      <% else %>
         <%= f.fields_for :properties, OpenStruct.new(Hash[@dynamic_form_entry.properties.map{|k,v| [k.to_s, v]}]) do |builder| %>
           <%= render_fields(@dynamic_form_entry, builder) %>
-          <%# end %>
+          <% end %>
       <% end %>
-      
-
-        <%# f.hidden_field  :dynamic_form_type_id, :value => @dynamic_form_type.id
-
-        if (@dynamic_form_entry)
-
-          dynamic_fields_for(@dynamic_form_entry.properties)
-        else
-          <%= f.fields_for :properties, @dynamic_form_entry.properties do |builder| %>
-      <%# f.fields_for :properties, OpenStruct.new(Hash[@dynamic_form_entry.properties.map{|k,v| [k.to_s, v]}]) do |builder| %>
-        <%# f.fields_for @dynamic_form_entry.properties do |builder| %>
-         <%# render_fields(@dynamic_form_entry, builder) %>
-      
-
   
       <% if @dynamic_form_type.form_type == "Multi-step" %>
         <div class="actions col-md-offset-8 col-sm-8">
@@ -56,7 +43,7 @@
         </div>
       <% else %>
         <div class="actions col-md-offset-2 col-sm-8">
-          <%= submit_tag "Save Form", :class => "btn btn-success btn-block btn-lg" %>
+          <%= submit_tag "Save Form", :name => "submit_entry", :class => "btn btn-success btn-block btn-lg" %>
           <span class="required required-tag">* </span>Indicates a required field!
         </div>
       <% end %>
