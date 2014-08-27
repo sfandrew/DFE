@@ -46,19 +46,19 @@
               <div class="actions col-md-5 col-sm-offset-5">
                 <span class="required required-tag">* </span>Indicates a required field!
                 <%= submit_tag 'Save Draft', 
-                        :class => "btn btn-danger  btn-md field-group-save",
+                        :class => "btn btn-danger dfe-tooltip btn-md field-group-save",
                         :name => "save_draft",
-                        :title => "Save the current state of the #{@dynamic_form_type.name}"  
+                        :title => "Save the current state of the #{@dynamic_form_type.name}",
                         :data => {
                                   :toggle => "tooltip", 
                                   :placement => "bottom" 
-                                  }, 
+                                  }
                         
                         %>   
                 <%= submit_tag 'Submit Form Entry', 
                         :class => "btn btn-primary dfe-tooltip btn-md field-group-submit", 
                         :name => "submit_entry",
-                        :title => "Submit #{@dynamic_form_type.name} as final." 
+                        :title => "Submit #{@dynamic_form_type.name} as final.",
                         :data => {
                             :toggle => "tooltip", 
                             :placement => "bottom", 
@@ -72,8 +72,10 @@
           <div class="actions col-md-offset-2 col-sm-8">
             <%= submit_tag "Save Form", :name => "submit_entry", :class => "btn btn-success btn-block btn-lg" %>
             <span class="required required-tag">* </span>Indicates a required field!
-        </div>
+          </div>
+        <% end %>
     </div><!-- /row -->
+
 
 <% end %>
 
