@@ -25,14 +25,8 @@ module DynamicFormsEngine
     end
 
     # Handles logic and rendering of individual field when creating dynamic form entries
-  	def render_individual_field(field, errors, builder)
-  		render partial: "dynamic_forms_engine/dynamic_form_entries/fields/#{field.field_type}", 
-             locals: {field: field, f: builder, errors: errors}
-  	end
-
     def render_field_with_value(field, errors, builder, dynamic_form_entry)
       field_value = nil
-      #first time render fields onto dom
         if !dynamic_form_entry.properties[0].nil?
           dynamic_form_entry.properties.each do |key,value|
             if field.name == value[:name] && field.field_type == value[:type]
@@ -40,18 +34,9 @@ module DynamicFormsEngine
               break
             end
           end
-        else
-          # when there is form validation errors
-          dynamic_form_entry.properties.each do |key,value|
-            if field.id == key
-              field_value = value
-              break
-            end
-          end
         end
       render partial: "dynamic_forms_engine/dynamic_form_entries/fields/#{field.field_type}", 
              locals: {field: field, f: builder, errors: errors, field_value: field_value}
-
     end
 
 

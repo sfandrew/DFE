@@ -34,12 +34,18 @@
       <% end %>
   
       <% if @dynamic_form_type.form_type == "Multi-step" %>
-        <div class="actions col-md-offset-8 col-sm-8">
-            <span class="required required-tag">* </span>Indicates a required field!
-            <%= submit_tag 'Save Draft', :class => "btn btn-danger  btn-md field-group-save",:name => "save_draft", :data => {:toggle => 
-                                          "tooltip", :placement => "left" }, :title => "Save the current state of the form" %> |     
-            <%= submit_tag 'Submit Form Entry', :class => "btn btn-primary  btn-md field-group-submit", :name => "submit_entry", :data => {:toggle => 
-                                        "tooltip", :placement => "right", :confirm => "Are you sure you want to submit this entry?"}, :title => "Save the current state of the form" %>
+        <div class="row">
+          <ul class="pager next-prev-steps">
+            <li class="previous"><a href="#">&larr; Previous</a></li>
+            <div class="actions col-md-5 col-sm-offset-5">
+              <span class="required required-tag">* </span>Indicates a required field!
+              <%= submit_tag 'Save Draft', :class => "btn btn-danger  btn-md field-group-save",:name => "save_draft", :data => {:toggle => 
+                                            "tooltip", :placement => "bottom" }, :title => "Save the current state of the form" %> |     
+              <%= submit_tag 'Submit Form Entry', :class => "btn btn-primary  btn-md field-group-submit", :name => "submit_entry", :data => {:toggle => 
+                                          "tooltip", :placement => "bottom", :confirm => "Are you sure you want to submit this entry?"}, :title => "Save the current state of the form" %>
+            </div>
+            <li class="next"><a href="#">Next &rarr;</a></li>
+          </ul>
         </div>
       <% else %>
         <div class="actions col-md-offset-2 col-sm-8">

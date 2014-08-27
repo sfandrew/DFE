@@ -40,7 +40,7 @@
     <tr>
       <th>Type</th>
       <th>Properties</th>
-      <th>In Draft?</th>
+      <th>Status</th>
       <th>Submitted</th>
       <th></th>
       <th></th>
@@ -65,9 +65,13 @@
           </td>
           <td>
             <% if dynamic_form_entry.in_progress %>
-              In draft
+              <%= link_to dynamic_form_entry, :class => 'btn btn-danger' do %>
+                <span class="glyphicon glyphicon-pencil"></span> IN DRAFT
+              <% end %>
             <% else %>
-              Not in draft
+              <%= link_to dynamic_form_entry, :class => 'btn btn-success' do %>
+                <span class="glyphicon glyphicon-ok"></span> SUBMITTED
+              <% end %>
             <% end %>
           </td>
           <td><%= dynamic_form_entry.created_at.strftime(" %l:%M %p %b. %d, %Y") %></td>

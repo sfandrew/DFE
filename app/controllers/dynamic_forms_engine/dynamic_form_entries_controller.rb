@@ -3,6 +3,7 @@ require_dependency "dynamic_forms_engine/application_controller"
 module DynamicFormsEngine
   class DynamicFormEntriesController < ApplicationController
     before_action :set_dynamic_form_entry, only: [:show, :edit, :update, :destroy]
+    before_filter :authenticate_user!
 
     # GET /dynamic_form_entries
     # GET /dynamic_form_entries.json
@@ -69,17 +70,15 @@ module DynamicFormsEngine
           end
         end
       end
-      if @dynamic_form_entry.save && params[:submit_entry]
+      if params[:submit_entry] && @dynamic_form_entry.save
         redirect_to dynamic_form_entry_path(@dynamic_form_entry), notice: "<strong>You have submitted your form entry!</strong>".html_safe
-      elsif @dynamic_form_type.save && params[:save_draft]
+      elsif params[:save_draft] && @dynamic_form_type.save  
          redirect_to edit_dynamic_form_entry_path(@dynamic_form_entry), alert: "<strong> You have temporary saved your draft. Come back to submit it when ready!</strong>".html_safe
       else
         render "new"
       end
     end
 
-    # PATCH/PUT /dynamic_form_entries/1
-    # PATCH/PUT /dynamic_form_entries/1.json
     def update
       @dynamic_form_type = @dynamic_form_entry.dynamic_form_type
 
@@ -92,11 +91,15 @@ module DynamicFormsEngine
         @dynamic_form_entry.in_progress = false
       end
 
-      if @dynamic_form_entry.update(dynamic_form_entry_params) && params[:submit_entry]
+      if params[:submit_entry] && @dynamic_form_entry.update(dynamic_form_entry_params)
         redirect_to @dynamic_form_entry, notice: 'Below is your curent Form Entry Submission!'
-      elsif @dynamic_form_entry.update(dynamic_form_entry_params) && params[:save_draft]
+      elsif params[:save_draft] && @dynamic_form_entry.update(dynamic_form_entry_params)
         redirect_to edit_dynamic_form_entry_path(@dynamic_form_entry), alert: "<strong> You have temporary saved your draft. Come back to submit it when ready!</strong>".html_safe 
+
       else
+        # used for when validatin errors occur
+        @dynamic_form_entry.assign_attributes(dynamic_form_entry_params)
+        @dynamic_form_entry.format_properties
         render "edit"
       end
 

@@ -68,17 +68,6 @@ module DynamicFormsEngine
       end
     end
     
-    #appends string 'other' if other option was selected
-    # def other_option
-    #   if dynamic_form_type.fields
-    #     dynamic_form_type.fields.each do |field|
-    #       if field.field_type == "options_select_with_other" && !field.content_meta.include?(self.properties[field.id.to_s])
-    #         self.properties[field.id.to_s].insert(0,'Other: ')
-    #       end
-    #     end
-    #   end
-    # end
-    
     def save_new_contacts(current_user)
       if self.contacts
         current_user_contact_emails = current_user.contacts.pluck(:email)

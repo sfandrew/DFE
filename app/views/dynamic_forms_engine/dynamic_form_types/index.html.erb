@@ -9,12 +9,9 @@
   <thead>
     <tr>
       <th>Name</th>
-      <!-- th>User</th -->
       <th>Description</th>
-      <th width="1%"></th>
-      <th width="1%"></th>
-      <!-- th width="1%"></th>
-      <th width="1%"></th -->
+      <th>Form Type</th>
+      <th></th>
     </tr>
   </thead>
 
@@ -22,8 +19,8 @@
     <% @dynamic_form_types.each do |dynamic_form_type| %>
       <tr>
         <td><%= dynamic_form_type.name %></td>
-        <!-- td><%= dynamic_form_type.user_id %></td -->
         <td><%= dynamic_form_type.description %></td>
+        <td><i><%= dynamic_form_type.form_type %></i></td>
         <td><%= link_to "New #{dynamic_form_type.name}", new_form_entry_path(dynamic_form_type), :class => 'btn btn-success' %> </td>
         <td>
           <a href="<%= form_entries_path(dynamic_form_type) %>">
