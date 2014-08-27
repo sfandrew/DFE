@@ -1,8 +1,16 @@
 <% field_value ||= nil %>
+<% if !@dynamic_form_entry.properties[field.id.to_s].nil? %> 
+		<% field_value = @dynamic_form_entry.properties[field.id.to_s] %>
+	<% elsif !field_value.blank? %>
+		<% field_value = field_value %>
+	<% else %>
+		<% field_value = '' %>
+<% end %>
 <div class="form-group">
-	<%= f.label field.name, field.name.humanize, :class => "col-sm-2 control-label" %>
+	<%= f.label field.name, field.name.humanize, value: "my default value", :class => "col-sm-2 control-label" %>
+	
 	<div class="col-sm-8">
-	  <%= f.text_field field.id, value: field_value || "", :class => "form-control" %>
+	  <%= f.text_field field.id, :class => "form-control" %>
 	  <% if defined?(errors) and errors.present? %>
 		<small style="color:red"><%= errors.join(', ') %></small>
 	  <% end %>

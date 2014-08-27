@@ -2,7 +2,7 @@
 <div class="form-group">
 	<%= f.label field.id, field.name.humanize, :class => "col-sm-2 control-label" %>
 	<div class="col-sm-2">
-		<%= f.email_field field.id, value: field_value || "", :class => "form-control email", :placeholder => "abc@yahoo.com" %>
+		<%= f.email_field field.id, value: field_value, :class => "form-control email", :placeholder => "abc@yahoo.com" %>
 		<% if defined?(errors) and errors.present? %>
 			<small style="color:red"><%= errors.join(', ') %></small>
 	  	<% end %>

@@ -2,7 +2,7 @@
 <div class="form-group">
 	<%= f.label field.id, field.name.humanize, :class => "col-sm-2 control-label" %>
 	<div class="col-sm-2">
-		<%= f.telephone_field field.id, value: field_value || "", :class => "form-control", :placeholder => "418-111-5555" %>
+		<%= f.telephone_field field.id, value: field_value, :class => "form-control", :placeholder => "418-111-5555" %>
 		<% if defined?(errors) and errors.present? %>
 			<small style="color:red"><%= errors.join(', ') %></small>
 	  	<% end %>

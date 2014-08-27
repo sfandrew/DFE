@@ -70,7 +70,7 @@ module DynamicFormsEngine
         end
       end
       if @dynamic_form_entry.save && params[:submit_entry]
-        redirect_to dynamic_form_entry_path(@dynamic_form_entry), notice: 'Below is your current Form Entry Submission'
+        redirect_to dynamic_form_entry_path(@dynamic_form_entry), notice: "<strong>You have submitted your form entry!</strong>".html_safe
       elsif @dynamic_form_type.save && params[:save_draft]
          redirect_to edit_dynamic_form_entry_path(@dynamic_form_entry), alert: "<strong> You have temporary saved your draft. Come back to submit it when ready!</strong>".html_safe
       else
