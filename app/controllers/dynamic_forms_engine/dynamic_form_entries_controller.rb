@@ -3,6 +3,7 @@ require_dependency "dynamic_forms_engine/application_controller"
 module DynamicFormsEngine
   class DynamicFormEntriesController < ApplicationController
     before_action :set_dynamic_form_entry, only: [:show, :edit, :update, :destroy]
+    before_filter :authenticate_user!
 
     # GET /dynamic_form_entries
     # GET /dynamic_form_entries.json
@@ -37,9 +38,7 @@ module DynamicFormsEngine
     end
     # GET /dynamic_form_entries/1/edit
     def edit
-      
       @dynamic_form_type = @dynamic_form_entry.dynamic_form_type
-
     end
 
     # POST /dynamic_form_entries
@@ -53,21 +52,15 @@ module DynamicFormsEngine
 
       if params[:save_draft]
         @dynamic_form_entry.in_progress = true
-        # if @dynamic_form_entry.save 
-        #   redirect_to dynamic_form_entries_path, notice: 'Your form entry has been temporary saved'
-        # end
+      else 
+        @dynamic_form_entry.in_progress = false
       end
-
-      
       # checks to see if contact exists for the current user
       #@dynamic_form_entry.save_new_contacts(current_user)
-
-      
       #check to see if user selected only contacts and or signature field
       if !@dynamic_form_entry.properties.nil?
         @dynamic_form_entry.properties.each_pair do |property_id, property_value|
           field = @dynamic_form_type.fields.find property_id
-          
           if field.attachment?
             file_attachment = Attachment.create!(attachable_id: params[:dynamic_form_entry][:dynamic_form_type_id],
                                                   attachable_type: 'DynamicFormEntry',
@@ -77,27 +70,39 @@ module DynamicFormsEngine
           end
         end
       end
-      if @dynamic_form_entry.save && params[:submit_entry]
-        redirect_to dynamic_form_entry_path(@dynamic_form_entry), notice: 'Below is your current Form Entry Submission'
-      elsif @dynamic_form_type.save && params[:save_draft]
-         redirect_to dynamic_form_entry_path(@dynamic_form_entry), notice: 'You have saved your draft.'
+      if params[:submit_entry] && @dynamic_form_entry.save
+        redirect_to dynamic_form_entry_path(@dynamic_form_entry), notice: "<strong>You have submitted your form entry!</strong>".html_safe
+      elsif params[:save_draft] && @dynamic_form_type.save  
+         redirect_to edit_dynamic_form_entry_path(@dynamic_form_entry), alert: "<strong> You have temporary saved your draft. Come back to submit it when ready!</strong>".html_safe
       else
         render "new"
       end
     end
 
-    # PATCH/PUT /dynamic_form_entries/1
-    # PATCH/PUT /dynamic_form_entries/1.json
     def update
-      respond_to do |format|
-        if @dynamic_form_entry.update(dynamic_form_entry_params)
-          format.html { redirect_to @dynamic_form_entry, notice: 'Dynamic form entry was successfully updated.' }
-          format.json { head :no_content }
-        else
-          format.html { render action: 'edit' }
-          format.json { render json: @dynamic_form_entry.errors, status: :unprocessable_entity }
-        end
+      @dynamic_form_type = @dynamic_form_entry.dynamic_form_type
+
+      if params[:signature]
+        @dynamic_form_entry.signature = params[:signature]
       end
+      if params[:save_draft]
+        @dynamic_form_entry.in_progress = true
+      else 
+        @dynamic_form_entry.in_progress = false
+      end
+
+      if params[:submit_entry] && @dynamic_form_entry.update(dynamic_form_entry_params)
+        redirect_to @dynamic_form_entry, notice: 'Below is your curent Form Entry Submission!'
+      elsif params[:save_draft] && @dynamic_form_entry.update(dynamic_form_entry_params)
+        redirect_to edit_dynamic_form_entry_path(@dynamic_form_entry), alert: "<strong> You have temporary saved your draft. Come back to submit it when ready!</strong>".html_safe 
+
+      else
+        # used for when validatin errors occur
+        @dynamic_form_entry.assign_attributes(dynamic_form_entry_params)
+        @dynamic_form_entry.format_properties
+        render "edit"
+      end
+
     end
 
     # DELETE /dynamic_form_entries/1

@@ -7,6 +7,7 @@ module DynamicFormsEngine
     validate :in_progress_validation, :if => Proc.new { |properties| properties.in_progress == true }
     validate :validate_email_phone_currency, :validate_properties, :if => Proc.new { |properties| properties.in_progress != true}
     before_create :format_properties, :if => Proc.new { |properties| !properties.properties.nil? }
+    before_update :format_properties, :if => Proc.new { |properties| !properties.properties.nil? }
 
     def in_progress_validation
       dynamic_form_type.fields.each do |field|
@@ -67,17 +68,6 @@ module DynamicFormsEngine
       end
     end
     
-    #appends string 'other' if other option was selected
-    # def other_option
-    #   if dynamic_form_type.fields
-    #     dynamic_form_type.fields.each do |field|
-    #       if field.field_type == "options_select_with_other" && !field.content_meta.include?(self.properties[field.id.to_s])
-    #         self.properties[field.id.to_s].insert(0,'Other: ')
-    #       end
-    #     end
-    #   end
-    # end
-    
     def save_new_contacts(current_user)
       if self.contacts
         current_user_contact_emails = current_user.contacts.pluck(:email)
@@ -116,6 +106,7 @@ module DynamicFormsEngine
       old_properties = self.properties
       new_properties = {}
       old_properties.each_with_index do |(field_id, field_value), index|
+        
         field = DynamicFormField.find(field_id.to_i)
         
         # Prepend "Other: " to options_select_with_other field types

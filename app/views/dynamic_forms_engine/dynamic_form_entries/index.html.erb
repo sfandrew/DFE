@@ -40,6 +40,7 @@
     <tr>
       <th>Type</th>
       <th>Properties</th>
+      <th>Status</th>
       <th>Submitted</th>
       <th></th>
       <th></th>
@@ -56,10 +57,21 @@
           <td class="form-properties">
             <% if !dynamic_form_entry.properties.empty? %>
               <% dynamic_form_entry.properties.first(5).each do  |key,value| %>
-                <li><%= value[:type] %> field</li>
+                <li><%= value[:type]%> field</li>
               <% end %>
             <% else %>
               No Properties
+            <% end %>
+          </td>
+          <td>
+            <% if dynamic_form_entry.in_progress %>
+              <%= link_to dynamic_form_entry, :class => 'btn btn-danger' do %>
+                <span class="glyphicon glyphicon-pencil"></span> IN DRAFT
+              <% end %>
+            <% else %>
+              <%= link_to dynamic_form_entry, :class => 'btn btn-success' do %>
+                <span class="glyphicon glyphicon-ok"></span> SUBMITTED
+              <% end %>
             <% end %>
           </td>
           <td><%= dynamic_form_entry.created_at.strftime(" %l:%M %p %b. %d, %Y") %></td>

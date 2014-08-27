@@ -1,7 +1,8 @@
+<% field_value ||= nil %>
 <div class="form-group">
 	<%= f.label field.id, field.name.humanize, :class => "col-sm-2 control-label" %>
 	<div class="col-sm-2">
-		<%= f.text_field field.id, :class => "form-control", :placeholder => "$56.46" %>
+		<%= f.text_field field.id, value: field_value, :class => "form-control", :placeholder => "$56.46" %>
 		<% if defined?(errors) and errors.present? %>
 			<small style="color:red"><%= errors.join(', ') %></small>
 	  	<% end %>

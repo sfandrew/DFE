@@ -26,50 +26,53 @@
         <% end %>
     
     <div class="row">
-        <div class="col-md-12">
-            <%= f.hidden_field  :dynamic_form_type_id, :value => @dynamic_form_type.id %>
+      <div class="col-md-12">
+        <%= f.hidden_field  :dynamic_form_type_id, :value => @dynamic_form_type.id %>
 
-            <%= f.fields_for :properties, OpenStruct.new(@dynamic_form_entry.properties) do |builder| %>
-          <%# f.fields_for :properties, OpenStruct.new(Hash[@dynamic_form_entry.properties.map{|k,v| [k.to_s, v]}]) do |builder| %>
-                <%= render_fields(@dynamic_form_entry, builder) %>
+        <% if @dynamic_form_entry.new_record? %>
+          <%= f.fields_for :properties, OpenStruct.new(@dynamic_form_entry.properties) do |builder| %>
+            <%= render_fields(@dynamic_form_entry, builder) %>
             <% end %>
-        </div>
-    </div><!-- /row -->
-
-    <div class="row">
-        <div class="col-md-offset-3 col-md-8">
-            <span class="required required-tag">* </span>Indicates a required field
-            <div class="clear spacer"></div>  
-        </div>
-    </div><!-- /row -->
-
-    <div class="row">
-        <% if @dynamic_form_type.form_type == "Multi-step" %>
-            <div class="actions col-md-offset-4 col-md-6">
-                <%= submit_tag 'Save Draft', 
-                        :class => "btn btn-primary dfe-tooltip btn-md field-group-save",
-                        :name => "save_draft", 
-                        :title => "Save the current state of the #{@dynamic_form_type.name}",
-                        :data => {
-                            :toggle => "tooltip", 
-                            :placement => "left" }
-                        %>     
-                <%= submit_tag 'Submit Form', 
-                        :class => "btn btn-success dfe-tooltip btn-md field-group-submit", 
-                        :name => "submit_entry", 
-                        :title => "Submit #{@dynamic_form_type.name} as final.",
-                        :data => {
-                            :toggle => "tooltip", 
-                            :placement => "right", 
-                            :confirm => "Are you sure you want to submit this entry?"}
-                         %>
-            </div>
         <% else %>
-            <div class="actions col-md-offset-2 col-sm-8">
-              <%= submit_tag "Save Form", :class => "btn btn-success btn-block btn-lg" %>
-              <span class="required required-tag">* </span>Indicates a required field!
-            </div>
-        <% end %>  
+          <%= f.fields_for :properties, OpenStruct.new(Hash[@dynamic_form_entry.properties.map{|k,v| [k.to_s, v]}]) do |builder| %>
+            <%= render_fields(@dynamic_form_entry, builder) %>
+            <% end %>
+        <% end %>
+    
+        <% if @dynamic_form_type.form_type == "Multi-step" %>
+          <div class="row">
+            <ul class="pager next-prev-steps">
+              <li class="previous"><a href="#">&larr; Previous</a></li>
+              <div class="actions col-md-5 col-sm-offset-5">
+                <span class="required required-tag">* </span>Indicates a required field!
+                <%= submit_tag 'Save Draft', 
+                        :class => "btn btn-danger  btn-md field-group-save",
+                        :name => "save_draft",
+                        :title => "Save the current state of the #{@dynamic_form_type.name}"  
+                        :data => {
+                                  :toggle => "tooltip", 
+                                  :placement => "bottom" 
+                                  }, 
+                        
+                        %>   
+                <%= submit_tag 'Submit Form Entry', 
+                        :class => "btn btn-primary dfe-tooltip btn-md field-group-submit", 
+                        :name => "submit_entry",
+                        :title => "Submit #{@dynamic_form_type.name} as final." 
+                        :data => {
+                            :toggle => "tooltip", 
+                            :placement => "bottom", 
+                            :confirm => "Are you sure you want to submit this entry?"}  
+                            %>
+              </div>
+              <li class="next"><a href="#">Next &rarr;</a></li>
+            </ul>
+          </div>
+        <% else %>
+          <div class="actions col-md-offset-2 col-sm-8">
+            <%= submit_tag "Save Form", :name => "submit_entry", :class => "btn btn-success btn-block btn-lg" %>
+            <span class="required required-tag">* </span>Indicates a required field!
+        </div>
     </div><!-- /row -->
 
 <% end %>
