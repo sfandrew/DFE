@@ -4,7 +4,7 @@
 	<div class="col-sm-2">
 		<%= f.text_field field.id, value: field_value, :class => "form-control", :placeholder => "$56.46" %>
 		<% if defined?(errors) and errors.present? %>
-			<small style="color:red"><%= errors.join(', ') %></small>
+			<small class="error-msg"style="color:red"><%= errors.join(', ') %></small>
 	  	<% end %>
 	</div>
 	<% if field.required? %>

@@ -11,7 +11,7 @@
 		<div class="btn-group btn-breadcrumb">
 			<% @dynamic_form_type.fields.each do |type| %>
 				<% if type.field_type == "field_group" %>
-					<a href="#" class="btn btn-default" data-step-id="step_<%= type.id %>"><%= type.name %></a>
+					<a href="#" class="btn btn-default" data-step-id="step_<%= type.id %>"><%= type.name %> <span class="badge alert-danger">2</span></a>
 				<% end %>
 			<% end %>
 		</div>
@@ -24,8 +24,8 @@
 	<%= render 'field_group' %>
 <% end %>
 
-<script type="text/javascript">
-  $(document).ready(function(){
-
-  });
-</script>
+<!-- if errors with class get count and its field id
+find breadcrumb with id and add class badge with total count of errors
+$('.error-msg').closest('fieldset');
+$('.error-msg').closest('fieldset').find('.error-msg');
+ -->

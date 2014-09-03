@@ -1,63 +1,86 @@
 <style type="text/css">
-.required{
-  color: red;
-  font-size: 22px;
-  text-shadow: 0 0 5px red;
-}
-.required-field{
-  margin-left: -25px;
-}
+    .required{
+      color: red;
+      font-size: 22px;
+      text-shadow: 0 0 5px red;
+    }
+    .required-field{
+      margin-left: -25px;
+    }
 </style>
-<div class="row">
-  <%= form_for(@dynamic_form_entry, :html => {:class => "form-horizontal", :multipart => true}) do |f| %>
-    <% if @dynamic_form_entry.errors.any? %>
-      <div class="well" id ="errors">
-        <h2>This form contains <%= pluralize(@dynamic_form_entry.errors.count, "error") %></h2>
-        <ul>
-        <% @dynamic_form_entry.errors.full_messages.each do |msg| %>
-          <li><%= msg %></li>
-        <% end %>
-        </ul>
-      </div>
-    <% end %>
-    <div class="col-md-12">
-      <%= f.hidden_field  :dynamic_form_type_id, :value => @dynamic_form_type.id %>
 
-      <% if @dynamic_form_entry.new_record? %>
-        <%= f.fields_for :properties, OpenStruct.new(@dynamic_form_entry.properties) do |builder| %>
-          <%= render_fields(@dynamic_form_entry, builder) %>
-          <% end %>
-      <% else %>
-        <%= f.fields_for :properties, OpenStruct.new(Hash[@dynamic_form_entry.properties.map{|k,v| [k.to_s, v]}]) do |builder| %>
-          <%= render_fields(@dynamic_form_entry, builder) %>
-          <% end %>
-      <% end %>
-  
-      <% if @dynamic_form_type.form_type == "Multi-step" %>
-        <div class="row">
-          <ul class="pager next-prev-steps">
-            <li class="previous"><a href="#">&larr; Previous</a></li>
-            <div class="actions col-md-5 col-sm-offset-5">
-              <span class="required required-tag">* </span>Indicates a required field!
-              <%= submit_tag 'Save Draft', :class => "btn btn-danger  btn-md field-group-save",:name => "save_draft", :data => {:toggle => 
-                                            "tooltip", :placement => "bottom" }, :title => "Save the current state of the form" %> |     
-              <%= submit_tag 'Submit Form Entry', :class => "btn btn-primary  btn-md field-group-submit", :name => "submit_entry", :data => {:toggle => 
-                                          "tooltip", :placement => "bottom", :confirm => "Are you sure you want to submit this entry?"}, :title => "Save the current state of the form" %>
-            </div>
-            <li class="next"><a href="#">Next &rarr;</a></li>
-          </ul>
-        </div>
-      <% else %>
-        <div class="actions col-md-offset-2 col-sm-8">
-          <%= submit_tag "Save Form", :name => "submit_entry", :class => "btn btn-success btn-block btn-lg" %>
-          <span class="required required-tag">* </span>Indicates a required field!
-        </div>
-      <% end %>
-        
-      </div>
-    </div>
-  <% end %>
-</div>
+<%= form_for(@dynamic_form_entry, 
+    :html => {:class => "form-horizontal", :multipart => true}) do |f| %>
+
+        <% if @dynamic_form_entry.errors.any? %>
+            <div class="row">
+                <div class="well" id ="errors">
+                    <h2>This form contains <%= pluralize(@dynamic_form_entry.errors.count, "error") %></h2>
+                    <ul>
+                        <% @dynamic_form_entry.errors.full_messages.each do |msg| %>
+                          <li><%= msg %></li>
+                        <% end %>
+                    </ul>
+                </div>
+            </div><!-- /row -->
+        <% end %>
+    
+    <div class="row">
+      <div class="col-md-12">
+        <%= f.hidden_field  :dynamic_form_type_id, :value => @dynamic_form_type.id %>
+
+        <% if @dynamic_form_entry.new_record? %>
+          <%= f.fields_for :properties, OpenStruct.new(@dynamic_form_entry.properties) do |builder| %>
+            <%= render_fields(@dynamic_form_entry, builder) %>
+            <% end %>
+        <% else %>
+          <%= f.fields_for :properties, OpenStruct.new(Hash[@dynamic_form_entry.properties.map{|k,v| [k.to_s, v]}]) do |builder| %>
+            <%= render_fields(@dynamic_form_entry, builder) %>
+            <% end %>
+        <% end %>
+    
+        <% if @dynamic_form_type.form_type == "Multi-step" %>
+          <div class="row">
+            <ul class="pager next-prev-steps">
+              <li class="previous"><a href="#">&larr; Previous</a></li>
+              <div class="actions col-md-5 col-sm-offset-5">
+                <span class="required required-tag">* </span>Indicates a required field!
+                <%= submit_tag 'Save Draft', 
+                        :class => "btn btn-danger dfe-tooltip btn-md field-group-save",
+                        :name => "save_draft",
+                        :title => "Save the current state of the #{@dynamic_form_type.name}",
+                        :data => {
+                                  :toggle => "tooltip", 
+                                  :placement => "bottom" 
+                                  }
+                        
+                        %>   
+                <%= submit_tag 'Submit Form Entry', 
+                        :class => "btn btn-primary dfe-tooltip btn-md field-group-submit", 
+                        :name => "submit_entry",
+                        :title => "Submit #{@dynamic_form_type.name} as final.",
+                        :data => {
+                            :toggle => "tooltip", 
+                            :placement => "bottom", 
+                            :confirm => "Are you sure you want to submit this entry?"}  
+                            %>
+              </div>
+              <li class="next"><a href="#">Next &rarr;</a></li>
+            </ul>
+          </div>
+        <% else %>
+          <div class="actions col-md-offset-2 col-sm-8">
+            <%= submit_tag "Save Form", :name => "submit_entry", :class => "btn btn-success btn-block btn-lg" %>
+            <span class="required required-tag">* </span>Indicates a required field!
+          </div>
+        <% end %>
+    </div><!-- /row -->
+
+
+<% end %>
+
+
+
 <script type="text/javascript">
 $(document).ready(function(){
 
@@ -65,14 +88,14 @@ $(document).ready(function(){
 
     $('.option-other').on('change', function(){
       if($(this).val() == "Other"){
-        console.log($(this));
+        //console.log($(this));
        $(this).closest('.options_select_container')
           .find('.option-field').show()
           .find('.other-select').removeAttr('disabled');
-        console.log("The other options was selected!");
+        //console.log("The other options was selected!");
       }
       else if($(this).val() != "Other"){
-        console.log("The other option was not selected");
+        //console.log("The other option was not selected");
         $(this).closest('.options_select_container')
             .find('.option-field').hide()
             .find(".other-select").attr('disabled','disabled');
