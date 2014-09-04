@@ -65,7 +65,7 @@
           </td>
           <td>
             <% if dynamic_form_entry.in_progress %>
-              <%= link_to dynamic_form_entry, :class => 'btn btn-danger' do %>
+              <%= link_to edit_dynamic_form_entry_path(dynamic_form_entry), :class => 'btn btn-danger' do %>
                 <span class="glyphicon glyphicon-pencil"></span> IN DRAFT
               <% end %>
             <% else %>

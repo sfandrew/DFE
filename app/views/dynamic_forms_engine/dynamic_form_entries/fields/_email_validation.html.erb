@@ -4,7 +4,7 @@
 	<div class="col-sm-2">
 		<%= f.email_field field.id, value: field_value, :class => "form-control email", :placeholder => "abc@yahoo.com" %>
 		<% if defined?(errors) and errors.present? %>
-			<small style="color:red"><%= errors.join(', ') %></small>
+			<small class="error-msg" style="color:red"><%= errors.join(', ') %></small>
 	  	<% end %>
 	</div>
 	<% if field.required? %>
