@@ -1,5 +1,5 @@
 <div class="row">
-  <h1 class="col-xs-12 col-sm-6 col-md-8">Form Types</h1>
+  <h1 class="col-xs-12 col-sm-6 col-md-8" id="main-header">Form Types</h1>
   <div class="col-xs-6 col-md-4">
     <%= link_to '+ New Form Type', new_dynamic_form_type_path, :class => 'btn btn-success pull-right' %>
   </div>
@@ -18,7 +18,7 @@
   <tbody>
     <% @dynamic_form_types.each do |dynamic_form_type| %>
       <tr>
-        <td><%= dynamic_form_type.name %></td>
+        <td><strong><%= dynamic_form_type.name %></strong></td>
         <td><%= dynamic_form_type.description %></td>
         <td><i><%= dynamic_form_type.form_type %></i></td>
         <td><%= link_to "New #{dynamic_form_type.name}", new_form_entry_path(dynamic_form_type), :class => 'btn btn-success' %> </td>

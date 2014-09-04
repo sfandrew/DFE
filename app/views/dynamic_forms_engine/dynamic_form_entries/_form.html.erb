@@ -29,14 +29,8 @@
       <div class="col-md-12">
         <%= f.hidden_field  :dynamic_form_type_id, :value => @dynamic_form_type.id %>
 
-        <% if @dynamic_form_entry.new_record? %>
-          <%= f.fields_for :properties, OpenStruct.new(@dynamic_form_entry.properties) do |builder| %>
-            <%= render_fields(@dynamic_form_entry, builder) %>
-            <% end %>
-        <% else %>
-          <%= f.fields_for :properties, OpenStruct.new(Hash[@dynamic_form_entry.properties.map{|k,v| [k.to_s, v]}]) do |builder| %>
-            <%= render_fields(@dynamic_form_entry, builder) %>
-            <% end %>
+        <%= f.fields_for :properties, OpenStruct.new(Hash[@dynamic_form_entry.properties.map{|k,v| [k.to_s, v]}]) do |builder| %>
+          <%= render_fields(@dynamic_form_entry, builder) %>
         <% end %>
     
         <% if @dynamic_form_type.form_type == "Multi-step" %>

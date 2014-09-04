@@ -75,6 +75,8 @@ module DynamicFormsEngine
       elsif params[:save_draft] && @dynamic_form_entry.save  
          redirect_to edit_dynamic_form_entry_path(@dynamic_form_entry), alert: "<strong> You have temporary saved your draft. Come back to submit it when ready!</strong>".html_safe
       else
+        @dynamic_form_entry.assign_attributes(dynamic_form_entry_params)
+        @dynamic_form_entry.format_properties
         render "new"
       end
     end
