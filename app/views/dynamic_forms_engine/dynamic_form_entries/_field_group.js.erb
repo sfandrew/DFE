@@ -42,40 +42,18 @@ DFE.initStepForm = function(){
 }	
 
 DFE.formErrorBadges = function(){
-	//$('.field-group').each
-		//$('.error-msg').size
-		// update breadcrumb with SIZE
 	if ($('.error-msg').length > 0) {
-		var error_fields = $('.error-msg').closest('fieldset');
-		for (i = 0; i < error_fields.length; i++) {
-			var fieldset_id = error_fields.eq(i).attr('id');
-			var number_of_errors = error_fields.eq(i).find('.error-msg').length;
-			DFE.updateBreadcrumb(fieldset_id, number_of_errors);
-			// var breadcrumb_id = $('.btn-breadcrumb a').data('step-id');
-			// if (breadcrumb_id == fieldset_id){
-			// 	console.log("I found it!" + i);
-			// }
-		}
-		
+		var $error_fields = $('.error-msg').closest('fieldset');
+		$error_fields.each(function(i){
+			var fieldset_id = $error_fields.eq(i).attr('id');
+			var number_of_errors = $error_fields.eq(i).find('.error-msg').length;
+			var $breadcrumbToUpdate = $('.btn-breadcrumb a[data-step-id=' + fieldset_id + ']');
+			$breadcrumbToUpdate.find('span').addClass('badge alert-danger')
+								.text(number_of_errors);
+		});
 	}
 }
 
-DFE.updateBreadcrumb = function(field_id,num_errors){
-
-	console.log("I was called with", field_id, num_errors);
-
-	var $breadcrumbToUpdate = $('.btn-breadcrumb a[data-step-id=' + field_id + ']');
-
-	$breadcrumbToUpdate.text(num_errors);
-
-
-	var badge_number = $('.alert-d')
-
-
-	// $('.btn-breadcrumb').find('a').data(field_id).text(num_errors);
-
-	// console.log("Is this working?");
-}
 
 DFE.toggleBreadcrumb = function($breadcrumb){
 

@@ -43,7 +43,6 @@ ActiveRecord::Schema.define(version: 20140819203317) do
     t.datetime "updated_at"
     t.integer  "user_id"
     t.string   "form_type"
-    t.boolean  "in_progress"
   end
 
   create_table "users", force: true do |t|
