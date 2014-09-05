@@ -17,8 +17,13 @@
 		</div>
 	</div>
 <% end %>
-
-<%= render 'form' %>
+<% if @dynamic_form_type.form_type != "Multi-step" %>
+	<div class="well">
+		<%= render 'form' %>
+	</div>
+<% else %>
+	<%= render 'form' %>
+<% end %>
 
 <% if @dynamic_form_type.form_type == "Multi-step" %>
 	<%= render 'field_group' %>

@@ -70,6 +70,12 @@ fieldset[selection="text_field"] .checkbox,fieldset[selection="text_area"] .chec
 fieldset[selection="options_select"] .options_select,fieldset[selection="options_select"] .checkbox {
   display: block; 
 }*/
+fieldset[selection="spacer"] .options_select,fieldset[selection="spacer"] .checkbox{
+  display: none;
+}
+fieldset[selection="divider"] .options_select,fieldset[selection="divider"] .checkbox{
+  display: none;
+}
 fieldset[selection="email_validation"] .checkbox,fieldset[selection="phone_validation"] .checkbox {
   display: block; 
 }
@@ -116,8 +122,7 @@ window.init = function() {
             check_option = $this.val();                     // String with selected $this
 
         $container.find('.field-popover').popover({
-                      trigger: 'hover',
-                      title: 'Name of Field', 
+                      trigger: 'hover', 
                       placement: "top"});
         $container.attr('selection',check_option);
         switch (check_option)
@@ -166,6 +171,14 @@ window.init = function() {
 
           case "small_header":
           updatePopover($container,'Give a small size header');
+          break;
+
+          case "divider":
+          updatePopover($container,'Add a line divider to seperate content');
+          break;
+
+          case "spacer":
+          updatePopover($container,'Add space betweens your content');
           break;
 
           case "text_field":
