@@ -18,9 +18,9 @@
 	</div>
 <% end %>
 <% if @dynamic_form_type.form_type != "Multi-step" %>
-	<div class="well">
+	<fieldset>
 		<%= render 'form' %>
-	</div>
+	</fieldset>
 <% else %>
 	<%= render 'form' %>
 <% end %>

@@ -70,10 +70,7 @@ fieldset[selection="text_field"] .checkbox,fieldset[selection="text_area"] .chec
 fieldset[selection="options_select"] .options_select,fieldset[selection="options_select"] .checkbox {
   display: block; 
 }*/
-fieldset[selection="spacer"] .options_select,fieldset[selection="spacer"] .checkbox{
-  display: none;
-}
-fieldset[selection="divider"] .options_select,fieldset[selection="divider"] .checkbox{
+fieldset[selection="spacer"] .field-popover,fieldset[selection="divider"] .field-popover{
   display: none;
 }
 fieldset[selection="email_validation"] .checkbox,fieldset[selection="phone_validation"] .checkbox {
@@ -106,11 +103,27 @@ fieldset[selection="contacts"] .options_select,fieldset[selection="contacts"] .c
 
 </style>
 <script type="text/javascript">
+
+window.formTypePopover = function(){
+  $('.form-type').popover({
+      placement: 'top',
+      trigger: 'click focus',
+      content: function(){
+        if($(this).val() == 'Default-form'){
+          var message = 'A normal regular form';
+          return message;
+        }else if($(this).val() == 'Multi-step'){
+          var message = 'Create a Multiple step form where you can add steps to each part of your form using the field_group field.';
+          return message;
+        }
+      }
+    });
+}
 // $(document).ready(function(){
 window.updatePopover = function($container, content){
   //console.log('updatePopover : ',container);
   $container.find('.field-popover').data('bs.popover').options.content = content; //this is defining the content params
-};
+}
 
 window.init = function() {
 
@@ -134,9 +147,9 @@ window.init = function() {
             $('.options_field').popover({
                       placement: 'top',
                       trigger: 'hover',
-                      title: 'Option field',
                       content: 'Enter each option seperated by comma'
                   });
+            $('.field_type').popover('destroy');
             break;
 
           case "options_select_with_other":
@@ -147,74 +160,98 @@ window.init = function() {
                       title: 'Option field with other',
                       content: 'Enter each option seperated by comma'
                   });
+            $('.field_type').popover('destroy');
             break;
 
           case "phone_validation":
           updatePopover($container,'Validate a phone number');
+          $('.field_type').popover('destroy');
           break;
 
           case "signature":
           updatePopover($container,'Add a signature field');
+          $('.field_type').popover('destroy');
           break;
 
           case "field_group":
           updatePopover($container,'Add a fieldset group');
+          $('.field_type').popover('destroy');
           break;
 
           case "large_header":
           updatePopover($container,'Give a LARGE header name');
+          $('.field_type').popover('destroy');
           break;
 
           case "medium_header":
           updatePopover($container,'Give a Medium size header');
+          $('.field_type').popover('destroy');
           break;
 
           case "small_header":
           updatePopover($container,'Give a small size header');
+          $('.field_type').popover('destroy');
           break;
 
           case "divider":
-          updatePopover($container,'Add a line divider to seperate content');
+          $(this).popover({
+                      placement: 'top',
+                      trigger: 'hover',
+                      content: 'Add a line divider to seperate content'
+                  });
           break;
 
           case "spacer":
-          updatePopover($container,'Add space betweens your content');
+          $(this).popover({
+                      placement: 'top',
+                      trigger: 'hover',
+                      content: 'Add a space between your content'
+                  });
           break;
 
           case "text_field":
           updatePopover($container,'Add a small text field');
+          $('.field_type').popover('destroy');
           break;
 
           case "agreement":
           updatePopover($container, 'Add a required agreement where users must check to submit the form');
+          $('.field_type').popover('destroy');
           break;
 
           case "signature":
           updatePopover($container,'Add a signature field');
+          $('.field_type').popover('destroy');
           break;
 
           case "calendar":
           updatePopover($container,'Add a calendar field');
+          $('.field_type').popover('destroy');
           break;
 
           case "currency":
           updatePopover($container, 'Add a currency field');
+          $('.field_type').popover('destroy');
           break;
 
           case "email_validation":
           updatePopover($container, 'Validate an email');
+          $('.field_type').popover('destroy');
           break;
 
           case "check_box":
           updatePopover($container, 'Add a checbox field');
+          $('.field_type').popover('destroy');
           break;
 
           case "text_area":
           updatePopover($container,'Add a large text field!');
+          $('.field_type').popover('destroy');
           break;
 
           case "file_upload":
           updatePopover($container,'Add a field to upload a picture or PDF');
+          $('.field_type').popover('destroy');
           break;
 
           case "description":
@@ -225,6 +262,7 @@ window.init = function() {
 
           case "contacts":
             updatePopover($container,'Add a contact information or search thru your saved contacts');
+            $('.field_type').popover('destroy');
             break;
 
           default:
@@ -236,12 +274,14 @@ window.init = function() {
           $container.children("div.col-md-5").removeClass("col-md-5");
           
         }
+
     });
 // ctrl f2 bookmark function
   $('.field_type').trigger("change");
 }
 // // Doc rdy
-$(document).ready(window.init)
+$(document).ready(window.init);
+$(document).ready(window.formTypePopover);
 // // Turbo links rdy (http://stackoverflow.com/questions/18770517/rails-4-how-to-use-document-ready-with-turbo-links)
-$(document).on('page:load', window.init)
+$(document).on('page:load', window.init);
 </script>

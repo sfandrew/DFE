@@ -1,21 +1,2 @@
 <h1>New Form</h1>
 <%= render 'form' %>
-
-<script type="text/javascript">
-	$(document).ready(function(){
-		$('.form-type').popover({
-			placement: 'top',
-			trigger: 'click',
-			content: function(){
-				if($(this).val() == 'Default-form'){
-					var	message = 'A normal regular form';
-					return message;
-				}else if($(this).val() == 'Multi-step'){
-					var message = 'Create a Multiple step form where you can add steps to each part of your form using the field_group field.';
-					return message;
-				}
-			}
-		});
-	});
-</script>
-

@@ -31,6 +31,13 @@ $(function(){
 	//tooltips
 	$('.dfe-tooltip').tooltip();
 
+	$('.field-group-save').on('mouseenter',function(){
+		$(this).css({"opacity": 1});
+	});
+	$('.field-group-save').on('mouseleave',function(){
+		$(this).css({"opacity": 0.5});
+	});
+
 
 });
 
