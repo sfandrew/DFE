@@ -23,7 +23,7 @@ module DynamicFormsEngine
           unless self.properties[field.id.to_s] =~ /\A\d+(?:\.\d{0,2})?\z/
             errors.add field.name, "Enter a valid amount!"
           end
-        elsif field.field_type == "agreement" && !self.properties[field.id.to_s].blank?
+        elsif field.field_type == "agreement" && !self.properties[field.id.to_s] != "0"
           unless self.properties[field.id.to_s] == "1"
             errors.add field.name, "You must agree to the form before you can submit!"
           end

@@ -1,0 +1,112 @@
+<style type="text/css">
+    .required{
+      color: red;
+      font-size: 22px;
+      text-shadow: 0 0 5px red;
+    }
+    .required-field{
+      margin-left: -25px;
+    }
+</style>
+<div align="center" class="row">
+    
+    <div class="btn-group btn-breadcrumb">
+      <% @dynamic_form_type.fields.each do |type| %>
+        <% if type.field_type == "field_group" %>
+          <a href="#" class="btn btn-default" data-step-id="step_<%= type.id %>"><%= type.name %> <span class=""></span></a>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+
+<%= form_for(@dynamic_form_entry, 
+    :html => {:class => "form-horizontal", :multipart => true}) do |f| %>
+
+        <% if @dynamic_form_entry.errors.any? %>
+            <div class="row">
+                <div class="well" id ="errors">
+                    <h2>This form contains <%= pluralize(@dynamic_form_entry.errors.count, "error") %></h2>
+                    <ul>
+                        <% @dynamic_form_entry.errors.full_messages.each do |msg| %>
+                          <li><%= msg %></li>
+                        <% end %>
+                    </ul>
+                </div>
+            </div><!-- /row -->
+        <% end %>
+    
+    <div class="row">
+      <div class="col-md-12">
+        <%= f.hidden_field  :dynamic_form_type_id, :value => @dynamic_form_type.id %>
+
+        <%= f.fields_for :properties, OpenStruct.new(Hash[@dynamic_form_entry.properties.map{|k,v| [k.to_s, v]}]) do |builder| %>
+          <%= render_fields(@dynamic_form_entry, builder) %>
+        <% end %>
+    
+        
+          <div class="row">
+            <ul class="pager next-prev-steps">
+              <li class="previous"><a href="#">&larr; Previous</a></li>
+              <div class="actions col-md-5 col-sm-offset-5">
+                <span class="required required-tag">* </span>Indicates a required field!
+                <%= submit_tag 'Save Draft', 
+                        :class => "btn btn-danger dfe-tooltip btn-md field-group-save",
+                        :name => "save_draft",
+                        :title => "Save the current state of the #{@dynamic_form_type.name}",
+                        :style => "opacity:0.5;",
+                        :data => {
+                                  :toggle => "tooltip", 
+                                  :placement => "bottom" 
+                                  }
+                        
+                        %>   
+                <%= submit_tag 'Submit Form Entry', 
+                        :class => "btn btn-primary dfe-tooltip btn-md field-group-submit", 
+                        :name => "submit_entry",
+                        :title => "Submit #{@dynamic_form_type.name} as final.",
+                        :data => {
+                            :toggle => "tooltip", 
+                            :placement => "bottom", 
+                            :confirm => "Are you sure you want to submit this entry?"}  
+                            %>
+              </div>
+              <li class="next"><a href="#">Next &rarr;</a></li>
+            </ul>
+          </div>
+      
+    </div><!-- /row -->
+
+
+<% end %>
+
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+    $('.datepicker').datepicker();
+
+    $('.option-other').on('change', function(){
+      if($(this).val() == "Other"){
+        //console.log($(this));
+       $(this).closest('.options_select_container')
+          .find('.option-field').show()
+          .find('.other-select').removeAttr('disabled');
+        //console.log("The other options was selected!");
+      }
+      else if($(this).val() != "Other"){
+        //console.log("The other option was not selected");
+        $(this).closest('.options_select_container')
+            .find('.option-field').hide()
+            .find(".other-select").attr('disabled','disabled');
+      }
+    });
+    if($('small').length > 0){
+      $('small').parent().parent().addClass('has-error');
+    }
+    $('.jsig').on('click',function(){
+    	$(window).resize();
+    });
+
+});
+</script>
