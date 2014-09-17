@@ -29,7 +29,7 @@ module DynamicFormsEngine
       field_value = nil
         if !dynamic_form_entry.properties[0].nil?
           dynamic_form_entry.properties.each do |key,value|
-            if field.name == value[:name] && field.field_type == value[:type]
+            if field.id == value[:id].to_i
               field_value = value[:value]
               break
             end
