@@ -38,7 +38,9 @@ module DynamicFormsEngine
     end
     # GET /dynamic_form_entries/1/edit
     def edit
+
       @dynamic_form_type = @dynamic_form_entry.dynamic_form_type
+
     end
 
     # POST /dynamic_form_entries
@@ -74,17 +76,15 @@ module DynamicFormsEngine
         redirect_to dynamic_form_entry_path(@dynamic_form_entry), notice: "<strong>You have submitted your form entry!</strong>".html_safe
       elsif params[:save_draft] && @dynamic_form_entry.save  
          redirect_to edit_dynamic_form_entry_path(@dynamic_form_entry), alert: "<strong> You have temporary saved your draft. Come back to submit it when ready!</strong>".html_safe
-      else
-        
-        @dynamic_form_entry.assign_attributes(dynamic_form_entry_params)
+      else       
         @dynamic_form_entry.format_properties
-
         render "new"
       end
     end
 
     def update
       @dynamic_form_type = @dynamic_form_entry.dynamic_form_type
+
 
       if params[:signature]
         @dynamic_form_entry.signature = params[:signature]
@@ -101,8 +101,8 @@ module DynamicFormsEngine
         redirect_to edit_dynamic_form_entry_path(@dynamic_form_entry), alert: "<strong> You have temporary saved your draft. Come back to submit it when ready!</strong>".html_safe 
 
       else
-        # used for when validatin errors occur
-        @dynamic_form_entry.assign_attributes(dynamic_form_entry_params)
+        
+        # @dynamic_form_entry.assign_attributes(dynamic_form_entry_params)
         @dynamic_form_entry.format_properties
         render "edit"
       end

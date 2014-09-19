@@ -6,10 +6,11 @@
 <div class="clear spacer"></div>
 
 <% if @dynamic_form_type.form_type != "Multi-step" %>
-	<fieldset>
+	
 		<%= render 'default_form' %>
-	</fieldset>
+	
 <% else %>
 	<%= render 'multistep_form' %>
 	<%= render 'field_group' %>
+	
 <% end %>

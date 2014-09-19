@@ -1,7 +1,8 @@
+<% field_value ||= nil %>
 <div class="form-group">
 	<%= f.label field.id, field.name.humanize, :class => "col-sm-2 control-label" %>
 	<div class="col-sm-2">
-		<%= f.check_box field.id, :class => "form-control" %>
+		<%= f.check_box field.id, {checked: true}, :class => "form-control" %>
 		<% if defined?(errors) and errors.present? %>
 			<small class="error-msg" style="color:red"><%= errors.join(', ') %></small>
 	  	<% end %>

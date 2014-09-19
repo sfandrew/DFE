@@ -36,6 +36,7 @@ module DynamicFormsEngine
         if field.field_type == "signature" && field.required? &&  self.signature.size < 25
           errors.add field.name, "must not be blank"
         elsif field.field_type != "signature" && field.required? && properties[field.id.to_s].blank?
+          
           errors.add field.name, "must not be blank"
         end
       end
@@ -68,21 +69,21 @@ module DynamicFormsEngine
       end
     end
     
-    def save_new_contacts(current_user)
-      if self.contacts
-        current_user_contact_emails = current_user.contacts.pluck(:email)
-        self.contacts.each do |contact|
-          contact.set_user_id(self.user_id)
-          if current_user_contact_emails.include?(contact.email)
-            self.contacts << current_user.contacts.where(email: contact.email).first
-            self.contacts.delete(contact)
-            #delete new contact row if these fields are empty
-          elsif contact.id.nil? && contact.first_name.empty? && contact.contact_type.empty? && contact.email.empty? && contact.company.empty?
-            self.contacts.delete(contact)
-          end
-        end
-      end
-    end
+    # def save_new_contacts(current_user)
+    #   if self.contacts
+    #     current_user_contact_emails = current_user.contacts.pluck(:email)
+    #     self.contacts.each do |contact|
+    #       contact.set_user_id(self.user_id)
+    #       if current_user_contact_emails.include?(contact.email)
+    #         self.contacts << current_user.contacts.where(email: contact.email).first
+    #         self.contacts.delete(contact)
+    #         #delete new contact row if these fields are empty
+    #       elsif contact.id.nil? && contact.first_name.empty? && contact.contact_type.empty? && contact.email.empty? && contact.company.empty?
+    #         self.contacts.delete(contact)
+    #       end
+    #     end
+    #   end
+    # end
 
 
     def each_field_with_value
