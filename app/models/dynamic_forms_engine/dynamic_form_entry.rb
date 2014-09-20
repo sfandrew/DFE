@@ -35,8 +35,7 @@ module DynamicFormsEngine
       dynamic_form_type.fields.each do |field|
         if field.field_type == "signature" && field.required? &&  self.signature.size < 25
           errors.add field.name, "must not be blank"
-        elsif field.field_type != "signature" && field.required? && properties[field.id.to_s].blank?
-          
+        elsif field.field_type != "signature" && field.required? && properties[field.id.to_s].blank?  
           errors.add field.name, "must not be blank"
         end
       end
