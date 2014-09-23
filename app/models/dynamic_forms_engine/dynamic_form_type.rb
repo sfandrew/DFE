@@ -3,23 +3,27 @@ module DynamicFormsEngine
   	has_many :fields, class_name: "DynamicFormField",  :dependent => :destroy
     has_many :entries, class_name: "DynamicFormEntry"
 
+    accepts_nested_attributes_for :fields, allow_destroy: true
+
     validates :name, :description, :fields, presence: true
     validates :form_type, presence: true, :inclusion => { :in => %w(Default-form Multi-step), 
                                                       :message => "%{value} is not a valid choice" }
 
-    accepts_nested_attributes_for :fields, allow_destroy: true
+    validate :field_group_requirement, :other_option_validate, :field_group_order
 
-    before_create :add_other_option, :field_group_requirement
-    before_update :other_option_validate, :field_group_requirement
 
-    def add_other_option
-      self.fields.each do |other_field|
-        if other_field.field_type == "options_select_with_other"
-          other_field.content_meta << ",Other"
-          puts "\n\n\n This is getting called! \n\n\n"
+    def field_group_order
+      self.fields.each_with_index do |item, index|
+        if item.field_type == "field_group" 
+          if fields[index+1].nil?
+            errors.add(item.name,"field group must have at least one field in it!!", { :id => 12 })
+          elsif !fields[index+1].nil? && fields[index+1].field_type =="field_group"
+            errors.add item.name, "You cannot have two field groups next to each other"
+          end
         end
       end
     end
+
 
     def field_group_requirement
       if self.form_type == "Multi-step"

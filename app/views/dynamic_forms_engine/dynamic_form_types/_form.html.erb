@@ -1,10 +1,14 @@
 <%= form_for(@dynamic_form_type, :html => {:class => "form-horizontal"}) do |f| %>
   <% if @dynamic_form_type.errors.any? %>
+
     <div class="well" id ="errors">
       <h2>This form type contains <%= pluralize(@dynamic_form_type.errors.count, "error") %></h2>
       <ul>
+      
       <% @dynamic_form_type.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
+        <li class="errors"><%= msg %></li>
+        <li style="display:none;" class="error"><%= @dynamic_form_type.errors.keys %></li>
+
       <% end %>
       </ul>
     </div>
