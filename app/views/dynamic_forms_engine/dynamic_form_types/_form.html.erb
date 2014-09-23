@@ -5,10 +5,8 @@
       <h2>This form type contains <%= pluralize(@dynamic_form_type.errors.count, "error") %></h2>
       <ul>
       
-      <% @dynamic_form_type.errors.full_messages.each do |msg| %>
-        <li class="errors"><%= msg %></li>
-        <li style="display:none;" class="error"><%= @dynamic_form_type.errors.keys %></li>
-
+      <% @dynamic_form_type.errors.each do |attribute, error| %>
+        <li class="field-errors" data-name="<%= attribute.to_s %>"><%= error %></li>
       <% end %>
       </ul>
     </div>
@@ -108,6 +106,25 @@ fieldset[selection="contacts"] .options_select,fieldset[selection="contacts"] .c
 </style>
 <script type="text/javascript">
 
+window.formFieldGroupErrors = function(){
+  var $field_group_errors = $('#errors').find('.field-errors');
+    $.each($field_group_errors, function(index, error){
+      var error_name = $(error).data('name');
+        window.errorsAddClass(error_name);
+    });
+}
+window.errorsAddClass = function(field_group_error_name){
+  var $each_field = $('#field_fields').children();
+    $.each($each_field, function(index, field){
+      var $each_fieldset = $(field);
+      var field_group_name = $(field).find('.user-input').val();
+      var field_group = $(field).find('.field_type').val();
+      if (field_group == "field_group" && field_group_error_name == field_group_name) {
+          $each_fieldset.addClass('alert alert-danger');
+      }
+    });
+}
+
 window.formTypePopover = function(){
   $('.form-type').popover({
       placement: 'top',
@@ -178,7 +195,7 @@ window.init = function() {
           break;
 
           case "field_group":
-          updatePopover($container,'Add a fieldset group');
+          updatePopover($container,'Add a fieldset group with fields in it');
           $('.field_type').popover('destroy');
           break;
 
@@ -286,6 +303,9 @@ window.init = function() {
 // // Doc rdy
 $(document).ready(window.init);
 $(document).ready(window.formTypePopover);
+$(document).ready(window.formFieldGroupErrors)
+
 // // Turbo links rdy (http://stackoverflow.com/questions/18770517/rails-4-how-to-use-document-ready-with-turbo-links)
 $(document).on('page:load', window.init);
+$(document).on('page:load', window.formFieldGroupErrors);
 </script>
