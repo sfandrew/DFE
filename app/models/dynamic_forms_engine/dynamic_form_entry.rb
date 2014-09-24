@@ -88,7 +88,7 @@ module DynamicFormsEngine
     def each_field_with_value
       properties.each do |index, field|
         if field[:type].to_s == 'file_upload'
-          attachment_id = value
+          attachment_id = field[:value]
           attachment = Attachment.find(attachment_id)
           yield index, attachment
         else

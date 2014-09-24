@@ -15,24 +15,48 @@
 <div class="well col-lg-10">
 	<% @dynamic_form_entry.each_field_with_value do |index, field| %>
 		<div class="row row-table">
-			<label class="col-sm-2 control-label ">
-				<%= field[:name] %>:
-			</label>
-			<% if field[:type] == "phone_validation" %>
+
+			<% if field.instance_of?(Attachment) %>
+				<label class="col-sm-2 control-label">
+					<%= field.content_name %>:
+				</label>
 				<div class="col-sm-10">
-					<%= number_to_phone(field[:value]) %>
+					<%= !field.filename.url.nil? ? link_to("Download", field.filename.url, class: 'btn btn-success') : 'No Attachment' %>
+				</div>
+			<% elsif field[:type] == "phone_validation" %>
+				<label class="col-sm-2 control-label">
+					<%= field.content_name %>:
+				</label>
+				<div class="col-sm-10">
+						<%= number_to_phone(field[:value]) %>
 				</div>
 			<% elsif field[:type] == "currency" %>
+				<label class="col-sm-2 control-label">
+					<%= field[:name] %>:
+				</label>
 				<div class="col-sm-10">
 					<%= number_to_currency(field[:value]) %>
 				</div>
+			<% elsif field[:type] == "phone_validation" %>
+				<label class="col-sm-2 control-label">
+					<%= field[:name] %>:
+				</label>
+				<div class="col-sm-10">
+					<%= number_to_phone(field[:value]) %>
+				</div>
 			<% elsif field[:type] == "agreement" %>
+				<label class="col-sm-2 control-label">
+					<%= field[:name] %>:
+				</label>
 				<div class="col-sm-10">
 					<p>Approved</p>
 				</div>
 			<% else %>
+				<label class="col-sm-2 control-label">
+					<%= field[:name] %>:
+				</label>
 				<div class="col-sm-10">
-					<%= field[:type].to_s == 'file_upload' ? link_to("Download", field[:value].filename.url) : field[:value] %>
+					<%= field[:value] %>
 				</div>
 			<% end %>
 		</div>
