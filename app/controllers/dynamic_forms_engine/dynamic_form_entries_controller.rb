@@ -60,22 +60,32 @@ module DynamicFormsEngine
       # checks to see if contact exists for the current user
       #@dynamic_form_entry.save_new_contacts(current_user)
       #check to see if user selected only contacts and or signature field
-      if !@dynamic_form_entry.properties.nil?
+      if !@dynamic_form_entry.properties.nil? && @dynamic_form_entry.valid?
         @dynamic_form_entry.properties.each_pair do |property_id, property_value|
-          field = @dynamic_form_type.fields.find property_id
+          field = @dynamic_form_type.fields.find(property_id)
           if field.attachment?
-            file_attachment = Attachment.create!(attachable_id: params[:dynamic_form_entry][:dynamic_form_type_id],
-                                                  attachable_type: 'DynamicFormEntry',
-                                                  content_name: field.name, 
-                                                  filename: property_value)
+            new_id = DynamicFormEntry.last.id+1
+            i = 0
+            attachments = property_value.size
+            while i < attachments
+              file_attachment = Attachment.create!(attachable_id: new_id,
+                                                user_id: current_user.id,
+                                                attachable_type: 'DynamicFormEntry',
+                                                content_name: field.name, 
+                                                filename: property_value[i])
+              i += 1
+  
+            end
             @dynamic_form_entry.properties[property_id] = file_attachment.id
+
           end
         end
       end
       if params[:submit_entry] && @dynamic_form_entry.save
+        
         redirect_to dynamic_form_entry_path(@dynamic_form_entry), notice: "<strong>You have submitted your form entry!</strong>".html_safe
-      elsif params[:save_draft] && @dynamic_form_entry.save  
-         redirect_to edit_dynamic_form_entry_path(@dynamic_form_entry), alert: "<strong> You have temporary saved your draft. Come back to submit it when ready!</strong>".html_safe
+      elsif params[:save_draft] && @dynamic_form_entry.save
+        redirect_to edit_dynamic_form_entry_path(@dynamic_form_entry), alert: "<strong> You have temporary saved your draft. Come back to submit it when ready!</strong>".html_safe
       else       
         @dynamic_form_entry.format_properties
         render "new"
