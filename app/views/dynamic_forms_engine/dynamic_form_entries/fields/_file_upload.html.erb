@@ -9,7 +9,9 @@
 		<small style="color:red"><%= errors.join(', ') %></small>
 	 <% end %>
   </div>
-  <%= get_attachment(field_value) if !field_value.nil? %>
+  <% if !field_value.nil? && field_value.is_a?(Integer) %>
+    <%= get_attachment(field_value) %>
+  <% end %>
   <% if field.required? %>
 	<span class="col-xs-1 required required-field">*</span>
   <% end %>

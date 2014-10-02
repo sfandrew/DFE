@@ -113,6 +113,8 @@ module DynamicFormsEngine
           
           if field.attachment?
             raise
+            @dynamic_form_entry.properties[1][:type]
+            Attachment.update!()
           end
       end
       
