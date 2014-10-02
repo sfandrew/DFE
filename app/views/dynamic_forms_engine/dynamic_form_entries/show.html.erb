@@ -16,13 +16,15 @@
 	<% @dynamic_form_entry.each_field_with_value do |index, field| %>
 		<div class="row row-table">
 
-			<% if field.instance_of?(Attachment) %>
-				<label class="col-sm-2 control-label">
-					<%= field.content_name %>:
-				</label>
-				<div class="col-sm-10">
-					<%= !field.filename.url.nil? ? link_to("Download", field.filename.url, class: 'btn btn-success') : 'No Attachment' %>
-				</div>
+			<% if field.class == ActiveRecord::Relation::ActiveRecord_Relation_Attachment %>
+				<% field.each do |attachment| %>
+					<label class="col-sm-2 control-label">
+						<%= attachment.content_name %>:
+					</label>
+					<div class="col-sm-10">
+						<%= link_to("Download", attachment.filename.url, class: 'btn btn-success') %>
+					</div>
+				<% end %>
 			<% elsif field[:type] == "phone_validation" %>
 				<label class="col-sm-2 control-label">
 					<%= field.content_name %>:

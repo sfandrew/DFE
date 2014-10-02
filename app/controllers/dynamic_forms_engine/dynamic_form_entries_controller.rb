@@ -37,15 +37,12 @@ module DynamicFormsEngine
 
     end
     # GET /dynamic_form_entries/1/edit
-    def edit
-
-      @dynamic_form_type = @dynamic_form_entry.dynamic_form_type
-
-    end
+   
 
     # POST /dynamic_form_entries
     # POST /dynamic_form_entries.json
     def create
+
       @dynamic_form_type  = DynamicFormType.find(params[:dynamic_form_entry][:dynamic_form_type_id])
       @dynamic_form_entry = current_user.dynamic_form_entries.new(dynamic_form_entry_params)
       if params[:signature]
@@ -63,6 +60,7 @@ module DynamicFormsEngine
       if !@dynamic_form_entry.properties.nil? && @dynamic_form_entry.valid?
         @dynamic_form_entry.properties.each_pair do |property_id, property_value|
           field = @dynamic_form_type.fields.find(property_id)
+
           if field.attachment?
             new_id = DynamicFormEntry.last.id+1
             i = 0
@@ -91,8 +89,13 @@ module DynamicFormsEngine
         render "new"
       end
     end
+     def edit
+      @dynamic_form_type = @dynamic_form_entry.dynamic_form_type
+
+    end
 
     def update
+
       @dynamic_form_type = @dynamic_form_entry.dynamic_form_type
 
 
@@ -105,6 +108,14 @@ module DynamicFormsEngine
         @dynamic_form_entry.in_progress = false
       end
 
+      dynamic_form_entry_params[:properties].each_pair do |property_id, property_value|
+          field = @dynamic_form_type.fields.find(property_id)
+          
+          if field.attachment?
+            raise
+          end
+      end
+      
       if params[:submit_entry] && @dynamic_form_entry.update(dynamic_form_entry_params)
         redirect_to @dynamic_form_entry, notice: 'Below is your curent Form Entry Submission!'
       elsif params[:save_draft] && @dynamic_form_entry.update(dynamic_form_entry_params)
