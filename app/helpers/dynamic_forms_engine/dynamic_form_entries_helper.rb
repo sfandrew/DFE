@@ -38,12 +38,6 @@ module DynamicFormsEngine
       render partial: "dynamic_forms_engine/dynamic_form_entries/fields/#{field.field_type}", 
              locals: {field: field, f: builder, errors: errors, field_value: field_value}
     end
-    def get_attachment(attachment_id)
-      att = Attachment.where(:id => attachment_id)
-      att.each do |attachment|
-        return link_to("Download", attachment.filename.url, class: 'btn btn-success')
-      end
-    end
 
   end
 end

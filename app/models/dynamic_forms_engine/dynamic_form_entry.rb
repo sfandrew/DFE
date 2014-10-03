@@ -21,6 +21,7 @@ module DynamicFormsEngine
           end
         elsif field.field_type == "currency" && !self.properties[field.id.to_s].blank?
           unless self.properties[field.id.to_s] =~ /\A\d+(?:\.\d{0,2})?\z/
+
             errors.add field.name, "Enter a valid amount!"
           end
         elsif field.field_type == "agreement" && !self.properties[field.id.to_s] != "0"
@@ -56,6 +57,9 @@ module DynamicFormsEngine
               errors.add field.name, "Enter a valid phone number including area code!"
             end
           elsif field.field_type == "currency"
+            # get_value = self.properties.find { |key,item| item[:id].to_i == field.id }
+            # unless get_value[1][:value] ~= /\A\d+(?:\.\d{0,2})?\z/
+            #   errors.add field.name, "Enter a valid amount!"
             unless self.properties[field.id.to_s] =~ /\A\d+(?:\.\d{0,2})?\z/
               errors.add field.name, "Enter a valid amount!"
             end
