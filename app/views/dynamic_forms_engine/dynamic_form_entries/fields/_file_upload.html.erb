@@ -1,5 +1,3 @@
-
-
 <div class="form-group">
   <%= f.label field.id, field.name.humanize, :class => "col-sm-2 control-label" %>
   <div class="col-sm-5">
@@ -9,11 +7,19 @@
 		<small style="color:red"><%= errors.join(', ') %></small>
 	 <% end %>
   </div>
-  <% if !field_value.nil? && field_value.is_a?(Integer) %>
-    <%= get_attachment(field_value) %>
+
+  <% if !field_value.nil? %>
+
+    <% @dynamic_form_entry.each_field_with_value do |index, field| %>
+      <% if field[:type] == "file_upload" && field[:value] == field_value %>
+        <%= link_to("Preview Attachment", index.filename.url, class: 'btn btn-success') %>
+      <% end %>
+    <% end %>
   <% end %>
+
   <% if field.required? %>
-	<span class="col-xs-1 required required-field">*</span>
+	 <span class="col-xs-1 required required-field">*</span>
   <% end %>
+
 </div>
 
