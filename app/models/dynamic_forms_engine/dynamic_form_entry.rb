@@ -4,8 +4,9 @@ module DynamicFormsEngine
     belongs_to :user
 
     serialize :properties, Hash
+
     validate :in_progress_validation, :if => Proc.new { |properties| properties.in_progress == true }
-    validate :validate_email_phone_currency, :validate_properties, :if => Proc.new { |properties| properties.in_progress != true}
+    validate :validate_on_submit, :if => Proc.new { |properties| properties.in_progress != true}
     before_create :format_properties, :if => Proc.new { |properties| !properties.properties.nil? }
     before_update :format_properties, :if => Proc.new { |properties| !properties.properties.nil? }
 
@@ -32,20 +33,8 @@ module DynamicFormsEngine
       end
     end
 
-    def validate_properties
-      dynamic_form_type.fields.each do |field|
-        if field.field_type == "signature" && field.required? &&  self.signature.size < 25
-          errors.add field.name, "must not be blank"
-        elsif field.field_type != "signature" && field.required? && properties[field.id.to_s].blank?  
-          errors.add field.name, "must not be blank"
-        end
-      end
-    end
-
-
    # http://stackoverflow.com/questions/8634139/phone-validation-regex
-   # This should be run before format_properties, so it relies on original properties format
-    def validate_email_phone_currency
+    def validate_on_submit
       if dynamic_form_type.fields
         dynamic_form_type.fields.each do |field|
           if field.field_type == "email_validation"
@@ -57,9 +46,6 @@ module DynamicFormsEngine
               errors.add field.name, "Enter a valid phone number including area code!"
             end
           elsif field.field_type == "currency"
-            # get_value = self.properties.find { |key,item| item[:id].to_i == field.id }
-            # unless get_value[1][:value] ~= /\A\d+(?:\.\d{0,2})?\z/
-            #   errors.add field.name, "Enter a valid amount!"
             unless self.properties[field.id.to_s] =~ /\A\d+(?:\.\d{0,2})?\z/
               errors.add field.name, "Enter a valid amount!"
             end
@@ -67,6 +53,10 @@ module DynamicFormsEngine
             unless self.properties[field.id.to_s] == "1"
               errors.add field.name, "You must agree to the form before you can submit!"
             end
+          elsif field.field_type == "signature" && field.required? &&  self.signature.size < 25
+            errors.add field.name, "must not be blank"
+          elsif field.field_type != "signature" && field.required? && properties[field.id.to_s].blank?
+            errors.add field.name, "must not be blank"
           end
         end
       end
@@ -94,7 +84,6 @@ module DynamicFormsEngine
       properties.each do |index, field|
         if field[:type].to_s == 'file_upload'
           attachment_id = field[:value]
-
           attachment = Attachment.find(attachment_id)
           field[:attachment] = attachment
           yield attachment, field

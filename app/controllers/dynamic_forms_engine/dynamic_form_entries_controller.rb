@@ -50,30 +50,6 @@ module DynamicFormsEngine
       else 
         @dynamic_form_entry.in_progress = false
       end
-      # checks to see if contact exists for the current user
-      #@dynamic_form_entry.save_new_contacts(current_user)
-      #check to see if user selected only contacts and or signature field
-      if !@dynamic_form_entry.properties.nil? && @dynamic_form_entry.valid?
-        @dynamic_form_entry.properties.each_pair do |property_id, property_value|
-          field = @dynamic_form_type.fields.find(property_id)
-
-          if field.attachment?
-            new_id = DynamicFormEntry.last.id+1
-            i = 0
-            attachments = property_value.size
-            while i < attachments
-              file_attachment = Attachment.create!(attachable_id: new_id,
-                                                user_id: current_user.id,
-                                                attachable_type: 'DynamicFormEntry',
-                                                content_name: field.name, 
-                                                filename: property_value[i])
-              i += 1
-            end
-            @dynamic_form_entry.properties[property_id] = file_attachment.id
-
-          end
-        end
-      end
 
       if params[:submit_entry] && @dynamic_form_entry.save
         redirect_to dynamic_form_entry_path(@dynamic_form_entry), notice: "<strong>You have submitted your form entry!</strong>".html_safe
@@ -101,24 +77,6 @@ module DynamicFormsEngine
         @dynamic_form_entry.assign_attributes(dynamic_form_entry_params)
         @dynamic_form_entry.in_progress = false
       end
-
-      if !@dynamic_form_entry.properties.nil? && @dynamic_form_entry.valid?
-        dynamic_form_entry_params[:properties].each_pair do |property_id, property_value|
-            field = @dynamic_form_type.fields.find(property_id)
-            if field.attachment? 
-              current_id = @dynamic_form_entry.id
-              file_attachment = Attachment.create!(attachable_id: current_id,
-                                                user_id: current_user.id,
-                                                attachable_type: 'DynamicFormEntry',
-                                                content_name: field.name, 
-                                                filename: property_value[0])
-              
-              dynamic_form_entry_params[:properties][property_id] = file_attachment.id
-              
-            end
-        end
-      end
-
       
       if params[:submit_entry] && @dynamic_form_entry.save
         redirect_to @dynamic_form_entry, notice: 'Below is your curent Form Entry Submission!'

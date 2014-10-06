@@ -142,3 +142,4 @@ DEPENDENCIES
   sass-rails (~> 4.0.2)
   sqlite3
   therubyracer
+  rack-mini-profiler

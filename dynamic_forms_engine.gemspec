@@ -24,5 +24,6 @@ Gem::Specification.new do |s|
   s.add_dependency "therubyracer"
   s.add_dependency 'bootstrap-datepicker-rails'
 
+
   s.add_development_dependency "sqlite3"
 end
