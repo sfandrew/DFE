@@ -23,22 +23,13 @@
 			<%= f.text_field :content_meta, placeholder: "Option 1, Option 2, Option 3", :class => "form-control"  %>
 		</div>
 	</div>
-	<div class="col-sm-1">
-		<div class="checkbox">
-			<label>
-			<%= f.check_box :required %>Required?
-			</label>
-		</div>
+	<div class="col-sm-1 checkbox required">
+		<%= f.check_box :required %>Required?
 	</div>
-	<div class="col-sm-1">
-		<div class="included-report">
-			<label>
-			<%= f.check_box :included_in_report %>Included?
-			</label>
-		</div>
+	<div style="padding-left:30px;" class="col-sm-1 checkbox include-report">
+		<%= f.check_box :included_in_report %>Include?
 	</div>
 	
-
 	<div class="col-sm-2" style="float:right; padding-left:25px;">
 		<%= f.hidden_field :_destroy %>
 		<%= link_to "Remove Field", '#', class: "remove_fields btn btn-danger" %>
