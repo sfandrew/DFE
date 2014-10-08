@@ -23,10 +23,10 @@
 			<%= f.text_field :content_meta, placeholder: "Option 1, Option 2, Option 3", :class => "form-control"  %>
 		</div>
 	</div>
-	<div class="col-sm-1 checkbox required">
+	<div class="col-sm-1 checkbox required" data-toggle="popover" data-trigger="focus" data-content="Have this as a required field" data-placement="top">
 		<%= f.check_box :required %>Required?
 	</div>
-	<div style="padding-left:30px;" class="col-sm-1 checkbox include-report">
+	<div style="padding-left:30px;" class="col-sm-1 checkbox include-report" data-toggle="popover" data-trigger="focus" data-content="Include this field in the report" data-placement="top">
 		<%= f.check_box :included_in_report %>Include?
 	</div>
 	
@@ -35,3 +35,10 @@
 		<%= link_to "Remove Field", '#', class: "remove_fields btn btn-danger" %>
 	</div>
 </fieldset>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('.include-report').popover({trigger: 'hover'});
+		$('.required').popover({trigger: 'hover'});
+	});
+</script>
