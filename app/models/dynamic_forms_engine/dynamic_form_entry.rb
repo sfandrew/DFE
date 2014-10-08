@@ -22,7 +22,6 @@ module DynamicFormsEngine
           end
         elsif field.field_type == "currency" && !self.properties[field.id.to_s].blank?
           unless self.properties[field.id.to_s] =~ /\A\d+(?:\.\d{0,2})?\z/
-
             errors.add field.name, "Enter a valid amount!"
           end
         elsif field.field_type == "agreement" && !self.properties[field.id.to_s] != "0"

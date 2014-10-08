@@ -6,6 +6,10 @@
   .table > thead > tr > th {
     vertical-align: middle;
   }
+  td{
+    text-align: center;
+  }
+
 </style>
 <h1 id="main-header">
   <% if @dynamic_form_type %>
@@ -53,7 +57,7 @@
       <% if !@dynamic_form_type.nil? %>
         <% @dynamic_form_type.fields.each do |field| %>
           <% if field.included_in_report %>
-            <th width="10%" align="center">
+            <th align="center">
               <%= field.name %>
               <h6>(<%= field.field_type  %> field)</h6>
             </th>
@@ -95,7 +99,11 @@
           <% if !@dynamic_form_type.nil? %>
             <% @dynamic_form_type.fields.each do |field| %>
               <% if field.included_in_report %>
-                <td><%= dynamic_form_entry.properties.find { |key, value|  true if value[:id].to_i == field.id }[1][:value] %></td>
+                <% if field.field_type == "agreement" || field.field_type == "check_box" %>
+                  <td><%= "Approve" if dynamic_form_entry.properties.find { |key, value| value[:id].to_i == field.id } %></td>
+                <% else %>
+                  <td><%= dynamic_form_entry.properties.find { |key, value|  value[:id].to_i == field.id }[1][:value] %></td>
+                <% end %>
               <% end %>
             <% end %>
           <% end %>

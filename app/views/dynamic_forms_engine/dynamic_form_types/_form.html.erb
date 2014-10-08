@@ -53,25 +53,18 @@
 
 <style type="text/css">
 
-fieldset .required{
+fieldset .required, .options_select{
   display: none;
 }
-fieldset .options_select {
-  display: none;
-}
-
-fieldset[selection="text_field"] .options_select,{
+fieldset[selection="large_header"] .include-report, fieldset[selection="signature"] .include-report{
   display:none;
 }
-/*fieldset[selection="contacts"] .checkbox,fieldset[selection="file_upload"] .checkbox{
-  display: block; 
+fieldset[selection="text_field"] .options_select,fieldset[selection="field_group"] .include-report{
+  display:none;
 }
-fieldset[selection="text_field"] .checkbox,fieldset[selection="text_area"] .checkbox {
-  display: block; 
+fieldset[selection="spacer"] .include-report, fieldset[selection="small_header"] .include-report {
+display: none;
 }
-fieldset[selection="options_select"] .options_select,fieldset[selection="options_select"] .checkbox {
-  display: block; 
-}*/
 fieldset[selection="spacer"] .field-popover,fieldset[selection="divider"] .field-popover{
   display: none;
 }
@@ -96,7 +89,10 @@ fieldset[selection="options_select_with_other"] .options_select,fieldset[selecti
 fieldset[selection="medium_header"] .options_select,fieldset[selection="medium_header"] .required{
   display: none;
 }
-fieldset[selection="small_header"] .options_select,fieldset[selection="small_header"] .required{
+fieldset[selection="small_header"] .options_select.required, fieldset[selection="medium_header"] .include-report{
+  display: none;
+}
+fieldset[selection="contacts"] .include-report, fieldset[selection="divider"] .include-report{
   display: none;
 }
 fieldset[selection="contacts"] .options_select,fieldset[selection="contacts"] .required{
@@ -261,7 +257,7 @@ window.init = function() {
           break;
 
           case "check_box":
-          updatePopover($container, 'Add a checbox field');
+          updatePopover($container, 'Add a checkbox field');
           $('.field_type').popover('destroy');
           break;
 
