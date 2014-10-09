@@ -15,7 +15,7 @@
 	<div class="col-sm-2">
 		<%= f.select :field_type, %w[agreement calendar check_box contacts currency description divider email_validation field_group file_upload large_header medium_header options_select options_select_with_other phone_validation signature small_header spacer text_area text_field], {:include_blank => 'Select a field', disabled: ''}, {:class => "field_type form-control"}  %>
 	</div>
-	<div class="col-sm-3 field-popover">
+	<div class="col-sm-2 field-popover">
 		<%= f.text_field :name, placeholder: "Name of field", :class => "form-control user-input" %>
 	</div>
 	<div class="options_select">
@@ -26,13 +26,20 @@
 	<div class="col-sm-1 checkbox required" data-toggle="popover" data-trigger="focus" data-content="Have this as a required field" data-placement="top">
 		<%= f.check_box :required %>Required?
 	</div>
-	<div style="padding-left:30px;" class="col-sm-1 checkbox include-report" data-toggle="popover" data-trigger="focus" data-content="Include this field in the report" data-placement="top">
+	<div style="padding-left:30px;" class="col-sm-1 checkbox include-report" data-toggle="popover" data-trigger="focus" 
+			data-content="Include this field in the report" data-placement="top">
 		<%= f.check_box :included_in_report %>Include?
 	</div>
-	
-	<div class="col-sm-2" style="float:right; padding-left:25px;">
+	<div class="col-sm-2">
+		<%= f.select(:field_width, "<option style='background-color:white; color:black;'>Size of Field</option>
+									<option value ='1' style='background-color:white; color:black;'>1</option>
+									<option value ='1' style='background-color:white; color:black;'>2</option>
+									<option value ='1' style='background-color:white; color:black;'>3</option>
+									<option value ='1' style='background-color:white; color:black;'>4</option>".html_safe,{}, {:class => "form-control btn btn-primary field-size"}) %>
+	</div>
+	<div class="col-sm-1">
 		<%= f.hidden_field :_destroy %>
-		<%= link_to "Remove Field", '#', class: "remove_fields btn btn-danger" %>
+		<%= link_to "Remove", '#', class: "remove_fields btn btn-danger" %>
 	</div>
 </fieldset>
 

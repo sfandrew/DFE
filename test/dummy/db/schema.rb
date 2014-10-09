@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141006225835) do
+ActiveRecord::Schema.define(version: 20141008220450) do
 
   create_table "dynamic_forms_engine_dynamic_form_entries", force: true do |t|
     t.integer  "dynamic_form_type_id"
@@ -34,6 +34,7 @@ ActiveRecord::Schema.define(version: 20141006225835) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "included_in_report"
+    t.string   "field_width"
   end
 
   create_table "dynamic_forms_engine_dynamic_form_types", force: true do |t|
