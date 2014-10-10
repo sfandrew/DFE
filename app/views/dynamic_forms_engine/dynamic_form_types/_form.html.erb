@@ -6,7 +6,7 @@
       <ul>
       
       <% @dynamic_form_type.errors.each do |attribute, error| %>
-        <li class="field-errors" data-name="<%= attribute.to_s %>"><%= error %></li>
+        <li class="field-errors" data-name="<%= attribute.to_s %>">field <%= error %></li>
       <% end %>
       </ul>
     </div>
@@ -56,6 +56,12 @@
 fieldset .required, .options_select{
   display: none;
 }
+fieldset[selection="spacer"] .field-size, fieldset[selection="divider"] .field-size{
+  display:none;
+}
+fieldset[selection="large_header"] .include-report, fieldset[selection="signature"] .include-report{
+  display:none;
+}
 fieldset[selection="large_header"] .include-report, fieldset[selection="signature"] .include-report{
   display:none;
 }
@@ -101,6 +107,7 @@ fieldset[selection="contacts"] .options_select,fieldset[selection="contacts"] .r
 
 </style>
 <script type="text/javascript">
+
 
 window.formFieldGroupErrors = function(){
   var $field_group_errors = $('#errors').find('.field-errors');
@@ -299,7 +306,7 @@ window.init = function() {
 // // Doc rdy
 $(document).ready(window.init);
 $(document).ready(window.formTypePopover);
-$(document).ready(window.formFieldGroupErrors)
+$(document).ready(window.formFieldGroupErrors);
 
 // // Turbo links rdy (http://stackoverflow.com/questions/18770517/rails-4-how-to-use-document-ready-with-turbo-links)
 $(document).on('page:load', window.init);

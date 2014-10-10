@@ -32,10 +32,12 @@
 	</div>
 	<div class="col-sm-2">
 		<%= f.select(:field_width, "<option style='background-color:white; color:black;'>Size of Field</option>
-									<option value ='1' style='background-color:white; color:black;'>1</option>
-									<option value ='1' style='background-color:white; color:black;'>2</option>
-									<option value ='1' style='background-color:white; color:black;'>3</option>
-									<option value ='1' style='background-color:white; color:black;'>4</option>".html_safe,{}, {:class => "form-control btn btn-primary field-size"}) %>
+									<option value ='col-md-3' style='background-color:white; color:black;'>25% width</option>
+									<option value ='col-md-4' style='background-color:white; color:black;'>33% width</option>
+									<option value ='col-md-6' style='background-color:white; color:black;'>50% width</option>
+									<option value ='col-md-8' style='background-color:white; color:black;'>75% width</option>
+									<option value ='col-md-12' style='background-color:white; color:black;'>Default 100%</option>
+									<option value ='inline' style='background-color:white; color:black;'>Multiple fields in one row</option>".html_safe,{}, {:class => "form-control btn btn-info field-size", :data => {:toggle => 'popover', :trigger => 'focus',:content => 'Choose the size of the field',:placement => 'top'}}) %>
 	</div>
 	<div class="col-sm-1">
 		<%= f.hidden_field :_destroy %>
@@ -43,9 +45,12 @@
 	</div>
 </fieldset>
 
+
 <script type="text/javascript">
-	$(document).ready(function(){
-		$('.include-report').popover({trigger: 'hover'});
-		$('.required').popover({trigger: 'hover'});
-	});
+$(document).ready(function(){
+	$('.include-report').popover({trigger: 'hover'});
+	$('.required').popover({trigger: 'hover'});
+	$('.field-size').popover({trigger: 'hover'});
+});
 </script>
+
