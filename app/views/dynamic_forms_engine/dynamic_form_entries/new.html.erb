@@ -14,3 +14,29 @@
 	<%= render 'field_group' %>
 	
 <% end %>
+
+<script type="text/javascript">
+
+window.DefaultFieldBehavoir = function(){
+  $('.datepicker').datepicker();
+  $('.jsig').on('click',function(){
+      $(window).resize();
+  });
+  $('.option-other').on('change', function(){
+    if($(this).val() == "Other"){
+      $(this).closest('.options_select_container')
+        .find('.option-field').show()
+        .find('.other-select').removeAttr('disabled');
+    }
+    else if($(this).val() != "Other"){
+    	$(this).closest('.options_select_container')
+         .find('.option-field').hide()
+         .find(".other-select").attr('disabled','disabled');
+      }
+    });
+    if($('small').length > 0){
+      $('small').parent().parent().addClass('has-error');
+    }
+}
+$(document).ready(window.DefaultFieldBehavoir);
+</script>

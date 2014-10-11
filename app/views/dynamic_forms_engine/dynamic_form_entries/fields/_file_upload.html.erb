@@ -1,7 +1,7 @@
 <div class="form-group">
-  <%= f.label field.id, field.name.humanize, :class => "col-sm-2 control-label" %>
-  <div class="col-sm-5">
-    <%= f.file_field field.id, :multiple => true, value: '~/resume.doc', :class => "form-control"  %>
+  <%= f.label field.id, field.name.humanize, :class => "col-md-2 control-label" %>
+  <div class="col-md-4">
+    <%= f.file_field field.id, :multiple => true, :class => "form-control"  %>
 
     <% if defined?(errors) and errors.present? %>
 		<small style="color:red"><%= errors.join(', ') %></small>
