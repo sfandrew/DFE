@@ -1,8 +1,8 @@
 <% field_value ||= nil %>
 
-<div class="form-group">
-	<%= f.label field.id, field.name.humanize, :class => "col-sm-2 control-label" %>
-	<div class="col-sm-4">
+<div class="col-md-<%= field.field_width %>">
+	<%= f.label field.id, field.name.humanize, :class => "col-md-2 control-label" %>
+	<div class="col-md-8">
 		<%= f.text_area field.id, value: field_value,:class => "form-control" %>
 		<% if defined?(errors) and errors.present? %>
 			<small class="error-msg" style="color:red"><%= errors.join(', ') %></small>

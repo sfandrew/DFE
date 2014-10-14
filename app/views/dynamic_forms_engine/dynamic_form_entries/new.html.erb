@@ -8,6 +8,7 @@
 <% if @dynamic_form_type.form_type != "Multi-step" %>
 	
 		<%= render 'default_form' %>
+    
 	
 <% else %>
 	<%= render 'multistep_form' %>
@@ -34,7 +35,7 @@ window.DefaultFieldBehavoir = function(){
          .find(".other-select").attr('disabled','disabled');
       }
     });
-    if($('small').length > 0){
+    if($('small.error-msg').length > 0){
       $('small').parent().parent().addClass('has-error');
     }
 }
