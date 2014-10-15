@@ -3,7 +3,8 @@ require_dependency "dynamic_forms_engine/application_controller"
 module DynamicFormsEngine
   class DynamicFormEntriesController < ApplicationController
     before_action :set_dynamic_form_entry, only: [:show, :edit, :update, :destroy]
-    before_filter :authenticate_user!
+    before_filter :authenticate_user!, only: [:index,:destroy, :edit, :update]
+    before_action :public_form, only: [:new, :create, :show], if: -> { current_user.nil? }
 
     # GET /dynamic_form_entries
     # GET /dynamic_form_entries.json
@@ -22,25 +23,18 @@ module DynamicFormsEngine
       render action: 'index'
     end
 
-    # GET /dynamic_form_entries/1
-    # GET /dynamic_form_entries/1.json
     def show
-      #@contacts = []#Contact.where(id: Contactable.select(:contact_id).where(:contactable_type => "DynamicFormEntry",:contactable_id => params[:id]))
     end
 
-    # GET /dynamic_form_entries/new
     def new
       @dynamic_form_type    = DynamicFormType.find(params[:dynamic_form_type_id])
-      @dynamic_form_entry   = current_user.dynamic_form_entries.new(dynamic_form_type_id: params[:dynamic_form_type_id]) 
-
-      #DynamicFormEntry.new(dynamic_form_type_id: params[:dynamic_form_type_id])
-
+      current_user.nil? ? public_form :  @dynamic_form_entry = current_user.dynamic_form_entries.new(dynamic_form_type_id: params[:dynamic_form_type_id])
     end
 
     def create
-
       @dynamic_form_type  = DynamicFormType.find(params[:dynamic_form_entry][:dynamic_form_type_id])
-      @dynamic_form_entry = current_user.dynamic_form_entries.new(dynamic_form_entry_params)
+      current_user.nil? ? public_form : @dynamic_form_entry = current_user.dynamic_form_entries.new(dynamic_form_type_id: params[:dynamic_form_type_id])
+
       if params[:signature]
         @dynamic_form_entry.signature = params[:signature]
       end
@@ -103,10 +97,27 @@ module DynamicFormsEngine
 
     private
 
+    def public_form
+      #on new
+      if !params[:dynamic_form_type_id].nil? && DynamicFormsEngine::DynamicFormType.find(params[:dynamic_form_type_id]).is_public == true
+        @dynamic_form_entry = DynamicFormsEngine::DynamicFormEntry.new(dynamic_form_type_id: params[:dynamic_form_type_id])
+      #on create
+      elsif !params[:dynamic_form_entry].nil? && DynamicFormsEngine::DynamicFormType.find(params[:dynamic_form_entry][:dynamic_form_type_id]).is_public == true
+        @dynamic_form_entry = DynamicFormsEngine::DynamicFormEntry.new(dynamic_form_entry_params)
+      #on show
+      elsif !@dynamic_form_entry.nil? 
+        true if @dynamic_form_entry.dynamic_form_type.is_public == true 
+      else 
+        redirect_to(root_path, alert: 'You must be signed in!')
+      end
+    end
     # Use callbacks to share common setup or constraints between actions.
     def set_dynamic_form_entry
-      @dynamic_form_entry = current_user.dynamic_form_entries.where( :id => params[:id] ).first
-      #DynamicFormEntry.find(params[:id])
+      if current_user.nil?
+        @dynamic_form_entry = DynamicFormsEngine::DynamicFormEntry.where(:id => params[:id]).first
+      else
+        @dynamic_form_entry = current_user.dynamic_form_entries.where( :id => params[:id] ).first
+      end
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

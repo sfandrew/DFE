@@ -1,3 +1,15 @@
+<style type="text/css">
+  th{
+    text-align: center;
+    vertical-align: middle;
+  }
+  .table > thead > tr > th {
+    vertical-align: middle;
+  }
+  td{
+    text-align: center;
+  }
+</style>
 <div class="row">
   <h1 class="col-xs-12 col-sm-6 col-md-8" id="main-header">Form Types</h1>
   <div class="col-xs-6 col-md-4">
@@ -7,10 +19,13 @@
 
 <table class="table table-striped table-hover workorders">
   <thead>
-    <tr>
+    <tr class='well'>
       <th>Name</th>
       <th>Description</th>
       <th>Form Type</th>
+      <th>Public ?</th>
+      <th></th>
+      <th></th>
       <th></th>
     </tr>
   </thead>
@@ -21,7 +36,12 @@
         <td><strong><%= dynamic_form_type.name %></strong></td>
         <td><%= dynamic_form_type.description %></td>
         <td><i><%= dynamic_form_type.form_type %></i></td>
-        <td><%= link_to "New #{dynamic_form_type.name}", new_form_entry_path(dynamic_form_type), :class => 'btn btn-success' %> </td>
+        <td><i><%= dynamic_form_type.is_public ? 'Yes' : 'No' %></i></td>
+        <td><%= link_to new_form_entry_path(dynamic_form_type), 
+            :class => 'btn btn-success' do %>
+            <span class="glyphicon glyphicon-pencil"></span> <%= "New #{dynamic_form_type.name}" %>
+          <% end %>
+        </td>
         <td>
           <a href="<%= form_entries_path(dynamic_form_type) %>">
             <button class="btn btn-primary" type="button">

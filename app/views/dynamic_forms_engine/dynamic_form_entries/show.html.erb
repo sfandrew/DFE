@@ -28,7 +28,7 @@
 					<%= field.content_name %>:
 				</label>
 				<div class="col-sm-10">
-						<%= number_to_phone(field[:value]) %>
+					<%= number_to_phone(field[:value]) %>
 				</div>
 			<% elsif field[:type] == "currency" %>
 				<label class="col-sm-2 control-label">
@@ -50,6 +50,13 @@
 				</label>
 				<div class="col-sm-10">
 					<p>Approved</p>
+				</div>
+			<% elsif field[:type] == "check_box" %>
+				<label class="col-sm-2 control-label">
+					<%= field[:name] %>:
+				</label>
+				<div class="col-sm-10">
+					<p>Checked</p>
 				</div>
 			<% else %>
 				<label class="col-sm-2 control-label">
