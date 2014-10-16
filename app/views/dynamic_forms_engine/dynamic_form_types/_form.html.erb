@@ -1,61 +1,3 @@
-<%= form_for(@dynamic_form_type, :html => {:class => "form-horizontal"}) do |f| %>
-  <% if @dynamic_form_type.errors.any? %>
-
-    <div class="well" id ="errors">
-      <h2>This form type contains <%= pluralize(@dynamic_form_type.errors.count, "error") %></h2>
-      <ul>
-      
-      <% @dynamic_form_type.errors.each do |attribute, error| %>
-        <li class="field-errors" data-name="<%= attribute.to_s %>"><%= attribute %> field <%= error %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
-
-  <div class="form-group">
-    <%= f.label :name, :class => "col-sm-2 control-label" %>
-    <div class="col-sm-10">
-      <%= f.text_field :name, :class => "form-control", :required => true,:placeholder => 'Name of form' %>
-    </div>
-  </div>
-
-  <div class="field form-group">
-    <%= f.label :description, :class => "col-sm-2 control-label" %>
-    <div class="col-sm-10">
-      <%= f.text_area :description, :class => "form-control", :required => true, :placeholder => 'Description of form' %>
-    </div>
-  </div>
-
-  <div class="field form-group">
-    <%= f.label :form_type, :class => "col-sm-2 control-label" %>
-    <div class="col-sm-4">
-      <%= f.select :form_type,['Default-form','Multi-step'],{:disabled => 'Select Form Type', :include_blank => 'Choose form'}, {:class => 'form-control input-medium form-type'} %>
-    </div>
-    <%= f.label :is_public, :class => "col-sm-2 control-label" %>
-    <div class="col-sm-4">
-      <%= f.select :is_public,[['Yes',true],['No',false]],{}, {:class => 'form-control public', 
-                            :data =>{:toggle => 'toggle', :trigger => 'focus', :content => 'Make this form Public(non users) or Private(registered users)', :placement => 'top'}} %>
-    </div>
-  </div>
-
-  <div class="field form-group">
-    <div class="col-sm-2 control-label">
-      <%= link_to_add_many_fields "Add Field", f, :fields %>
-    </div>
-
-    <div class="col-sm-10" id="field_fields" >
-      <%=raw "<em id='no_field_fields' style='width: 100%; color: red; text-align: center; padding-top: 13px;display: block;'>You need at least one field to submit this form!</em>" if @dynamic_form_type.fields.blank? %>
-      <%= f.fields_for :fields do |builder| %>
-        <%= render 'field_fields', f: builder %>
-      <% end %>
-    </div>
-  </div>
-
-  <div class="actions col-md-offset-2 col-sm-10">
-    <%= f.submit "Save Form", :class => "btn btn-success btn-block btn-lg" %>
-  </div>
-<% end %>
-
 <style type="text/css">
 
 fieldset .required, .options_select{
@@ -114,8 +56,102 @@ fieldset[selection="contacts"] .options_select,fieldset[selection="contacts"] .r
 }
 
 </style>
+<%= form_for(@dynamic_form_type, :html => {:class => "form-horizontal"}) do |f| %>
+  <% if @dynamic_form_type.errors.any? %>
+
+    <div class="well" id ="errors">
+      <h2>This form type contains <%= pluralize(@dynamic_form_type.errors.count, "error") %></h2>
+      <ul>
+      
+      <% @dynamic_form_type.errors.each do |attribute, error| %>
+        <li class="field-errors" data-name="<%= attribute.to_s %>"><%= attribute %> field <%= error %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= f.label :name, :class => "col-sm-2 control-label" %>
+    <div class="col-sm-10">
+      <%= f.text_field :name, :class => "form-control", :required => true,:placeholder => 'Name of form' %>
+    </div>
+  </div>
+
+  <div class="field form-group">
+    <%= f.label :description, :class => "col-sm-2 control-label" %>
+    <div class="col-sm-10">
+      <%= f.text_area :description, :class => "form-control", :required => true, :placeholder => 'Description of form' %>
+    </div>
+  </div>
+
+  <div class="field form-group">
+    <%= f.label :form_type, :class => "col-sm-2 control-label" %>
+    <div class="col-sm-4">
+      <%= f.select :form_type,['Default-form','Multi-step'],{:disabled => 'Select Form Type', :include_blank => 'Choose form'}, {:class => 'form-control form-type', id: "form-type"}  %>
+    </div>
+    <%= f.label :is_public, :class => "col-sm-2 control-label" %>
+    <div class="col-sm-4">
+      <%= f.select :is_public,[['Yes',true],['No',false]],{}, {:class => 'form-control public', 
+                            :data =>{:toggle => 'toggle', :trigger => 'focus', :content => 'Make this form Public(non users) or Private(registered users)', :placement => 'top'}, id: "public"} %>
+    </div>
+  </div>
+
+  <div class="field form-group">
+    <div class="col-sm-2 control-label">
+      <%= link_to_add_many_fields "Add Field", f, :fields %>
+    </div>
+
+    <div class="col-sm-10" id="field_fields" >
+      <%=raw "<em id='no_field_fields' style='width: 100%; color: red; text-align: center; padding-top: 13px;display: block;'>You need at least one field to submit this form!</em>" if @dynamic_form_type.fields.blank? %>
+      <%= f.fields_for :fields do |builder| %>
+        <%= render 'field_fields', f: builder %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="actions col-md-offset-2 col-sm-10">
+    <%= f.submit "Save Form", :class => "btn btn-success btn-block btn-lg" %>
+  </div>
+<% end %>
+
+
 <script type="text/javascript">
 
+window.publicFormValidation = function(){
+  $('#form-type, #public').change(function(){
+    if(checkForm()){
+      $('.add_many_fields').on('click',function(){
+        setTimeout(function(){
+          $('.field_type option[value="file_upload"]').hide();
+          $('.field_type option[value="contacts"]').hide();
+        }, 500);
+      }); 
+      $('.field_type option[value="file_upload"]').hide();
+      $('.field_type option[value="contacts"]').hide();
+    }else {
+      var $contacts = $('.field_type option[value="contacts"]');
+      var $file_uploads = $('.field_type option[value="file_upload"]');
+      $contacts.show();
+      $file_uploads.show();
+      $('.add_many_fields').on('click',function(){
+        $contacts.show();
+        $file_uploads.show();
+        $('.add_many_fields').on('click',function(){
+          setTimeout(function(){
+            $contacts.show();
+            $file_uploads.show();
+        }, 500);
+      }); 
+      });
+    };
+  });
+}
+
+checkForm = function(){
+  var form_type_value = $('#form-type').val();
+  var public_val = $('#public').val();
+  return (form_type_value == "Multi-step" && public_val == "true");
+}
 
 window.formFieldGroupErrors = function(){
   var $field_group_errors = $('#errors').find('.field-errors');
@@ -151,9 +187,8 @@ window.formTypePopover = function(){
       }
     });
 }
-// $(document).ready(function(){
+
 window.updatePopover = function($container, content){
-  //console.log('updatePopover : ',container);
   $container.find('.field-popover').data('bs.popover').options.content = content; //this is defining the content params
 }
 
@@ -315,7 +350,9 @@ window.init = function() {
 $(document).ready(window.init);
 $(document).ready(window.formTypePopover);
 $(document).ready(window.formFieldGroupErrors);
+$(document).ready(window.publicFormValidation);
 $('.public').popover({trigger: 'hover'});
+
 
 // // Turbo links rdy (http://stackoverflow.com/questions/18770517/rails-4-how-to-use-document-ready-with-turbo-links)
 $(document).on('page:load', window.init);
