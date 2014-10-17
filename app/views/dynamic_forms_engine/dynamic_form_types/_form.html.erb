@@ -91,7 +91,7 @@ fieldset[selection="contacts"] .options_select,fieldset[selection="contacts"] .r
     </div>
     <%= f.label :is_public, :class => "col-sm-2 control-label" %>
     <div class="col-sm-4">
-      <%= f.select :is_public,[['Yes',true],['No',false]],{}, {:class => 'form-control public', 
+      <%= f.select :is_public,[['Yes',true],['No',false]],{:include_blank => 'Select'}, {:class => 'form-control public', 
                             :data =>{:toggle => 'toggle', :trigger => 'focus', :content => 'Make this form Public(non users) or Private(registered users)', :placement => 'top'}, id: "public"} %>
     </div>
   </div>
@@ -118,39 +118,36 @@ fieldset[selection="contacts"] .options_select,fieldset[selection="contacts"] .r
 <script type="text/javascript">
 
 window.publicFormValidation = function(){
-  $('#form-type, #public').change(function(){
+  $('#public').change(function(){
     if(checkForm()){
+      $('.field_type option[value="file_upload"]').hide();
+      $('.field_type option[value="contacts"]').hide();
       $('.add_many_fields').on('click',function(){
         setTimeout(function(){
           $('.field_type option[value="file_upload"]').hide();
           $('.field_type option[value="contacts"]').hide();
         }, 500);
       }); 
-      $('.field_type option[value="file_upload"]').hide();
-      $('.field_type option[value="contacts"]').hide();
     }else {
       var $contacts = $('.field_type option[value="contacts"]');
       var $file_uploads = $('.field_type option[value="file_upload"]');
       $contacts.show();
       $file_uploads.show();
-      $('.add_many_fields').on('click',function(){
-        $contacts.show();
-        $file_uploads.show();
         $('.add_many_fields').on('click',function(){
           setTimeout(function(){
+            var $contacts = $('.field_type option[value="contacts"]');
+            var $file_uploads = $('.field_type option[value="file_upload"]');
             $contacts.show();
             $file_uploads.show();
         }, 500);
-      }); 
       });
     };
   });
 }
 
 checkForm = function(){
-  var form_type_value = $('#form-type').val();
   var public_val = $('#public').val();
-  return (form_type_value == "Multi-step" && public_val == "true");
+  return (public_val == "true");
 }
 
 window.formFieldGroupErrors = function(){
@@ -165,9 +162,13 @@ window.errorsAddClass = function(field_group_error_name){
     $.each($each_field, function(index, field){
       var $each_fieldset = $(field);
       var field_group_name = $(field).find('.user-input').val();
+      var public_status = $('#public').val();
       var field_group = $(field).find('.field_type').val();
       if (field_group == "field_group" && field_group_error_name == field_group_name) {
-          $each_fieldset.addClass('alert alert-danger');
+        $each_fieldset.addClass('alert alert-danger');
+      }else if (public_status == "true" && $each_fieldset.find('.field_type').val() == "contacts" || 
+                public_status == "true" && $each_fieldset.find('.field_type').val() == "file_upload" ){
+        $each_fieldset.addClass('alert alert-danger');
       }
     });
 }
