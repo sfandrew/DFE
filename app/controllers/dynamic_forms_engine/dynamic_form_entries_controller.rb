@@ -26,6 +26,11 @@ module DynamicFormsEngine
     # GET /dynamic_form_entries/1.json
     def show
       #@contacts = []#Contact.where(id: Contactable.select(:contact_id).where(:contactable_type => "DynamicFormEntry",:contactable_id => params[:id]))
+      respond_to do |format|
+        format.html
+        format.csv { render text: @dynamic_form_entry.to_csv }
+        format.xml { @entry_as_array = @dynamic_form_entry.to_array}
+      end
     end
 
     # GET /dynamic_form_entries/new

@@ -44,6 +44,8 @@
       <th>Submitted</th>
       <th></th>
       <th></th>
+      <th></th>
+      <th></th>
     </tr>
   </thead>
 
@@ -76,6 +78,8 @@
           </td>
           <td><%= dynamic_form_entry.created_at.strftime(" %l:%M %p %b. %d, %Y") %></td>
           <td><%= link_to 'Show', dynamic_form_entry, :class => 'btn btn-info' %></td>
+          <td><%= link_to 'CSV', dynamic_form_entry_path(dynamic_form_entry, format: :csv), :class => 'btn btn-info' %></td>
+          <td><%= link_to 'XML', dynamic_form_entry_path(dynamic_form_entry, format: :xml), :class => 'btn btn-info'%></td>
           <!-- td><%= link_to 'Edit', edit_dynamic_form_entry_path(dynamic_form_entry) %></td -->
           <td><%= link_to 'Delete', dynamic_form_entry, method: :delete, data: { confirm: 'Are you sure?' }, :class => 'btn btn-danger' %></td>
         </tr>
