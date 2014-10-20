@@ -1,9 +1,15 @@
-<div class="form-group">
-	<%= f.label field.id, field.name.humanize, :class => "col-sm-2 control-label" %>
-	<div class="col-sm-2">
-		<%= f.check_box field.id, :class => "form-control" %>
+<% field_value ||= nil %>
+
+<div class="col-md-<%= field.field_width %>">
+	<%= f.label field.id, field.name.humanize, :class => "col-md-2 control-label" %>
+	<div class="col-md-3">
+		<% if field_value == "1" %>
+			<%= f.check_box field.id, {checked: true} %>
+		<% else %>
+			<%= f.check_box field.id %>
+		<% end %>
 		<% if defined?(errors) and errors.present? %>
-			<small style="color:red"><%= errors.join(', ') %></small>
+			<small class="error-msg" style="color:red"><%= errors.join(', ') %></small>
 	  	<% end %>
 	</div>
 	<% if field.required? %>

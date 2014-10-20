@@ -4,8 +4,9 @@ module DynamicFormsEngine
     belongs_to :user
 
     serialize :properties, Hash
+
     validate :in_progress_validation, :if => Proc.new { |properties| properties.in_progress == true }
-    validate :validate_email_phone_currency, :validate_properties, :if => Proc.new { |properties| properties.in_progress != true}
+    validate :validate_on_submit, :if => Proc.new { |properties| properties.in_progress != true}
     before_create :format_properties, :if => Proc.new { |properties| !properties.properties.nil? }
     before_update :format_properties, :if => Proc.new { |properties| !properties.properties.nil? }
 
@@ -23,7 +24,7 @@ module DynamicFormsEngine
           unless self.properties[field.id.to_s] =~ /\A\d+(?:\.\d{0,2})?\z/
             errors.add field.name, "Enter a valid amount!"
           end
-        elsif field.field_type == "agreement" && !self.properties[field.id.to_s].blank?
+        elsif field.field_type == "agreement" && !self.properties[field.id.to_s] != "0"
           unless self.properties[field.id.to_s] == "1"
             errors.add field.name, "You must agree to the form before you can submit!"
           end
@@ -31,20 +32,8 @@ module DynamicFormsEngine
       end
     end
 
-    def validate_properties
-      dynamic_form_type.fields.each do |field|
-        if field.field_type == "signature" && field.required? &&  self.signature.size < 25
-          errors.add field.name, "must not be blank"
-        elsif field.field_type != "signature" && field.required? && properties[field.id.to_s].blank?
-          errors.add field.name, "must not be blank"
-        end
-      end
-    end
-
-
    # http://stackoverflow.com/questions/8634139/phone-validation-regex
-   # This should be run before format_properties, so it relies on original properties format
-    def validate_email_phone_currency
+    def validate_on_submit
       if dynamic_form_type.fields
         dynamic_form_type.fields.each do |field|
           if field.field_type == "email_validation"
@@ -63,34 +52,40 @@ module DynamicFormsEngine
             unless self.properties[field.id.to_s] == "1"
               errors.add field.name, "You must agree to the form before you can submit!"
             end
-          end
-        end
-      end
-    end
-    
-    def save_new_contacts(current_user)
-      if self.contacts
-        current_user_contact_emails = current_user.contacts.pluck(:email)
-        self.contacts.each do |contact|
-          contact.set_user_id(self.user_id)
-          if current_user_contact_emails.include?(contact.email)
-            self.contacts << current_user.contacts.where(email: contact.email).first
-            self.contacts.delete(contact)
-            #delete new contact row if these fields are empty
-          elsif contact.id.nil? && contact.first_name.empty? && contact.contact_type.empty? && contact.email.empty? && contact.company.empty?
-            self.contacts.delete(contact)
+          elsif field.field_type == "signature" && field.required? &&  self.signature.size < 25
+            errors.add field.name, "must not be blank"
+          elsif field.field_type != "signature" && field.required? && properties[field.id.to_s].blank?
+            errors.add field.name, "must not be blank"
           end
         end
       end
     end
 
+    
+    
+    # def save_new_contacts(current_user)
+    #   if self.contacts
+    #     current_user_contact_emails = current_user.contacts.pluck(:email)
+    #     self.contacts.each do |contact|
+    #       contact.set_user_id(self.user_id)
+    #       if current_user_contact_emails.include?(contact.email)
+    #         self.contacts << current_user.contacts.where(email: contact.email).first
+    #         self.contacts.delete(contact)
+    #         #delete new contact row if these fields are empty
+    #       elsif contact.id.nil? && contact.first_name.empty? && contact.contact_type.empty? && contact.email.empty? && contact.company.empty?
+    #         self.contacts.delete(contact)
+    #       end
+    #     end
+    #   end
+    # end
 
     def each_field_with_value
       properties.each do |index, field|
         if field[:type].to_s == 'file_upload'
-          attachment_id = value
+          attachment_id = field[:value]
           attachment = Attachment.find(attachment_id)
-          yield index, attachment
+          field[:attachment] = attachment
+          yield attachment, field
         else
           yield index, field
         end
@@ -106,14 +101,13 @@ module DynamicFormsEngine
       old_properties = self.properties
       new_properties = {}
       old_properties.each_with_index do |(field_id, field_value), index|
-        
         field = DynamicFormField.find(field_id.to_i)
         
         # Prepend "Other: " to options_select_with_other field types
         if field.field_type == "options_select_with_other" && !field.content_meta.include?(field_value)
           field_value = "Other: " + field_value
         end
-        new_properties[index] = {name: field.name, type: field.field_type, value: field_value}
+        new_properties[index] = {name: field.name, type: field.field_type, value: field_value, id: field_id}
       end
       self.properties = new_properties
     end

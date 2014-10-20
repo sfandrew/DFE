@@ -3,7 +3,8 @@ require_dependency "dynamic_forms_engine/application_controller"
 module DynamicFormsEngine
   class DynamicFormEntriesController < ApplicationController
     before_action :set_dynamic_form_entry, only: [:show, :edit, :update, :destroy]
-    before_filter :authenticate_user!
+    before_filter :authenticate_user!, only: [:index,:destroy, :edit, :update]
+    before_action :public_form, only: [:new, :create, :show], if: -> { current_user.nil? }
 
     # GET /dynamic_form_entries
     # GET /dynamic_form_entries.json
@@ -22,35 +23,18 @@ module DynamicFormsEngine
       render action: 'index'
     end
 
-    # GET /dynamic_form_entries/1
-    # GET /dynamic_form_entries/1.json
     def show
-      #@contacts = []#Contact.where(id: Contactable.select(:contact_id).where(:contactable_type => "DynamicFormEntry",:contactable_id => params[:id]))
-      respond_to do |format|
-        format.html
-        format.csv { render text: @dynamic_form_entry.to_csv }
-        format.xml { @entry_as_array = @dynamic_form_entry.to_array}
-      end
     end
 
-    # GET /dynamic_form_entries/new
     def new
       @dynamic_form_type    = DynamicFormType.find(params[:dynamic_form_type_id])
-      @dynamic_form_entry   = current_user.dynamic_form_entries.new(dynamic_form_type_id: params[:dynamic_form_type_id]) 
-
-      #DynamicFormEntry.new(dynamic_form_type_id: params[:dynamic_form_type_id])
-
-    end
-    # GET /dynamic_form_entries/1/edit
-    def edit
-      @dynamic_form_type = @dynamic_form_entry.dynamic_form_type
+      current_user.nil? ? public_form :  @dynamic_form_entry = current_user.dynamic_form_entries.new(dynamic_form_type_id: params[:dynamic_form_type_id])
     end
 
-    # POST /dynamic_form_entries
-    # POST /dynamic_form_entries.json
     def create
       @dynamic_form_type  = DynamicFormType.find(params[:dynamic_form_entry][:dynamic_form_type_id])
-      @dynamic_form_entry = current_user.dynamic_form_entries.new(dynamic_form_entry_params)
+      current_user.nil? ? public_form : @dynamic_form_entry = current_user.dynamic_form_entries.new(dynamic_form_type_id: params[:dynamic_form_type_id])
+
       if params[:signature]
         @dynamic_form_entry.signature = params[:signature]
       end
@@ -60,28 +44,19 @@ module DynamicFormsEngine
       else 
         @dynamic_form_entry.in_progress = false
       end
-      # checks to see if contact exists for the current user
-      #@dynamic_form_entry.save_new_contacts(current_user)
-      #check to see if user selected only contacts and or signature field
-      if !@dynamic_form_entry.properties.nil?
-        @dynamic_form_entry.properties.each_pair do |property_id, property_value|
-          field = @dynamic_form_type.fields.find property_id
-          if field.attachment?
-            file_attachment = Attachment.create!(attachable_id: params[:dynamic_form_entry][:dynamic_form_type_id],
-                                                  attachable_type: 'DynamicFormEntry',
-                                                  content_name: field.name, 
-                                                  filename: property_value)
-            @dynamic_form_entry.properties[property_id] = file_attachment.id
-          end
-        end
-      end
+
       if params[:submit_entry] && @dynamic_form_entry.save
-        redirect_to dynamic_form_entry_path(@dynamic_form_entry) + "?iframe=" + (params[:iframe] == "1" ? "1" : "0"), notice: "<strong>You have submitted your form entry!</strong>".html_safe
-      elsif params[:save_draft] && @dynamic_form_entry.save  
-        redirect_to edit_dynamic_form_entry_path(@dynamic_form_entry) + "?iframe=" + (params[:iframe] == "1" ? "1" : "0"), alert: "<strong> You have temporary saved your draft. Come back to submit it when ready!</strong>".html_safe
-      else
+        redirect_to dynamic_form_entry_path(@dynamic_form_entry), notice: "<strong>You have submitted your form entry!</strong>".html_safe
+      elsif params[:save_draft] && @dynamic_form_entry.save
+        redirect_to edit_dynamic_form_entry_path(@dynamic_form_entry), alert: "<strong> You have temporary saved your draft. Come back to submit it when ready!</strong>".html_safe
+      else       
+        @dynamic_form_entry.format_properties
         render "new"
       end
+    end
+     def edit
+      @dynamic_form_type = @dynamic_form_entry.dynamic_form_type
+
     end
 
     def update
@@ -93,17 +68,17 @@ module DynamicFormsEngine
       if params[:save_draft]
         @dynamic_form_entry.in_progress = true
       else 
+        @dynamic_form_entry.assign_attributes(dynamic_form_entry_params)
         @dynamic_form_entry.in_progress = false
       end
-
-      if params[:submit_entry] && @dynamic_form_entry.update(dynamic_form_entry_params)
+      
+      if params[:submit_entry] && @dynamic_form_entry.save
         redirect_to @dynamic_form_entry, notice: 'Below is your curent Form Entry Submission!'
       elsif params[:save_draft] && @dynamic_form_entry.update(dynamic_form_entry_params)
         redirect_to edit_dynamic_form_entry_path(@dynamic_form_entry), alert: "<strong> You have temporary saved your draft. Come back to submit it when ready!</strong>".html_safe 
 
       else
-        # used for when validatin errors occur
-        @dynamic_form_entry.assign_attributes(dynamic_form_entry_params)
+        # @dynamic_form_entry.assign_attributes(dynamic_form_entry_params)
         @dynamic_form_entry.format_properties
         render "edit"
       end
@@ -122,10 +97,27 @@ module DynamicFormsEngine
 
     private
 
+    def public_form
+      #on new
+      if !params[:dynamic_form_type_id].nil? && DynamicFormsEngine::DynamicFormType.find(params[:dynamic_form_type_id]).is_public == true
+        @dynamic_form_entry = DynamicFormsEngine::DynamicFormEntry.new(dynamic_form_type_id: params[:dynamic_form_type_id])
+      #on create
+      elsif !params[:dynamic_form_entry].nil? && DynamicFormsEngine::DynamicFormType.find(params[:dynamic_form_entry][:dynamic_form_type_id]).is_public == true
+        @dynamic_form_entry = DynamicFormsEngine::DynamicFormEntry.new(dynamic_form_entry_params)
+      #on show
+      elsif !@dynamic_form_entry.nil? 
+        true if @dynamic_form_entry.dynamic_form_type.is_public == true 
+      else 
+        redirect_to(root_path, alert: 'You must be signed in!')
+      end
+    end
     # Use callbacks to share common setup or constraints between actions.
     def set_dynamic_form_entry
-      @dynamic_form_entry = current_user.dynamic_form_entries.where( :id => params[:id] ).first
-      #DynamicFormEntry.find(params[:id])
+      if current_user.nil?
+        @dynamic_form_entry = DynamicFormsEngine::DynamicFormEntry.where(:id => params[:id]).first
+      else
+        @dynamic_form_entry = current_user.dynamic_form_entries.where( :id => params[:id] ).first
+      end
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

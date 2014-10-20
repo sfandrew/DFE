@@ -1,7 +1,7 @@
 
 <style type="text/css">
 
-fieldset{
+fieldset.field-group{
   display: none;
 }
 
@@ -43,7 +43,14 @@ position: relative;
 
   margin-left: -100px;
 }*/
-
+.btn-primary .badge {
+  color: red;
+  background-color: #f2dede;
+}
+.btn-default .badge {
+ color: red; 
+ background-color: #f2dede; 
+}
 
 /** The Magic **/
 .btn-breadcrumb .btn:not(:last-child):after {
@@ -173,16 +180,6 @@ position: relative;
 
 
 </style>
-
-
-
-
-
-
-
-
-
-
 
 <script type="text/javascript">
 <%= render partial: 'field_group.js' %>

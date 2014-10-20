@@ -13,26 +13,44 @@
 	</div>
 	
 	<div class="col-sm-2">
-		<%= f.select :field_type, %w[agreement calendar check_box contacts currency description email_validation file_upload large_header medium_header options_select options_select_with_other phone_validation signature small_header field_group text_area text_field], {:include_blank => 'Select a field', disabled: ''}, {:class => "field_type form-control"}  %>
+		<%= f.select(:field_type, %w[agreement calendar check_box contacts currency description divider email_validation field_group file_upload large_header medium_header options_select options_select_with_other phone_validation signature small_header spacer text_area text_field], {:include_blank => 'Select a field', disabled: ''}, {:class => "field_type form-control"})  %>
 	</div>
-	<div class="col-sm-3 field-popover">
-		<%= f.text_field :name, placeholder: "Name of field", :class => "form-control"  %>
+	<div class="col-sm-2 field-popover">
+		<%= f.text_field :name, placeholder: "Name of field", :class => "form-control user-input" %>
 	</div>
 	<div class="options_select">
 		<div class="options_field col-sm-3">
 			<%= f.text_field :content_meta, placeholder: "Option 1, Option 2, Option 3", :class => "form-control"  %>
 		</div>
 	</div>
-	<div class="col-sm-1">
-		<div class="checkbox">
-			<label>
-			<%= f.check_box :required %>Required?
-			</label>
-		</div>
+	<div class="col-sm-1 checkbox required" data-toggle="popover" data-trigger="focus" data-content="Have this as a required field" data-placement="top">
+		<%= f.check_box :required %>Required?
 	</div>
-
-	<div class="col-sm-2" style="float:right; padding-left:25px;">
+	<div style="padding-left:30px;" class="col-sm-1 checkbox include-report" data-toggle="popover" data-trigger="focus" 
+			data-content="Include this field in the report" data-placement="top">
+		<%= f.check_box :included_in_report %>Include?
+	</div>
+	<div class="col-sm-2">
+		<%= f.select(:field_width, "<option style='background-color:white; color:black;'>Size of Field</option>
+									<option value ='3' style='background-color:white; color:black;'>25% width</option>
+									<option value ='4' style='background-color:white; color:black;'>33% width</option>
+									<option value ='6' style='background-color:white; color:black;'>50% width</option>
+									<option value ='8' style='background-color:white; color:black;'>75% width</option>
+									<option value ='12' style='background-color:white; color:black;'>Default 100%</option>
+									".html_safe,{}, {:class => "form-control btn btn-info field-size", :data => {:toggle => 'popover', :trigger => 'focus',:content => 'Choose the size of the field',:placement => 'top'}}) %>
+	</div>
+	<div class="col-sm-1">
 		<%= f.hidden_field :_destroy %>
-		<%= link_to "Remove Field", '#', class: "remove_fields btn btn-danger" %>
+		<%= link_to "Remove", '#', class: "remove_fields btn btn-danger" %>
 	</div>
 </fieldset>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+	$('.include-report').popover({trigger: 'hover'});
+	$('.required').popover({trigger: 'hover'});
+	$('.field-size').popover({trigger: 'hover'});
+});
+</script>
+

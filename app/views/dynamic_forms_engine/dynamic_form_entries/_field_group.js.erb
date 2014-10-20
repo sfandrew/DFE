@@ -5,6 +5,11 @@ var DFE = DFE || {};
 $(function(){
 	DFE.initStepForm();
 
+	//adding badges to breadcrumbs when form errors
+	$(window).on('load', function(){
+		DFE.formErrorBadges();
+	});
+
 	//next step
 	$('.next').on('click', function(){
 		DFE.nextStep( $('.field-group') );
@@ -26,6 +31,13 @@ $(function(){
 	//tooltips
 	$('.dfe-tooltip').tooltip();
 
+	$('.field-group-save').on('mouseenter',function(){
+		$(this).css({"opacity": 1});
+	});
+	$('.field-group-save').on('mouseleave',function(){
+		$(this).css({"opacity": 0.5});
+	});
+
 
 });
 
@@ -34,7 +46,21 @@ $(function(){
 DFE.initStepForm = function(){
 	$('.field-group:eq(0)').addClass('active');
 	DFE.toggleBreadcrumb( $('.btn-breadcrumb a:eq(0)') ) ;
+}	
+
+DFE.formErrorBadges = function(){
+	if ($('.error-msg').length > 0) {
+		var $error_fields = $('.error-msg').closest('fieldset');
+		$error_fields.each(function(i){
+			var fieldset_id = $error_fields.eq(i).attr('id');
+			var number_of_errors = $error_fields.eq(i).find('.error-msg').length;
+			var $breadcrumbToUpdate = $('.btn-breadcrumb a[data-step-id=' + fieldset_id + ']');
+			$breadcrumbToUpdate.find('span').addClass('badge alert-danger')
+								.text(number_of_errors);
+		});
+	}
 }
+
 
 DFE.toggleBreadcrumb = function($breadcrumb){
 

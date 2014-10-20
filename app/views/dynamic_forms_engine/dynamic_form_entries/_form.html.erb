@@ -11,7 +11,7 @@
 
 <%= form_for(@dynamic_form_entry, 
     :html => {:class => "form-horizontal", :multipart => true}) do |f| %>
-    <%= hidden_field_tag("iframe", "1") if params[:iframe] == "1" %>
+
         <% if @dynamic_form_entry.errors.any? %>
             <div class="row">
                 <div class="well" id ="errors">
@@ -29,14 +29,8 @@
       <div class="col-md-12">
         <%= f.hidden_field  :dynamic_form_type_id, :value => @dynamic_form_type.id %>
 
-        <% if @dynamic_form_entry.new_record? %>
-          <%= f.fields_for :properties, OpenStruct.new(@dynamic_form_entry.properties) do |builder| %>
-            <%= render_fields(@dynamic_form_entry, builder) %>
-            <% end %>
-        <% else %>
-          <%= f.fields_for :properties, OpenStruct.new(Hash[@dynamic_form_entry.properties.map{|k,v| [k.to_s, v]}]) do |builder| %>
-            <%= render_fields(@dynamic_form_entry, builder) %>
-            <% end %>
+        <%= f.fields_for :properties, OpenStruct.new(Hash[@dynamic_form_entry.properties.map{|k,v| [k.to_s, v]}]) do |builder| %>
+          <%= render_fields(@dynamic_form_entry, builder) %>
         <% end %>
     
         <% if @dynamic_form_type.form_type == "Multi-step" %>
@@ -49,6 +43,7 @@
                         :class => "btn btn-danger dfe-tooltip btn-md field-group-save",
                         :name => "save_draft",
                         :title => "Save the current state of the #{@dynamic_form_type.name}",
+                        :style => "opacity:0.5;",
                         :data => {
                                   :toggle => "tooltip", 
                                   :placement => "bottom" 
@@ -105,7 +100,7 @@ $(document).ready(function(){
       $('small').parent().parent().addClass('has-error');
     }
     $('.jsig').on('click',function(){
-    	$(window).resize();
+      $(window).resize();
     });
 
 });

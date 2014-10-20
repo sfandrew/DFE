@@ -1,13 +1,24 @@
-<div class="form-group">
-  <%= f.label field.id, field.name.humanize, :class => "col-sm-2 control-label" %>
-  <div class="col-sm-8">
-    <%= f.file_field field.id, :class => "form-control"  %>
+<div class="col-md-<%= field.field_width %>">
+  <%= f.label field.id, field.name.humanize, :class => "col-md-2 control-label" %>
+  <div class="col-md-6">
+    <%= f.file_field field.id, :multiple => true, :class => "form-control"  %>
+
     <% if defined?(errors) and errors.present? %>
 		<small style="color:red"><%= errors.join(', ') %></small>
 	 <% end %>
   </div>
-  <% if field.required? %>
-	<span class="col-xs-1 required required-field">*</span>
+
+  <% if field_value.is_a? Integer %>
+    <% @dynamic_form_entry.each_field_with_value do |index, field| %>
+      <% if field[:type] == "file_upload" && field[:value] == field_value %>
+        <%= link_to("Preview Attachment", index.filename.url, class: 'btn btn-success') %>
+      <% end %>
+    <% end %>
   <% end %>
+
+  <% if field.required? %>
+	 <span class="col-xs-1 required required-field">*</span>
+  <% end %>
+
 </div>
 
