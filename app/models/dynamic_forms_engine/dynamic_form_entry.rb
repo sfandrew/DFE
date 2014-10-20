@@ -34,7 +34,11 @@ module DynamicFormsEngine
 
    # http://stackoverflow.com/questions/8634139/phone-validation-regex
     def validate_on_submit
+      
+      #binding.pry
+
       if dynamic_form_type.fields
+
         dynamic_form_type.fields.each do |field|
           if field.field_type == "email_validation"
             unless self.properties[field.id.to_s] =~ /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i

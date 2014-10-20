@@ -28,12 +28,21 @@ module DynamicFormsEngine
 
     def new
       @dynamic_form_type    = DynamicFormType.find(params[:dynamic_form_type_id])
-      current_user.nil? ? public_form :  @dynamic_form_entry = current_user.dynamic_form_entries.new(dynamic_form_type_id: params[:dynamic_form_type_id])
+      if current_user.nil? && !@dynamic_form_type.blank?
+        public_form
+      else
+        @dynamic_form_entry = current_user.dynamic_form_entries.new(dynamic_form_type_id: @dynamic_form_type.id)
+      end
     end
 
     def create
       @dynamic_form_type  = DynamicFormType.find(params[:dynamic_form_entry][:dynamic_form_type_id])
-      current_user.nil? ? public_form : @dynamic_form_entry = current_user.dynamic_form_entries.new(dynamic_form_type_id: params[:dynamic_form_type_id])
+
+      if current_user.nil? && !@dynamic_form_type.blank?
+        public_form
+      else
+        @dynamic_form_entry = current_user.dynamic_form_entries.new(dynamic_form_type_id: @dynamic_form_type.id)
+      end
 
       if params[:signature]
         @dynamic_form_entry.signature = params[:signature]
@@ -54,9 +63,9 @@ module DynamicFormsEngine
         render "new"
       end
     end
-     def edit
-      @dynamic_form_type = @dynamic_form_entry.dynamic_form_type
 
+    def edit
+      @dynamic_form_type = @dynamic_form_entry.dynamic_form_type
     end
 
     def update
