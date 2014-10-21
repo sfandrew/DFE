@@ -135,5 +135,38 @@ module DynamicFormsEngine
       return search_query
     end
 
+    def to_array
+      arr = []
+      each_field_with_value do |index, field|
+        arr_row = [field[:name]]
+        case field[:type]
+        when "phone_validation"
+          arr_row << ActionController::Base.helpers.number_to_phone(field[:value])
+        when "currency"
+          arr_row << ActionController::Base.helpers.number_to_currency(field[:value])
+        when "agreement"
+          arr_row << "Approved"
+        when "file_upload"
+          arr_row << field[:value].filename.url
+        else
+          arr_row << field[:value]
+        end
+        arr << arr_row
+      end
+      return arr
+    end
+
+    def to_csv
+      csv_string = ""
+      to_array.each_with_index do |row|
+        row.each_with_index do |col, index|
+          csv_string += col
+          csv_string += "," if index != (row.size-1)
+        end
+        csv_string += "\n"
+      end
+      return csv_string
+    end
+
   end
 end
