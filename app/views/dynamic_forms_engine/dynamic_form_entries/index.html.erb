@@ -52,7 +52,7 @@
 <table class="table table-striped table-hover">
   <thead>
     <tr class="well">
-      <% if @dynamic_form_type %>
+      <% if !@dynamic_form_type %>
         <th>Type</th>
         <th>Properties</th>
       <% end %>
@@ -78,7 +78,7 @@
     <% if @dynamic_form_entries %>
       <% @dynamic_form_entries.each do |dynamic_form_entry| %>
         <tr>
-          <% if @dynamic_form_type %>
+          <% if !@dynamic_form_type %>
             <td><strong><%= dynamic_form_entry.dynamic_form_type.name %></strong></td>
             <td class="form-properties">
               <% if !dynamic_form_entry.properties.empty? %>
