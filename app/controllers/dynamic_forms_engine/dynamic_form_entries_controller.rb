@@ -33,7 +33,7 @@ module DynamicFormsEngine
 
     def create
       @dynamic_form_type  = DynamicFormType.find(params[:dynamic_form_entry][:dynamic_form_type_id])
-      current_user.nil? ? public_form : @dynamic_form_entry = current_user.dynamic_form_entries.new(dynamic_form_type_id: params[:dynamic_form_type_id])
+      current_user.nil? ? public_form : @dynamic_form_entry = current_user.dynamic_form_entries.new(dynamic_form_entry_params)
 
       if params[:signature]
         @dynamic_form_entry.signature = params[:signature]

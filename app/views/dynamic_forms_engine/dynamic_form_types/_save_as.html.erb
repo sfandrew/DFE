@@ -28,9 +28,9 @@
     <div class="col-sm-4">
       <%= f.select :form_type,['Default-form','Multi-step'],{:disabled => 'Choose Form', :include_blank => 'Choose form'}, {:class => 'form-control input-medium form-type'} %>
     </div>
-    <%= f.label :public, :class => "col-sm-2 control-label" %>
+    <%= f.label :is_public, :class => "col-sm-2 control-label" %>
     <div class="col-sm-4">
-      <%= f.select :public,[['Yes',true],['No',false]],{}, {:class => 'form-control public', 
+      <%= f.select :is_public,[['Yes',true],['No',false]],{}, {:class => 'form-control public', 
                             :data =>{:toggle => 'toggle', :trigger => 'focus', :content => 'Make this form Public(non users) or Private(registered users)', :placement => 'top'}} %>
     </div>
   </div>
