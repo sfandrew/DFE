@@ -41,8 +41,9 @@ module DynamicFormsEngine
       if current_user.nil? && !@dynamic_form_type.blank?
         public_form
       else
-        @dynamic_form_entry = current_user.dynamic_form_entries.new(dynamic_form_type_id: @dynamic_form_type.id)
+        @dynamic_form_entry = current_user.dynamic_form_entries.new(dynamic_form_entry_params)
       end
+
 
       if params[:signature]
         @dynamic_form_entry.signature = params[:signature]

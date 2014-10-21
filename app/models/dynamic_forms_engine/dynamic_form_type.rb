@@ -9,13 +9,51 @@ module DynamicFormsEngine
     validates :form_type, presence: true, :inclusion => { :in => %w(Default-form Multi-step), 
                                                       :message => "%{value} is not a valid choice" }
     validates :is_public, :inclusion => {:in => [true,false], :message => 'That is not a valid choice!'}
-    validate :field_group_requirement, :other_option_validate, :field_group_order, :public_form
+    validate :field_group_requirement, :other_option_validate, :field_group_order, :public_form, :field_size
 
+    def field_size
+      self.fields.each do |field|
+        if field.field_type == "contacts" && !field.included_in_report == "false"
+          errors.add field.name, "Contacts field has a fixed width"
+        elsif field.field_type == "divider" && !field.included_in_report == "false"
+         errors[:base] << "Divider field has a fixed width"
+        elsif field.field_type == "field_group" && !field.included_in_report == "false"
+          errors.add field.name, "Field_group field has a fixed width"
+        elsif field.field_type == "signature" && !field.included_in_report == "false"
+          errors.add field.name, "Signature field has a field has a fixed width"
+        elsif field.field_type == "spacer" && !field.included_in_report == "false"
+           errors[:base] << "Spacer field has a field has a fixed width"
+        end 
+      end
+    end
+
+    def include_option
+      self.fields.each  do |field|
+        if field.field_type == "contacts" && include_field.included_in_report
+          errors.add field.name, "Contacts cannot be included in report"
+        elsif field.field_type == "divider" && include_field.included_in_report
+          errors[:base] << "Divider field cannot be included in report"
+        elsif field.field_type == "field_group" && include_field.included_in_report
+          errors.add field.name, "Field group cannot be included in report"
+        elsif field.field_type == "file_upload" && include_field.included_in_report
+          errors.add field.name, "File upload cannot be included in report"
+        elsif field.field_type == "large_header" && include_field.included_in_report
+          errors.add field.name, "Large header cannot be included in report"
+        elsif field.field_type == "medium_header" && include_field.included_in_report
+          errors.add field.name, "Medium header cannot be included in report"
+        elsif field.field_type == "medium_header" && include_field.included_in_report
+          errors.add field.name, "Small header cannot be included in report"
+        elsif field.field_type == "spacer" && include_field.included_in_report
+          errors[:base] << "Spacer field cannot be included in report"
+        end
+      end
+    end
+    
     def public_form
       if self.is_public
         self.fields.each do |check_field|
           if check_field.field_type == "contacts" || check_field.field_type == "file_upload"
-            errors.add check_field.name,  "A public form cannot have a Contacts or file upload field"
+            errors.add check_field.name, "A public form cannot have a Contacts or file upload field"
           end
         end
       end
