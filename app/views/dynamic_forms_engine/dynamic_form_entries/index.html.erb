@@ -14,6 +14,7 @@
 <h1 id="main-header">
   <% if @dynamic_form_type %>
     <%= pluralize(@dynamic_form_entries.size, @dynamic_form_type.name) %>
+    <%= link_to 'Edit', edit_dynamic_form_type_path(@dynamic_form_type), class: 'badge' %>
   <% else %>
     <%= pluralize(@dynamic_form_entries.size, 'Entry') %>
   <% end %>
@@ -51,8 +52,6 @@
 <table class="table table-striped table-hover">
   <thead>
     <tr class="well">
-      <!-- th>Type</th -->
-      <!-- th>Properties</th -->
       <th>Status</th>
       <% if !@dynamic_form_type.nil? %>
         <% @dynamic_form_type.fields.each do |field| %>
@@ -75,16 +74,6 @@
     <% if @dynamic_form_entries %>
       <% @dynamic_form_entries.each do |dynamic_form_entry| %>
         <tr>
-          <!-- td><strong><%= dynamic_form_entry.dynamic_form_type.name %></strong></td -->
-          <!-- td class="form-properties">
-            <%# if !dynamic_form_entry.properties.empty? %>
-              <%# dynamic_form_entry.properties.first(5).each do  |key,value| %>
-                <li><%#= value[:type]%> field</li>
-              <%# end %>
-            <%# else %>
-              No Properties
-            <%# end %>
-          </td -->
           <td>
             <% if dynamic_form_entry.in_progress %>
               <%= link_to edit_dynamic_form_entry_path(dynamic_form_entry), :class => 'btn btn-danger' do %>
