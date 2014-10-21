@@ -21,6 +21,7 @@ ActiveRecord::Schema.define(version: 20141014231107) do
     t.datetime "updated_at"
     t.integer  "user_id"
     t.text     "signature"
+    t.string   "other"
     t.boolean  "in_progress"
   end
 
@@ -46,6 +47,12 @@ ActiveRecord::Schema.define(version: 20141014231107) do
     t.integer  "user_id"
     t.string   "form_type"
     t.boolean  "is_public"
+  end
+
+  create_table "dynamic_forms_engine_users", force: true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "users", force: true do |t|
