@@ -12,18 +12,28 @@
 
 </style>
 <div class="row">
-  <h1 class="col-md-6" id="main-header">
-    <% if @dynamic_form_type %>
-      <%= pluralize(@dynamic_form_entries.size, @dynamic_form_type.name) %>
-
-    <% else %>
-      <%= pluralize(@dynamic_form_entries.size, 'Entry') %>
-    <% end %>
-  </h1>
   <div class="col-md-6">
-    <%= link_to 'Edit', edit_dynamic_form_type_path(@dynamic_form_type), class: 'btn btn-primary pull-right' %>
-    <%= link_to "CSV", '#', class: 'btn btn-info pull-right' %>
-    <%= link_to "Excel", '#', class: 'btn btn-info pull-right' %>
+
+    <ol class="breadcrumb header transparent-background">
+      <li><%= link_to "Forms", dynamic_form_types_path %></li>
+      
+      <% if @dynamic_form_type %>
+        <li><%= @dynamic_form_type.name %></li>
+        <li class="active"><%= @dynamic_form_entries.size %> Entries</li>
+      <% else %>
+        <li>Entries</li>
+      <% end %>
+    </ol>
+
+  </div>
+  <div class="col-md-6">
+    <div class="btn-group pull-right">
+      <%= link_to "Embed", form_entries_path(@dynamic_form_type, format: 'iframe'), class: 'btn btn-default' %>
+      <%= link_to "CSV", form_entries_path(@dynamic_form_type, format: 'csv'), class: 'btn btn-default' %>
+      <%= link_to "Excel", form_entries_path(@dynamic_form_type, format: 'xls'), class: 'btn btn-default' %>
+      <%= link_to 'Edit Form', edit_dynamic_form_type_path(@dynamic_form_type), class: 'btn btn-primary ' %>
+      <%= link_to 'View Form', new_form_entry_path(@dynamic_form_type), class: 'btn btn-info ' %>
+    </div>
   </div>
 </div>
 
@@ -46,9 +56,12 @@
            <%= text_field 'search', 'end', :class => "form-control", :placeholder => "End Date" %>
         </div>
       </div>
-      <%= link_to "Reset", dynamic_form_entries_path, :class => 'btn btn-danger col-sm-1' %>
-      <div class="col-xs-6 col-sm-2">
-        <button type="submit" class="btn btn-info btn-block"><i class="fa fa-search"></i> Search</button>
+      
+      <div class="col-xs-6 col-sm-3">
+        <div class="btn-group pull-right">
+          <%= link_to "Reset", dynamic_form_entries_path, :class => 'btn btn-danger' %>
+          <button type="submit" class="btn btn-info"><i class="fa fa-search"></i> Search</button>
+        </div>
       </div>
     </div>
   <% end %>
@@ -75,8 +88,10 @@
         <% end %>
       <% end %>
       <th>Submitted</th>
-      <th></th>
-      <th></th>
+      <th width="1%"></th>
+      <th width="1%"></th>
+      <th width="1%"></th>
+      <th width="1%"></th>
     </tr>
   </thead>
 
@@ -128,9 +143,13 @@
             <% end %>
           <% end %>
           <td><%= dynamic_form_entry.created_at.strftime(" %l:%M %p %b. %d, %Y") %></td>
-          <td><%= link_to 'Show', dynamic_form_entry, :class => 'btn btn-info' %></td>
+          <td><%= link_to 'View', dynamic_form_entry, :class => 'btn btn-info' %></td>
+          <td><%= link_to 'CSV', dynamic_form_entry_path(dynamic_form_entry, format: :csv), :class => 'btn btn-default' %></td>
+          <td><%= link_to 'XML', dynamic_form_entry_path(dynamic_form_entry, format: :xml), :class => 'btn btn-default'%></td>
           <!-- td><%= link_to 'Edit', edit_dynamic_form_entry_path(dynamic_form_entry) %></td -->
-          <td><%= link_to 'Delete', dynamic_form_entry, method: :delete, data: { confirm: 'Are you sure?' }, :class => 'btn btn-danger' %></td>
+          <td>
+            <%= link_to 'Delete', dynamic_form_entry, method: :delete, data: { confirm: 'Are you sure?' }, :class => 'btn btn-danger' %>
+          </td>
         </tr>
       <% end %>
     <% else %>

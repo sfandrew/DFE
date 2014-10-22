@@ -2,6 +2,14 @@
 // This separates any bootstrap style changes to this file
 @import "bootstrap";
 
+.breadcrumb.header{
+	font-size: 20px;
+}
+
+.transparent-background{
+	background: transparent;
+}
+
 /*for nav bar collapse break point*/
 @media (max-width: 990px) {
     .navbar-header {
@@ -67,7 +75,7 @@ fieldset {
 	border: 1px solid #c0c0c0;
 	margin-bottom: 0.5em;
 	padding: 0.625em 0.75em;
-	border-radius: 0px;
+	border-radius: 4px;
 }
 
 legend {

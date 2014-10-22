@@ -24,6 +24,11 @@ module DynamicFormsEngine
     end
 
     def show
+      respond_to do |format|   
+        format.html    
+        format.csv { render text: @dynamic_form_entry.to_csv }   
+        format.xml { @entry_as_array = @dynamic_form_entry.to_array}   
+      end
     end
 
     def new

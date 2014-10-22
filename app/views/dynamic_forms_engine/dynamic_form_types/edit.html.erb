@@ -1,5 +1,7 @@
-<div align="center">
-	<h1 id="main-header"><%= @dynamic_form_type.name %></h1>
-</div>
+<ol class="breadcrumb header">
+	<li><%= link_to "Forms", dynamic_form_types_path %></li>
+	<li class="active"><%= @dynamic_form_type.name %></li>
+</ol>
+
 <%= render 'save_as' %>
 
