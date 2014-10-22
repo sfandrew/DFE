@@ -10,6 +10,14 @@ module DynamicFormsEngine
     before_create :format_properties, :if => Proc.new { |properties| !properties.properties.nil? }
     before_update :format_properties, :if => Proc.new { |properties| !properties.properties.nil? }
 
+
+    def get_property_value(field_id)
+      if !properties.blank?
+        temp = properties.find { |key, value|  value[:id].to_i == field_id }
+        temp[1][:value] if temp && temp[1]
+      end
+    end
+
     def in_progress_validation
       dynamic_form_type.fields.each do |field|
         if field.field_type == "email_validation" && !self.properties[field.id.to_s].blank?

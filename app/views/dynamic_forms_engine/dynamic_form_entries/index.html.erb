@@ -62,7 +62,7 @@
           <% if field.included_in_report %>
             <th align="center">
               <%= field.name %>
-              <h6>(<%= field.field_type  %> field)</h6>
+              <h6>(<%= field.field_type.titleize  %>)</h6>
             </th>
           <% end %>
         <% end %>
@@ -111,7 +111,9 @@
                 <% else %>
                   <td>
                     <% if !dynamic_form_entry.properties.blank? %>
-                      <%= dynamic_form_entry.properties.find { |key, value|  value[:id].to_i == field.id }[1][:value] %>
+                      <%#= dynamic_form_entry.properties.find { |key, value|  value[:id].to_i == field.id }[1][:value] %>
+                      <%= dynamic_form_entry.get_property_value(field.id) %>
+                      <%#= field.id %>
                     <% end %>
                   </td>
                 <% end %>
