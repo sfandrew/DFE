@@ -11,9 +11,9 @@
   }
 </style>
 <div class="row">
-  <h1 class="col-xs-12 col-sm-6 col-md-8" id="main-header">Form Types</h1>
-  <div class="col-xs-6 col-md-4">
-    <%= link_to '+ New Form Type', new_dynamic_form_type_path, :class => 'btn btn-success pull-right' %>
+  <h1 class="col-xs-12 col-sm-6 col-md-6 col-lg-6" id="main-header">Form Types</h1>
+  <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+    <%= link_to '+ Create New Form', new_dynamic_form_type_path, :class => 'btn btn-success pull-right' %>
   </div>
 </div>
 
@@ -24,35 +24,46 @@
       <th>Description</th>
       <th>Form Type</th>
       <th>Public ?</th>
-      <th></th>
-      <th></th>
-      <th></th>
+      <th width='1%'></th>
+      <th width='1%'></th>
+      <th width='1%'></th>
+      <th width='1%'></th>
     </tr>
   </thead>
 
   <tbody>
     <% @dynamic_form_types.each do |dynamic_form_type| %>
       <tr>
+
         <td><strong><%= dynamic_form_type.name %></strong></td>
+
         <td><%= dynamic_form_type.description %></td>
+
         <td><i><%= dynamic_form_type.form_type %></i></td>
+
         <td><i><%= dynamic_form_type.is_public ? 'Yes' : 'No' %></i></td>
-        <td><%= link_to new_form_entry_path(dynamic_form_type), 
-            :class => 'btn btn-success' do %>
-            <i class="fa fa-pencil-square-o"></i> <%= "New #{dynamic_form_type.name}" %>
+
+        <td><%= link_to 'Share', edit_dynamic_form_type_path(dynamic_form_type), :class => 'btn btn-sm btn-default' %></td>
+
+        <td>
+          <%= link_to new_form_entry_path(dynamic_form_type), 
+            :class => 'btn btn-sm btn-success' do %>
+            <i class="fa fa-pencil-square-o"></i> <%= "View" %>
           <% end %>
         </td>
         <td>
           <a href="<%= form_entries_path(dynamic_form_type) %>">
-            <button class="btn btn-primary" type="button">
-              Show Entries 
+            <button class="btn btn-sm btn-primary" type="button">
+              Entries 
               <span class="badge">
                 <%= dynamic_form_type.entries.count  %>
               </span>
             </button>
           </a>
         </td>
-        <td><%= link_to 'Edit', edit_dynamic_form_type_path(dynamic_form_type), :class => 'btn btn-info' %></td>
+
+        <td><%= link_to 'Edit', edit_dynamic_form_type_path(dynamic_form_type), :class => 'btn btn-sm btn-info' %></td>
+
         <!--  <td><%= link_to 'Delete', dynamic_form_type, method: :delete, data: { confirm: 'Are you sure?' }, :class => 'btn btn-danger' %></td> -->
         
       </tr>
