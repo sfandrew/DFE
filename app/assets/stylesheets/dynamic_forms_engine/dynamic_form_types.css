@@ -5,6 +5,19 @@ fieldset.dynamic-form-field{
   padding-right: 22px;
 }
 
+.row.options_select{
+  padding-top: 15px;
+}
+
+.dynamic-form-field-number{
+  float: left;
+  width: 50px;
+  position: relative;
+  min-height: 1px;
+  padding-right: 15px;
+  padding-left: 15px;
+}
+
 fieldset .required, .options_select{
   display: none;
 }
