@@ -11,14 +11,21 @@
   }
 
 </style>
-<h1 id="main-header">
-  <% if @dynamic_form_type %>
-    <%= pluralize(@dynamic_form_entries.size, @dynamic_form_type.name) %>
-    <%= link_to 'Edit', edit_dynamic_form_type_path(@dynamic_form_type), class: 'badge' %>
-  <% else %>
-    <%= pluralize(@dynamic_form_entries.size, 'Entry') %>
-  <% end %>
-</h1>
+<div class="row">
+  <h1 class="col-md-6" id="main-header">
+    <% if @dynamic_form_type %>
+      <%= pluralize(@dynamic_form_entries.size, @dynamic_form_type.name) %>
+
+    <% else %>
+      <%= pluralize(@dynamic_form_entries.size, 'Entry') %>
+    <% end %>
+  </h1>
+  <div class="col-md-6">
+    <%= link_to 'Edit', edit_dynamic_form_type_path(@dynamic_form_type), class: 'btn btn-primary pull-right' %>
+    <%= link_to "CSV", '#', class: 'btn btn-info pull-right' %>
+    <%= link_to "Excel", '#', class: 'btn btn-info pull-right' %>
+  </div>
+</div>
 
 <fieldset>
   <%= form_for(:search, :url => dynamic_form_entries_path, :html => { :method => :get }) do  %>
@@ -29,18 +36,18 @@
           <%= options_for_select(@entries_name) %>
         </select>
       </div>
-      <div class="col-xs-3 col-sm-2">
+      <div class="col-xs-3 col-sm-3">
         <%=raw text_field 'search', 'properties', :class => "col-xs-6 form-control", :placeholder => "Enter properties like" %>
       </div>
       <div class="col-md-3">
         <div class="input-daterange input-group date">
-          <%= text_field 'search', 'start', :class => "input-sm form-control", :placeholder => "Start Date" %>
+          <%= text_field 'search', 'start', :class => "form-control", :placeholder => "Start Date" %>
           <span class="input-group-addon">to</span>
-           <%= text_field 'search', 'end', :class => "input-sm form-control", :placeholder => "End Date" %>
+           <%= text_field 'search', 'end', :class => "form-control", :placeholder => "End Date" %>
         </div>
       </div>
-      <%= link_to "Reset Query", dynamic_form_entries_path, :class => 'btn btn-danger col-sm-1' %>
-      <div class="col-xs-6 col-sm-3">
+      <%= link_to "Reset", dynamic_form_entries_path, :class => 'btn btn-danger col-sm-1' %>
+      <div class="col-xs-6 col-sm-2">
         <button type="submit" class="btn btn-info btn-block"><i class="fa fa-search"></i> Search</button>
       </div>
     </div>
