@@ -3,8 +3,9 @@ require_dependency "dynamic_forms_engine/application_controller"
 module DynamicFormsEngine
   class DynamicFormEntriesController < ApplicationController
     before_action :set_dynamic_form_entry, only: [:show, :edit, :update, :destroy]
-    before_filter :authenticate_user!, only: [:index,:destroy, :edit, :update]
+    before_filter :authenticate_user!, only: [:index,:destroy, :edit, :update, :form_entries]
     before_action :public_form, only: [:new, :create, :show], if: -> { current_user.nil? }
+    before_action :set_dynamic_form_type, only: [:new, :create, :show, :form_entries, :edit, :update]
 
     # GET /dynamic_form_entries
     # GET /dynamic_form_entries.json
@@ -16,8 +17,7 @@ module DynamicFormsEngine
       end
     end
 
-    def form_entries
-      @dynamic_form_type      = DynamicFormType.find(params[:dynamic_form_type_id])
+    def form_entries      
       @dynamic_form_entries   = current_user.dynamic_form_entries.where(:dynamic_form_type_id =>  @dynamic_form_type.id).all
       @entries_name = @dynamic_form_entries.map { |form_entry| [form_entry.dynamic_form_type.name, form_entry.dynamic_form_type.id] }
       render action: 'index'
@@ -27,21 +27,18 @@ module DynamicFormsEngine
     end
 
     def new
-      @dynamic_form_type    = DynamicFormType.find(params[:dynamic_form_type_id])
-      if current_user.nil? && !@dynamic_form_type.blank?
-        public_form
-      else
+      if current_user
         @dynamic_form_entry = current_user.dynamic_form_entries.new(dynamic_form_type_id: @dynamic_form_type.id)
+      else
+        @dynamic_form_entry = DynamicFormEntry.new(dynamic_form_type_id: @dynamic_form_type.id)
       end
     end
 
     def create
-      @dynamic_form_type  = DynamicFormType.find(params[:dynamic_form_entry][:dynamic_form_type_id])
-
-      if current_user.nil? && !@dynamic_form_type.blank?
-        public_form
-      else
+      if current_user
         @dynamic_form_entry = current_user.dynamic_form_entries.new(dynamic_form_entry_params)
+      else
+        @dynamic_form_entry = DynamicFormEntry.new(dynamic_form_entry_params)
       end
 
 
@@ -66,11 +63,10 @@ module DynamicFormsEngine
     end
 
     def edit
-      @dynamic_form_type = @dynamic_form_entry.dynamic_form_type
+
     end
 
     def update
-      @dynamic_form_type = @dynamic_form_entry.dynamic_form_type
 
       if params[:signature]
         @dynamic_form_entry.signature = params[:signature]
@@ -108,23 +104,30 @@ module DynamicFormsEngine
     private
 
     def public_form
-      #on new
-      if !params[:dynamic_form_type_id].nil? && DynamicFormsEngine::DynamicFormType.find(params[:dynamic_form_type_id]).is_public == true
-        @dynamic_form_entry = DynamicFormsEngine::DynamicFormEntry.new(dynamic_form_type_id: params[:dynamic_form_type_id])
-      #on create
-      elsif !params[:dynamic_form_entry].nil? && DynamicFormsEngine::DynamicFormType.find(params[:dynamic_form_entry][:dynamic_form_type_id]).is_public == true
-        @dynamic_form_entry = DynamicFormsEngine::DynamicFormEntry.new(dynamic_form_entry_params)
-      #on show
-      elsif !@dynamic_form_entry.nil? 
-        true if @dynamic_form_entry.dynamic_form_type.is_public == true 
-      else 
+      set_dynamic_form_type if !@dynamic_form_type
+      if !@dynamic_form_type.is_public
         redirect_to(root_path, alert: 'You must be signed in!')
       end
     end
+
+    # Since dynamic_form_type_id is set in different places depending on the action, we have to check a few places
+    def set_dynamic_form_type
+      set_dynamic_form_entry if !@dynamic_form_entry
+      if params[:dynamic_form_type_id]
+        @dynamic_form_type = DynamicFormType.find(params[:dynamic_form_type_id])
+      elsif params[:dynamic_form_entry] && params[:dynamic_form_entry][:dynamic_form_type_id]
+        @dynamic_form_type = DynamicFormType.find(params[:dynamic_form_entry][:dynamic_form_type_id])
+      elsif @dynamic_form_entry
+        @dynamic_form_type = @dynamic_form_entry.dynamic_form_type
+      else
+        redirect_to(root_path, alert: "Could not find Dynamic Form Type.")
+      end
+    end
+
     # Use callbacks to share common setup or constraints between actions.
     def set_dynamic_form_entry
       if current_user.nil?
-        @dynamic_form_entry = DynamicFormsEngine::DynamicFormEntry.where(:id => params[:id]).first
+        @dynamic_form_entry = DynamicFormEntry.where(:id => params[:id]).first
       else
         @dynamic_form_entry = current_user.dynamic_form_entries.where( :id => params[:id] ).first
       end

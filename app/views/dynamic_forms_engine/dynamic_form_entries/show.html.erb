@@ -1,11 +1,11 @@
 
 <div class="row">
-	<h1 class="col-xs-12 col-sm-6 col-md-8" id="main-header"><%= @dynamic_form_entry.dynamic_form_type.name %> </h1>
-	<div class="col-xs-6 col-md-4">
+	<h1 class="col-xs-12 col-sm-12 col-md-6 col-lg-6" id="main-header"><%= @dynamic_form_entry.dynamic_form_type.name %> </h1>
+	<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
 		<% if params[:iframe] != "1" %>
 			<%= link_to("New #{@dynamic_form_entry.dynamic_form_type.name}", 
 						new_form_entry_path(@dynamic_form_entry.dynamic_form_type), 
-						:class=>"btn btn-success pull-left") %>
+						:class=>"btn btn-success pull-right") %>
 
 			<%= link_to("Entries", 
 						form_entries_path(@dynamic_form_entry.dynamic_form_type), 
@@ -14,7 +14,7 @@
 	</div>
 
 </div>
-<div class="well col-lg-10">
+<div class="well col-md-12 col-lg-12">
 	<% @dynamic_form_entry.each_field_with_value do |index, field| %>
 		<div class="row row-table">
 			
