@@ -39,7 +39,7 @@
         <td><i><%= dynamic_form_type.is_public ? 'Yes' : 'No' %></i></td>
         <td><%= link_to new_form_entry_path(dynamic_form_type), 
             :class => 'btn btn-success' do %>
-            <span class="glyphicon glyphicon-pencil"></span> <%= "New #{dynamic_form_type.name}" %>
+            <i class="fa fa-pencil-square-o"></i> <%= "New #{dynamic_form_type.name}" %>
           <% end %>
         </td>
         <td>

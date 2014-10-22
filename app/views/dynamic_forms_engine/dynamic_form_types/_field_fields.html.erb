@@ -30,21 +30,23 @@
 			data-content="Include this field in the report" data-placement="top">
 		<%= f.check_box :included_in_report %>Include?
 	</div>
-	<p>test!</p>
 	<div class="col-sm-2">
-		<%= f.select(:field_width, "<option value=false style='background-color:white; color:black;'>Size of Field</option>
-									<option value ='3' style='background-color:white; color:black;'>25% width</option>
-									<option value ='6' style='background-color:white; color:black;'>50% width</option>
-									<option value ='8' style='background-color:white; color:black;'>75% width</option>
-									<option value ='12' style='background-color:white; color:black;'>Default 100%</option>
-									".html_safe,{}, {:class => "form-control btn btn-info field-size", :data => {:toggle => 'popover', :trigger => 'focus',:content => 'Choose the size of the field',:placement => 'top'}}) %>
+		<%= f.select(:field_width, 
+			options_for_select([
+				["Size of Field", false, style: "background-color:white; color:black;"],
+				["25% width", 3, style: "background-color:white; color:black;"],
+				["50% width", 6, style: "background-color:white; color:black;"],
+				["75% width", 8, style: "background-color:white; color:black;"],
+				["Default 100%", 12, style: "background-color:white; color:black;"]
+				], :selected => f.object.field_width),
+			{}, {:class => "form-control btn btn-info field-size", :data => {:toggle => 'popover', :trigger => 'focus',:content => 'Choose the size of the field',:placement => 'top'}} ) %>
 	</div>
+
 	<div class="col-sm-1">
 		<%= f.hidden_field :_destroy %>
 		<%= link_to "Remove", '#', class: "remove_fields btn btn-danger" %>
 	</div>
 </fieldset>
-
 
 <script type="text/javascript">
 $(document).ready(function(){

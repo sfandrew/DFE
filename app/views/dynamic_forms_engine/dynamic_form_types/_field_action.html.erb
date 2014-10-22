@@ -1,0 +1,313 @@
+<style type="text/css">
+  fieldset .required, .options_select{
+  display: none;
+}
+fieldset[selection="contacts"] .field-size{
+  display:none;
+}
+fieldset[selection="agreement"] .required{
+  display:block;
+}
+fieldset[selection="field_group"] .field-size, fieldset[selection="file_upload"] .include-report{
+  display:none;
+}
+fieldset[selection="spacer"] .field-size, fieldset[selection="divider"] .field-size{
+  display:none;
+}
+fieldset[selection="large_header"] .include-report, fieldset[selection="signature"] .include-report{
+  display:none;
+}
+fieldset[selection="large_header"] .include-report, fieldset[selection="signature"] .field-size{
+  display:none;
+}
+fieldset[selection="text_field"] .options_select,fieldset[selection="field_group"] .include-report{
+  display:none;
+}
+fieldset[selection="spacer"] .include-report, fieldset[selection="small_header"] .include-report {
+display: none;
+}
+fieldset[selection="spacer"] .field-popover,fieldset[selection="divider"] .field-popover{
+  display: none;
+}
+fieldset[selection="email_validation"] .required,fieldset[selection="phone_validation"] .required {
+  display: block; 
+}
+fieldset[selection="currency"] .required,fieldset[selection="calendar"] .required {
+  display: block; 
+}
+fieldset[selection="text_area"] .required,fieldset[selection="text_field"] .required {
+  display: block; 
+}
+fieldset[selection="text_area"] .include-report,fieldset[selection="text_field"] .include-report {
+  display: none; 
+}
+fieldset[selection="large_header"] .options_select,fieldset[selection="large_header"] .required{
+  display: none;
+}
+fieldset[selection="options_select"] .options_select,fieldset[selection="options_select"]  {
+  display: block; 
+}
+fieldset[selection="options_select_with_other"] .options_select,fieldset[selection="options_select_with_other"]  {
+  display: block; 
+}
+fieldset[selection="medium_header"] .options_select,fieldset[selection="medium_header"] .required{
+  display: none;
+}
+fieldset[selection="small_header"] .options_select.required, fieldset[selection="medium_header"] .include-report{
+  display: none;
+}
+fieldset[selection="contacts"] .include-report, fieldset[selection="divider"] .include-report{
+  display: none;
+}
+fieldset[selection="contacts"] .options_select,fieldset[selection="contacts"] .required{
+  display: none;
+}
+
+</style>
+
+<script type="text/javascript">
+
+window.publicFormValidation = function(){
+  $('#public').change(function(){
+    if(checkForm()){
+      $('.field_type option[value="file_upload"]').hide();
+      $('.field_type option[value="contacts"]').hide();
+      $('.add_many_fields').on('click',function(){
+        setTimeout(function(){
+          $('.field_type option[value="file_upload"]').hide();
+          $('.field_type option[value="contacts"]').hide();
+        }, 500);
+      }); 
+    }else {
+      var $contacts = $('.field_type option[value="contacts"]');
+      var $file_uploads = $('.field_type option[value="file_upload"]');
+      $contacts.show();
+      $file_uploads.show();
+        $('.add_many_fields').on('click',function(){
+          setTimeout(function(){
+            var $contacts = $('.field_type option[value="contacts"]');
+            var $file_uploads = $('.field_type option[value="file_upload"]');
+            $contacts.show();
+            $file_uploads.show();
+        }, 500);
+      });
+    };
+  });
+}
+
+checkForm = function(){
+  var public_val = $('#public').val();
+  return (public_val == "true");
+}
+
+window.formFieldGroupErrors = function(){
+  var $field_group_errors = $('#errors').find('.field-errors');
+    $.each($field_group_errors, function(index, error){
+      var error_name = $(error).data('name');
+        window.errorsAddClass(error_name);
+    });
+}
+window.errorsAddClass = function(field_group_error_name){
+  var $each_field = $('#field_fields').children();
+    $.each($each_field, function(index, field){
+      var $each_fieldset = $(field);
+      var field_group_name = $(field).find('.user-input').val();
+      var public_status = $('#public').val();
+      var field_group = $(field).find('.field_type').val();
+      if (field_group == "field_group" && field_group_error_name == field_group_name) {
+        $each_fieldset.addClass('alert alert-danger');
+      }else if (public_status == "true" && $each_fieldset.find('.field_type').val() == "contacts" || 
+                public_status == "true" && $each_fieldset.find('.field_type').val() == "file_upload" ){
+        $each_fieldset.addClass('alert alert-danger');
+      }
+    });
+}
+
+window.formTypePopover = function(){
+  $('.form-type').popover({
+      placement: 'top',
+      trigger: 'click focus',
+      content: function(){
+        if($(this).val() == 'Default-form'){
+          var message = 'A normal regular form';
+          return message;
+        }else if($(this).val() == 'Multi-step'){
+          var message = 'Create a Multiple step form where you can add steps to each part of your form using the field_group field.';
+          return message;
+        }
+      }
+    });
+}
+
+window.updatePopover = function($container, content){
+  $container.find('.field-popover').data('bs.popover').options.content = content; //this is defining the content params
+}
+
+window.init = function() {
+
+    $("body").on("change", '.field_type', function() {
+
+
+        var $this = $(this),                                // Field type drop down
+            $container = $this.closest("fieldset");           // Fieldset container
+            check_option = $this.val();                     // String with selected $this
+
+        $container.find('.field-popover').popover({
+                      trigger: 'hover', 
+                      placement: "top"});
+        $container.attr('selection',check_option);
+        switch (check_option)
+        {
+          case "options_select":
+            // $container.children('.options_select').show();
+            updatePopover($container,'Here you can create a drop down list with different options. Enter each option seperated by comma such as Option1, Option2, Option3');
+            // $container.find('.checkbox').show();
+            $('.options_field').popover({
+                      placement: 'top',
+                      trigger: 'hover',
+                      content: 'Enter each option seperated by comma'
+                  });
+            $('.field_type').popover('destroy');
+            break;
+
+          case "options_select_with_other":
+            updatePopover($container,'Same as options select but with other option and enter option');
+            $('.options_field').popover({
+                      placement: 'top',
+                      trigger: 'hover',
+                      title: 'Option field with other',
+                      content: 'Enter each option seperated by comma'
+                  });
+            $('.field_type').popover('destroy');
+            break;
+
+          case "phone_validation":
+          updatePopover($container,'Validate a phone number');
+          $('.field_type').popover('destroy');
+          break;
+
+          case "signature":
+          updatePopover($container,'Add a signature field');
+          $('.field_type').popover('destroy');
+          break;
+
+          case "field_group":
+          updatePopover($container,'Add a fieldset group with fields in it');
+          $('.field_type').popover('destroy');
+          break;
+
+          case "large_header":
+          updatePopover($container,'Give a LARGE header name');
+          $('.field_type').popover('destroy');
+          break;
+
+          case "medium_header":
+          updatePopover($container,'Give a Medium size header');
+          $('.field_type').popover('destroy');
+          break;
+
+          case "small_header":
+          updatePopover($container,'Give a small size header');
+          $('.field_type').popover('destroy');
+          break;
+
+          case "divider":
+          $(this).popover({
+                      placement: 'top',
+                      trigger: 'hover',
+                      content: 'Add a line divider to seperate content'
+                  });
+          break;
+
+          case "spacer":
+          $(this).popover({
+                      placement: 'top',
+                      trigger: 'hover',
+                      content: 'Add a space between your content'
+                  });
+          break;
+
+          case "text_field":
+          updatePopover($container,'Add a small text field');
+          $('.field_type').popover('destroy');
+          break;
+
+          case "agreement":
+          updatePopover($container, 'Add a required agreement where users must check to submit the form');
+          $('.field_type').popover('destroy');
+          break;
+
+          case "signature":
+          updatePopover($container,'Add a signature field');
+          $('.field_type').popover('destroy');
+          break;
+
+          case "calendar":
+          updatePopover($container,'Add a calendar field');
+          $('.field_type').popover('destroy');
+          break;
+
+          case "currency":
+          updatePopover($container, 'Add a currency field');
+          $('.field_type').popover('destroy');
+          break;
+
+          case "email_validation":
+          updatePopover($container, 'Validate an email');
+          $('.field_type').popover('destroy');
+          break;
+
+          case "check_box":
+          updatePopover($container, 'Add a checkbox field');
+          $('.field_type').popover('destroy');
+          break;
+
+          case "text_area":
+          updatePopover($container,'Add a large text field!');
+          $('.field_type').popover('destroy');
+          break;
+
+          case "file_upload":
+          updatePopover($container,'Add a field to upload a picture or PDF');
+          $('.field_type').popover('destroy');
+          break;
+
+          case "description":
+            updatePopover($container,'Add a short description field');
+            $container.children("div.col-sm-3").addClass("col-md-5");
+            $container.children("div.col-md-5").removeClass("col-sm-3");
+            break;
+
+          case "contacts":
+            updatePopover($container,'Add a contact information or search thru your saved contacts');
+            $('.field_type').popover('destroy');
+            break;
+
+          default:
+            updatePopover($container,'Enter Name of Field');
+        }
+
+        if (check_option != "description") {
+          $container.children("div.col-md-5").addClass("col-sm-3");
+          $container.children("div.col-md-5").removeClass("col-md-5");
+          
+        }
+
+    });
+// ctrl f2 bookmark function
+  $('.field_type').trigger("change");
+}
+$('.btn-success').tooltip();
+$('.btn-primary').tooltip();
+// // Doc rdy
+$(document).ready(window.init);
+$(document).ready(window.formTypePopover);
+$(document).ready(window.formFieldGroupErrors);
+$(document).ready(window.publicFormValidation);
+$('.public').popover({trigger: 'hover'});
+
+
+// // Turbo links rdy (http://stackoverflow.com/questions/18770517/rails-4-how-to-use-document-ready-with-turbo-links)
+$(document).on('page:load', window.init);
+$(document).on('page:load', window.formFieldGroupErrors);
+</script>
