@@ -101,6 +101,16 @@ module DynamicFormsEngine
         end
       end
     end
+
+    #
+    # SELF
+    #
+    def self.field_types
+      ['agreement', 'calendar', 'check_box', 'contacts', 'currency', 'description', 
+        'divider', 'email_validation', 'field_group', 'file_upload', 'large_header', 
+        'medium_header', 'options_select', 'options_select_with_other', 'phone_validation', 
+        'signature', 'small_header', 'spacer', 'text_area', 'text_field']
+    end
     
   end
 end

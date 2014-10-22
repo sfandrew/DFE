@@ -11,41 +11,51 @@
 		    cursor: move;">1</h3>
 		<%= f.hidden_field :field_order, :class => "field_order" %>
 	</div>
+
+	<div class="pull-right">
+		<%= f.hidden_field :_destroy %>
+		<%= link_to "Remove", '#', class: "remove_fields btn btn-danger" %>
+	</div>
+
 	
 	<div class="col-sm-2">
-		<%= f.select(:field_type, %w[agreement calendar check_box contacts currency description divider email_validation field_group file_upload large_header medium_header options_select options_select_with_other phone_validation signature small_header spacer text_area text_field], {:include_blank => 'Select a field', disabled: ''}, {:class => "field_type form-control"})  %>
+		<%= f.select(:field_type, DynamicFormsEngine::DynamicFormType.field_types.map{|x| [x.titleize, x] }, {:include_blank => 'Select a field', disabled: ''}, {:class => "field_type form-control"})  %>
+		<%#= f.select(:field_type, %w[agreement calendar check_box contacts currency description divider email_validation field_group file_upload large_header medium_header options_select options_select_with_other phone_validation signature small_header spacer text_area text_field], {:include_blank => 'Select a field', disabled: ''}, {:class => "field_type form-control"})  %>
 	</div>
+
 	<div class="col-sm-2 field-popover">
 		<%= f.text_field :name, placeholder: "Name of field", :class => "form-control user-input" %>
 	</div>
+
 	<div class="options_select">
 		<div class="options_field col-sm-3">
 			<%= f.text_field :content_meta, placeholder: "Option 1, Option 2, Option 3", :class => "form-control"  %>
 		</div>
 	</div>
-	<div class="col-sm-1 checkbox required" data-toggle="popover" data-trigger="focus" data-content="Have this as a required field" data-placement="top">
-		<%= f.check_box :required %>Required?
+
+	<div class="col-md-2 checkbox required" data-toggle="popover" data-trigger="focus" data-content="Have this as a required field" data-placement="top">
+		<%= label_tag :required do %>
+			<%= f.check_box :required %> Required?
+		<% end %>
 	</div>
-	<div style="padding-left:30px;" class="col-sm-1 checkbox include-report" data-toggle="popover" data-trigger="focus" 
+
+	<div style="padding-left:30px;" class="col-md-2 checkbox include-report" data-toggle="popover" data-trigger="focus" 
 			data-content="Include this field in the report" data-placement="top">
 		<%= f.check_box :included_in_report %>Include?
 	</div>
-	<div class="col-sm-2">
+
+	<div class="pull-right" style="margin-right: 10px;">
 		<%= f.select(:field_width, 
 			options_for_select([
-				["Size of Field", false, style: "background-color:white; color:black;"],
-				["25% width", 3, style: "background-color:white; color:black;"],
-				["50% width", 6, style: "background-color:white; color:black;"],
-				["75% width", 8, style: "background-color:white; color:black;"],
-				["Default 100%", 12, style: "background-color:white; color:black;"]
+				["Field Width", false, style: "background-color:white; color:black;"],
+				["Width: 25%", 3, style: "background-color:white; color:black;"],
+				["Width: 50%", 6, style: "background-color:white; color:black;"],
+				["Width: 75%", 8, style: "background-color:white; color:black;"],
+				["Width: 100%", 12, style: "background-color:white; color:black;"]
 				], :selected => f.object.field_width),
 			{}, {:class => "form-control btn btn-info field-size", :data => {:toggle => 'popover', :trigger => 'focus',:content => 'Choose the size of the field',:placement => 'top'}} ) %>
 	</div>
 
-	<div class="col-sm-1">
-		<%= f.hidden_field :_destroy %>
-		<%= link_to "Remove", '#', class: "remove_fields btn btn-danger" %>
-	</div>
 </fieldset>
 
 <script type="text/javascript">
