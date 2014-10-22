@@ -67,6 +67,20 @@ fieldset[selection="contacts"] .options_select,fieldset[selection="contacts"] .r
 
 <script type="text/javascript">
 
+window.publicDisable = function(){
+  var $form_type = $('.form-type');
+  var $form_public = $('#public');
+
+  $form_type.change(function(){
+    if($form_type.val() == "Multi-step"){
+      $form_public.attr('disabled','disabled');
+      $form_public.val("false");
+    }else {
+      $form_public.removeAttr('disabled');
+    }
+  });
+}
+
 window.publicFormValidation = function(){
   $('#public').change(function(){
     if(checkForm()){
@@ -132,7 +146,7 @@ window.formTypePopover = function(){
           var message = 'A normal regular form';
           return message;
         }else if($(this).val() == 'Multi-step'){
-          var message = 'Create a Multiple step form where you can add steps to each part of your form using the field_group field.';
+          var message = 'Create a Multiple step form where you can add steps to each part of your form using the field_group field. Multi-step cannot be public!';
           return message;
         }
       }
@@ -301,6 +315,7 @@ $('.btn-success').tooltip();
 $('.btn-primary').tooltip();
 // // Doc rdy
 $(document).ready(window.init);
+$(document).ready(window.publicDisable);
 $(document).ready(window.formTypePopover);
 $(document).ready(window.formFieldGroupErrors);
 $(document).ready(window.publicFormValidation);

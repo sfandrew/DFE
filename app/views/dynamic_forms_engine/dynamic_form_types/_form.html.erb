@@ -29,11 +29,11 @@
   <div class="field form-group">
     <%= f.label :form_type, :class => "col-sm-2 control-label" %>
     <div class="col-sm-4">
-      <%= f.select :form_type,['Default-form','Multi-step'],{:disabled => 'Select Form Type', :include_blank => 'Choose form'}, {:class => 'form-control form-type', id: "form-type"}  %>
+      <%= f.select :form_type,['Default-form','Multi-step'],{}, {:class => 'form-control form-type', id: "form-type"}  %>
     </div>
     <%= f.label :is_public, :class => "col-sm-2 control-label" %>
     <div class="col-sm-4">
-      <%= f.select :is_public,[['Yes',true],['No',false]],{:include_blank => 'Select'}, {:class => 'form-control public', 
+      <%= f.select :is_public,[['No',false],['Yes',true]],{}, {:class => 'form-control public', 
                             :data =>{:toggle => 'toggle', :trigger => 'focus', :content => 'Make this form Public(non users) or Private(registered users)', :placement => 'top'}, id: "public"} %>
     </div>
   </div>
