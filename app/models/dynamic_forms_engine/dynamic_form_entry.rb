@@ -180,5 +180,59 @@ module DynamicFormsEngine
       return csv_string
     end
 
+    def self.entries_to_csv(entries, form_type)
+      csv_string = ""
+      DynamicFormEntry.entries_to_array(entries, form_type).each_with_index do |row|
+        row.each_with_index do |col, index|
+          csv_string += col
+          csv_string += "," if index != (row.size-1)
+        end
+        csv_string += "\n"
+      end
+      return csv_string
+    end
+
+
+    # Turns the entries into a grid-like array, for use in conversion to CSV's and XML's
+    # Similar to index view
+    def self.entries_to_array(entries, form_type)
+      arr = []
+
+      # column headers
+      header_row = ["Status"]
+      form_type.fields.each do |field|
+        header_row << "#{field.name} (#{field.field_type.titleize})"
+      end
+      header_row << "Submitted"
+      arr << header_row
+
+      entries.each do |entry|
+
+        arr_row = []
+        if entry.in_progress
+          arr_row << "IN DRAFT"
+        else
+          arr_row << "SUBMITTED"
+        end
+
+        form_type.fields.each do |field|
+          if field.field_type == "agreement" || field.field_type == "check_box"
+            if entry.properties.find { |key, value| value[:id].to_i == field.id }
+              arr_row << "Approve"
+            else
+              arr_row << ""
+            end
+          else
+            arr_row << "\"#{entry.get_property_value(field.id).to_s}\""
+          end 
+        end
+
+        arr_row << "\"#{entry.created_at.strftime(' %l:%M %p %b. %d, %Y')}\""
+
+        arr << arr_row
+      end
+      return arr
+    end
+
   end
 end
