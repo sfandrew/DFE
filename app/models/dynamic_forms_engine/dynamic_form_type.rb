@@ -102,6 +102,15 @@ module DynamicFormsEngine
       end
     end
 
+    def is_multistep_form
+      true if form_type === "Multi-step"
+    end
+
+    def is_default_form
+      true if form_type === "Default-form"
+    end
+
+
     #
     # SELF
     #

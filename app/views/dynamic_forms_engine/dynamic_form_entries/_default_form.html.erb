@@ -24,12 +24,10 @@
     </div>
   <% end %>
 
-
   <%= f.hidden_field  :dynamic_form_type_id, :value => @dynamic_form_type.id %>
   <%= f.fields_for :properties, OpenStruct.new(Hash[@dynamic_form_entry.properties.map{|k,v| [k.to_s, v]}]) do |builder| %>
     <%= render_fields(@dynamic_form_entry, builder) %>
   <% end %>
-
 
   <div class="actions col-md-offset-2 col-sm-8">
     <%= submit_tag "Save Form", :name => "submit_entry", :class => "btn btn-success btn-block btn-lg" %>

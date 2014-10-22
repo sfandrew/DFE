@@ -8,14 +8,21 @@ module DynamicFormsEngine
       return_html = ""
       cols = 0
       form_group_exists = false
+      dynamic_form_type = dynamic_form_entry.dynamic_form_type
 
       # raise keys: dynamic_form_entry.errors.keys, ids: dynamic_form_entry.ordered_fields.map(&:id)
-      dynamic_form_entry.dynamic_form_type.ordered_fields.each_with_index do |field ,i|
+
+      # For each field ...
+      dynamic_form_type.ordered_fields.each_with_index do |field ,i|
+
+        next_field = dynamic_form_entry.dynamic_form_type.ordered_fields[i+1]
+
         #Row and width before
         if cols == 0
           return_html += '<div class="row">'
         end
 
+        # Update cols with field
         cols += field.field_width.to_i
 
         # if one field_group already exists, end one fieldset for the start of the next one
@@ -29,19 +36,17 @@ module DynamicFormsEngine
 
         errors = dynamic_form_entry.errors.full_messages_for(field.name.to_sym)
         return_html += render_field_with_value(field,errors,builder,dynamic_form_entry)
+
         #closes the div if the next field is greater than 12
-        if !dynamic_form_entry.dynamic_form_type.ordered_fields[i+1].nil?
-          if (cols + dynamic_form_entry.dynamic_form_type.ordered_fields[i+1].field_width.to_i) > 12
-            return_html += "</diviv class='clear spacer'></div>"
-            cols = 0
-          elsif
-            #contacts default width
+        if !next_field.blank?
+          if (cols + next_field.field_width.to_i) > 12
             return_html += "</div><div class='clear spacer'></div>"
             cols = 0
           end
+        else 
+          #add space between last field and submit button
+          return_html += "</div><div class='clear spacer'></div>" 
         end
-        #add space between last field and submit button
-        return_html << "<div class='clear spacer'></div>" if dynamic_form_entry.dynamic_form_type.ordered_fields[i+1].nil?
 
       end
 
