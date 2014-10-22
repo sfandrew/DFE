@@ -87,15 +87,11 @@ legend {
 	margin-top: 15px;
 	margin-right: 2em;
 }
+
 #main-header{
-	font-family: 'Roboto Slab', serif;
 	font-size: 40px;
 	margin-bottom: 30px;
 }
-
-/*.dropdown:hover .dropdown-menu {
-    display: block;
- }*/
 
 .bs-footer {
 	padding-top: 40px;
@@ -164,5 +160,8 @@ legend {
 	padding-top: 4px;
 	padding-bottom: 4px;
 }
-
+input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+}
 
