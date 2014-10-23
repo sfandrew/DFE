@@ -12,20 +12,20 @@
 
 </style>
 <div class="row">
-  <div class="col-md-6">
+  <div class="col-md-12">
 
-    <ol class="breadcrumb header transparent-background">
+    <ol class="breadcrumb header">
       <li><%= link_to "Forms", dynamic_form_types_path %></li>
-      <li>Entries</li>
+      <li>All Entries</li>
     </ol>
 
   </div>
-  <div class="col-md-6">
+  <!-- div class="col-md-6">
     <div class="btn-group pull-right">
       <%= link_to "CSV", "#", class: 'btn btn-default' %>
       <%= link_to "Excel", "#", class: 'btn btn-default' %>
     </div>
-  </div>
+  </div -->
 </div>
 
 <fieldset>
@@ -103,13 +103,24 @@
             <% end %>
           </td>  
 
-          <td><%= dynamic_form_entry.created_at.strftime(" %l:%M %p %b. %d, %Y") %></td>
-          <td><%#= link_to 'View', dynamic_form_entry, :class => 'btn btn-info' %></td>
-          <td><%#= link_to 'CSV', dynamic_form_entry_path(dynamic_form_entry, format: :csv), :class => 'btn btn-default' %></td>
-          <td><%= link_to 'XML', dynamic_form_entry_path(dynamic_form_entry, format: :xml), :class => 'btn btn-default'%></td>
+          <td>
+            <%= dynamic_form_entry.created_at.strftime(" %l:%M %p %b. %d, %Y") %>
+          </td>
 
           <td>
-            <%= link_to 'Delete', dynamic_form_entry, method: :delete, data: { confirm: 'Are you sure?' }, :class => 'btn btn-danger' %>
+            <%= link_to 'CSV', dynamic_form_entry_path(dynamic_form_entry, format: :csv), :class => 'btn btn-default' %>
+          </td>
+          <td>
+            <%= link_to 'XML', dynamic_form_entry_path(dynamic_form_entry, format: :xml), :class => 'btn btn-default'%>
+          </td>
+          <td>
+            <%= link_to 'View', dynamic_form_entry, :class => 'btn btn-info' %>
+          </td>
+          <td>
+            <%= link_to 'Delete', dynamic_form_entry, 
+                  method: :delete, 
+                  data: { confirm: 'Are you sure?' }, 
+                  class: 'btn btn-danger' %>
           </td>
 
         </tr>
