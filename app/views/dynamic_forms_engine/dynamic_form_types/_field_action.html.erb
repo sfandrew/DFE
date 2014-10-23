@@ -1,70 +1,3 @@
-<style type="text/css">
-  fieldset .required, .options_select{
-  display: none;
-}
-fieldset[selection="contacts"] .field-size{
-  display:none;
-}
-fieldset[selection="agreement"] .required{
-  display:block;
-}
-fieldset[selection="field_group"] .field-size, fieldset[selection="file_upload"] .include-report{
-  display:none;
-}
-fieldset[selection="spacer"] .field-size, fieldset[selection="divider"] .field-size{
-  display:none;
-}
-fieldset[selection="large_header"] .include-report, fieldset[selection="signature"] .include-report{
-  display:none;
-}
-fieldset[selection="large_header"] .include-report, fieldset[selection="signature"] .field-size{
-  display:none;
-}
-fieldset[selection="text_field"] .options_select,fieldset[selection="field_group"] .include-report{
-  display:none;
-}
-fieldset[selection="spacer"] .include-report, fieldset[selection="small_header"] .include-report {
-display: none;
-}
-fieldset[selection="spacer"] .field-popover,fieldset[selection="divider"] .field-popover{
-  display: none;
-}
-fieldset[selection="email_validation"] .required,fieldset[selection="phone_validation"] .required {
-  display: block; 
-}
-fieldset[selection="currency"] .required,fieldset[selection="calendar"] .required {
-  display: block; 
-}
-fieldset[selection="text_area"] .required,fieldset[selection="text_field"] .required {
-  display: block; 
-}
-fieldset[selection="text_area"] .include-report,fieldset[selection="text_field"] .include-report {
-  display: none; 
-}
-fieldset[selection="large_header"] .options_select,fieldset[selection="large_header"] .required{
-  display: none;
-}
-fieldset[selection="options_select"] .options_select,fieldset[selection="options_select"]  {
-  display: block; 
-}
-fieldset[selection="options_select_with_other"] .options_select,fieldset[selection="options_select_with_other"]  {
-  display: block; 
-}
-fieldset[selection="medium_header"] .options_select,fieldset[selection="medium_header"] .required{
-  display: none;
-}
-fieldset[selection="small_header"] .options_select.required, fieldset[selection="medium_header"] .include-report{
-  display: none;
-}
-fieldset[selection="contacts"] .include-report, fieldset[selection="divider"] .include-report{
-  display: none;
-}
-fieldset[selection="contacts"] .options_select,fieldset[selection="contacts"] .required{
-  display: none;
-}
-
-</style>
-
 <script type="text/javascript">
 
 window.publicDisable = function(){
@@ -108,6 +41,29 @@ window.publicFormValidation = function(){
     };
   });
 }
+// window.publicFormValidation = function(){
+//   $public_val = $('#public').val();
+//   $('.add_many_fields').on('click',function(){
+//     setTimeout(function(){
+//         $contacts = $('.field_type option[value="contacts"]');
+//         $file_uploads = $('.field_type option[value="file_upload"]');
+//         }, 500);
+//       if($public_val == "true"){
+//         setTimeout(function(){
+//             $contacts.hide();
+//             $file_uploads.hide();
+            
+//           }, 1000);
+        
+//       }else{
+//         console.log($contacts.length());
+//         setTimeout(function(){
+//             $contacts.show();
+//             $file_uploads.show();
+//           }, 1000);
+//       }
+//    });
+// }
 
 checkForm = function(){
   var public_val = $('#public').val();

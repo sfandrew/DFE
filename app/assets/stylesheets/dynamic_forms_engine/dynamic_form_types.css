@@ -18,11 +18,14 @@ fieldset.dynamic-form-field{
   padding-left: 15px;
 }
 
-fieldset .required, .options_select{
-  display: none;
+fieldset[selection="options_select"] .required {
+  display:block;
 }
-fieldset[selection="contacts"] .field-size{
+fieldset[selection="contacts"] .field-size, fieldset .required, .options_select{
   display:none;
+}
+fieldset[selection="agreement"] .required, fieldset[selection="check_box"] .required{
+  display: block;
 }
 fieldset[selection="field_group"] .field-size, fieldset[selection="file_upload"] .include-report{
   display:none;
@@ -57,7 +60,7 @@ fieldset[selection="text_area"] .required,fieldset[selection="text_field"] .requ
 fieldset[selection="large_header"] .options_select,fieldset[selection="large_header"] .required{
   display: none;
 }
-fieldset[selection="options_select"] .options_select,fieldset[selection="options_select"]  {
+fieldset[selection="options_select"] .options_select,fieldset[selection="options_select"]  .required{
   display: block; 
 }
 fieldset[selection="options_select_with_other"] .options_select,fieldset[selection="options_select_with_other"]  {
