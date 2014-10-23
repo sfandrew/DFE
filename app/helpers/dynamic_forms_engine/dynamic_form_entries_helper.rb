@@ -26,22 +26,24 @@ module DynamicFormsEngine
             return_html += "</fieldset>"    # Close field set
             cols = 0
           end
-          return_html += "<fieldset><legend>#{field.name.humanize}</legend>"
+          return_html += "<fieldset id='step_#{field.id}' class='field-group'><legend>#{field.name.humanize}</legend>"
           form_group_exists = true
         end
 
-        # ROWS
-        if !field.field_width.blank? && field.field_width.to_i > 0
-          return_html += '<div class="row dfe-fields-row">' if cols == 0  # New row
-          # Update cols with field
-          cols += field.field_width.to_i 
-        end
+        if field.field_type != "field_group"
+          # ROWS
+          if !field.field_width.blank? && field.field_width.to_i > 0
+            return_html += '<div class="row dfe-fields-row">' if cols == 0  # New row
+            # Update cols with field
+            cols += field.field_width.to_i 
+          end
 
-        if (cols > 12) && (field.field_type != "field_group")
-          return_html += "</div>"                             # Close row
-          return_html += "<div class='clear spacer'></div>"   # Add spacer
-          return_html += "<div class='row dfe-fields-row'>"   # Open new row
-          cols = field.field_width.to_i
+          if cols > 12
+            return_html += "</div>"                             # Close row
+            return_html += "<div class='clear spacer'></div>"   # Add spacer
+            return_html += "<div class='row dfe-fields-row'>"   # Open new row
+            cols = field.field_width.to_i
+          end
         end
 
         errors = dynamic_form_entry.errors.full_messages_for(field.name.to_sym)
@@ -50,6 +52,9 @@ module DynamicFormsEngine
       end
 
       return_html += "</div>"           # Last row
+
+      # Add space between last row and fieldset end
+      return_html += "<div class='clear spacer'></div>" 
 
       # FIELDSET - last closed
       if form_group_exists
