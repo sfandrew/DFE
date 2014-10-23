@@ -22,6 +22,7 @@ module DynamicFormsEngine
         if field.field_type == "field_group"
           if form_group_exists
             return_html += "</div>"         # Close row
+            return_html += "<div class='clear spacer'></div>"   # Add spacer before fieldset close
             return_html += "</fieldset>"    # Close field set
             cols = 0
           end
@@ -48,11 +49,11 @@ module DynamicFormsEngine
 
       end
 
-      return_html += "</div>"
+      return_html += "</div>"           # Last row
 
       # FIELDSET - last closed
       if form_group_exists
-        return_html += "</fieldset><!-- LAST -->" 
+        return_html += "</fieldset>"    # Last fieldset
       end
 
       # Add space between last field and submit button
