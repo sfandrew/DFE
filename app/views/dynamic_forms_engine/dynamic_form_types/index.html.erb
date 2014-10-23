@@ -43,7 +43,8 @@
 
         <td><i><%= dynamic_form_type.is_public ? 'Yes' : 'No' %></i></td>
 
-        <td><%= link_to 'Share', edit_dynamic_form_type_path(dynamic_form_type), :class => 'btn btn-sm btn-default' %></td>
+        <td><%= button_tag 'Share', :class => 'btn btn-sm btn-default',
+                                  :data => {toggle: 'modal', target: ".iframe-#{dynamic_form_type.id}"} %></td>
 
         <td>
           <%= link_to new_form_entry_path(dynamic_form_type), 
@@ -64,10 +65,29 @@
 
         <td><%= link_to 'Edit', edit_dynamic_form_type_path(dynamic_form_type), :class => 'btn btn-sm btn-info' %></td>
 
-        <!--  <td><%= link_to 'Delete', dynamic_form_type, method: :delete, data: { confirm: 'Are you sure?' }, :class => 'btn btn-danger' %></td> -->
+        <!-- Modal -->
+        <div class="modal iframe-<%= dynamic_form_type.id %> fade"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel"          aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel"><%= dynamic_form_type.name %></h4>
+              </div>
+              <div class="modal-body">
+                <p>Copy and paste the iframe code below onto your website</p>
+                <textarea rows="3"class="form-control"><iframe src="localhost:3000/dynamic_forms_engine/dynamic_form_entries/new/<%= dynamic_form_type.id %>?iframe=1" height="800" width="1280"></iframe></textarea>        
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
         
       </tr>
     <% end %>
   </tbody>
 </table>
 <br>
+
+
