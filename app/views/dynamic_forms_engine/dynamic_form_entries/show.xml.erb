@@ -6,7 +6,7 @@
   xmlns:html="http://www.w3.org/TR/REC-html40">
   <Worksheet ss:Name="Sheet1">
     <Table>
-      <% @entry_as_array.each do |row| %>
+      <% @array_for_xml.each do |row| %>
         <Row>        
         <% row.each do |cell| %>
           <Cell><Data ss:Type="String"><%= cell.to_s %></Data></Cell>
