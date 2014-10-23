@@ -25,7 +25,7 @@ module DynamicFormsEngine
             return_html += "</fieldset>"    # Close field set
             cols = 0
           end
-          return_html += "<fieldset><h1>#{field.name.humanize}</h1>"
+          return_html += "<fieldset><legend>#{field.name.humanize}</legend>"
           form_group_exists = true
         end
 
