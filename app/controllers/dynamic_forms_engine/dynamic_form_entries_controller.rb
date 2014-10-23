@@ -26,7 +26,9 @@ module DynamicFormsEngine
         format.csv { render text: DynamicFormEntry.entries_to_csv(@dynamic_form_entries, @dynamic_form_type)}
         format.xml { 
           @array_for_xml = DynamicFormEntry.entries_to_array(@dynamic_form_entries, @dynamic_form_type)
-          render "show.xml.erb" }
+          stream = render_to_string(:template => "dynamic_forms_engine/dynamic_form_entries/show.xml.erb")
+          send_data(stream, :type => "text/xml", :filename => "form_entries.xml")
+        }
       end
       
     end
