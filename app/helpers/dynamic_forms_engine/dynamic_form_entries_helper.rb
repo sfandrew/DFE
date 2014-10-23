@@ -13,44 +13,57 @@ module DynamicFormsEngine
       # raise keys: dynamic_form_entry.errors.keys, ids: dynamic_form_entry.ordered_fields.map(&:id)
 
       # For each field ...
-      dynamic_form_type.ordered_fields.each_with_index do |field ,i|
+      dynamic_form_type.ordered_fields.each_with_index do |field, i|
 
-        next_field = dynamic_form_entry.dynamic_form_type.ordered_fields[i+1]
+        next_field = dynamic_form_type.ordered_fields[i+1]
 
-        #Row and width before
-        if cols == 0
-          return_html += '<div class="row">'
-        end
-
-        # Update cols with field
-        cols += field.field_width.to_i
-
+        # FIELDSET
         # if one field_group already exists, end one fieldset for the start of the next one
         if field.field_type == "field_group"
           if form_group_exists
-            return_html += "</fieldset>"
+            return_html += "</div>"         # Close row
+            return_html += "<div class='clear spacer'></div>"   # Add spacer before fieldset close
+            return_html += "</fieldset>"    # Close field set
+            cols = 0
           end
+          return_html += "<fieldset id='step_#{field.id}' class='field-group'><legend>#{field.name.humanize}</legend>"
           form_group_exists = true
-          return_html += ("<fieldset id='step_#{field.id}' class='field-group'><legend>#{field.name.humanize}</legend>")
+        end
+
+        if field.field_type != "field_group"
+          # ROWS
+          if !field.field_width.blank? && field.field_width.to_i > 0
+            return_html += '<div class="row dfe-fields-row">' if cols == 0  # New row
+            # Update cols with field
+            cols += field.field_width.to_i 
+          end
+
+          if cols > 12
+            return_html += "</div>"                             # Close row
+            return_html += "<div class='clear spacer'></div>"   # Add spacer
+            return_html += "<div class='row dfe-fields-row'>"   # Open new row
+            cols = field.field_width.to_i
+          end
         end
 
         errors = dynamic_form_entry.errors.full_messages_for(field.name.to_sym)
         return_html += render_field_with_value(field,errors,builder,dynamic_form_entry)
 
-        #closes the div if the next field is greater than 12
-        if !next_field.blank?
-          if (cols + next_field.field_width.to_i) > 12
-            return_html += "</div><div class='clear spacer'></div>"
-            cols = 0
-          end
-        else 
-          #add space between last field and submit button
-          return_html += "</div><div class='clear spacer'></div>" 
-        end
-
       end
 
-      return_html += "</fieldset>" if form_group_exists #final closing fieldset tag
+      return_html += "</div>"           # Last row
+
+      # Add space between last row and fieldset end
+      return_html += "<div class='clear spacer'></div>" 
+
+      # FIELDSET - last closed
+      if form_group_exists
+        return_html += "</fieldset>"    # Last fieldset
+      end
+
+      # Add space between last field and submit button
+      return_html += "<div class='clear spacer'></div>" 
+
       return_html.html_safe
 
     end

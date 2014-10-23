@@ -10,11 +10,13 @@ module DynamicFormsEngine
     # GET /dynamic_form_entries
     # GET /dynamic_form_entries.json
     def index
-      @dynamic_form_entries = current_user.dynamic_form_entries.all #DynamicFormEntry.all
-      @entries_name = @dynamic_form_entries.map { |form_entry| [form_entry.dynamic_form_type.name, form_entry.dynamic_form_type.id] }
       if !params[:search].blank?
         @dynamic_form_entries = current_user.dynamic_form_entries.search(params[:search])
+      else
+        @dynamic_form_entries = current_user.dynamic_form_entries.all #DynamicFormEntry.all
       end
+      @entries_name = @dynamic_form_entries.map { |form_entry| [form_entry.dynamic_form_type.name, form_entry.dynamic_form_type.id] }
+      
     end
 
     def form_entries      
@@ -22,11 +24,13 @@ module DynamicFormsEngine
       @entries_name = @dynamic_form_entries.map { |form_entry| [form_entry.dynamic_form_type.name, form_entry.dynamic_form_type.id] }
 
       respond_to do |format|
-        format.html { render action: 'index' }
+        format.html
         format.csv { render text: DynamicFormEntry.entries_to_csv(@dynamic_form_entries, @dynamic_form_type)}
         format.xml { 
           @array_for_xml = DynamicFormEntry.entries_to_array(@dynamic_form_entries, @dynamic_form_type)
-          render "show.xml.erb" }
+          stream = render_to_string(:template => "dynamic_forms_engine/dynamic_form_entries/show.xml.erb")
+          send_data(stream, :type => "text/xml", :filename => "form_entries.xml")
+        }
       end
       
     end
