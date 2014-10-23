@@ -32,14 +32,14 @@
 			
 			<% if field[:type] == "file_upload" %>
 				<label class="col-sm-3 control-label">
-					<%= index.content_name %>:
+					<%= index[:name] %>:
 				</label>
 				<div class="col-sm-9">
 					<%= link_to("Download", index.filename.url, class: 'btn btn-success') %>
 				</div>
 			<% elsif field[:type] == "phone_validation" %>
 				<label class="col-sm-3 control-label">
-					<%= field.content_name %>:
+					<%= field[:name] %>:
 				</label>
 				<div class="col-sm-9">
 					<%= number_to_phone(field[:value]) %>
