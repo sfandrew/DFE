@@ -1,5 +1,56 @@
 <script type="text/javascript">
 
+// $('main').on('change', '.field_type:first', function() {
+
+//   alert("I got it!");
+// });
+
+
+window.fieldGroupValidation = function(){
+  $('main').on('change', '.field_type:first', function() {
+    var $first_field = $('.field_type:first');
+    var $first_row = $('fieldset.dynamic-form-field').eq(0);
+    var $form_type = $('#form-type');
+    if($form_type.val() == "Multi-step" && $first_field.val() != "field_group"){
+      $first_row.addClass('alert alert-danger');
+      alert("First field must be a Field group!");
+    }else{
+      $first_row.removeClass('alert alert-danger');
+    }
+  });
+  $('main').on('change', '.form-type', function() {
+    var $first_field = $('.field_type:first');
+    var $first_row = $('fieldset.dynamic-form-field').eq(0);
+    var $form_type = $('#form-type');
+    if($form_type.val() == "Multi-step" && $first_field.val() != "field_group"){
+      $first_row.addClass('alert alert-danger');
+      alert("First field must be a field group!");
+    }else{
+      $first_row.removeClass('alert alert-danger');
+    }
+  });
+
+
+  // var $form_type = $('#form-type');
+  // var $add_fields = $('.add_many_fields');
+  // $add_fields.on('click',function(){
+  //   var $first_field = $('.field_type').eq(0);
+
+  //   console.log("$first_field.val()");
+
+  //     $first_field.change(function(){
+  //             console.log("This was changed!");
+  //     });
+
+  // });
+  // $form_type.change(function(){
+  //   if($form_type.val() == "Multi-step"){
+  //     console.log("test");
+  //   }
+  // });
+
+}
+
 window.publicDisable = function(){
   var $form_type = $('.form-type');
   var $form_public = $('#public');
@@ -271,6 +322,7 @@ $('.btn-primary').tooltip();
 $(document).ready(window.init);
 $(document).ready(window.publicDisable);
 $(document).ready(window.formTypePopover);
+$(document).ready(window.fieldGroupValidation);
 $(document).ready(window.formFieldGroupErrors);
 $(document).ready(window.publicFormValidation);
 $('.public').popover({trigger: 'hover'});
