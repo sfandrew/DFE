@@ -73,13 +73,12 @@
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                 <h4 class="modal-title" id="myModalLabel"><%= dynamic_form_type.name %></h4>
               </div>
+              
               <div class="modal-body">
                 <p>Copy and paste the iframe code below onto your website</p>
-                <textarea rows="3"class="form-control"><iframe src="localhost:3000/dynamic_forms_engine/dynamic_form_entries/new/<%= dynamic_form_type.id %>?iframe=1" height="800" width="1280"></iframe></textarea>        
+                <textarea rows="3"class="form-control"><iframe src="http://localhost:3000/dynamic_forms_engine/dynamic_form_entries/new/<%= dynamic_form_type.id %>?iframe=1" height="800" width="1280"></iframe></textarea>        
               </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              </div>
+
             </div>
           </div>
         </div>
