@@ -13,9 +13,9 @@
 		<!-- Collect the nav links, forms, and other content for toggling -->
 		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 			<ul class="nav navbar-nav">
-				<li><%= link_to "Form Types", dynamic_form_types_path %></li>
-				<li><%= link_to "New Form Type", new_dynamic_form_type_path %></li>
-				<li><%= link_to "My Form Entries", dynamic_form_entries_path %></li>
+				<li><%= link_to "My Forms", dynamic_form_types_path %></li>
+				<li><%= link_to "New Form", new_dynamic_form_type_path %></li>
+				<li><%= link_to "My Entries", dynamic_form_entries_path %></li>
 				<% if @dynamic_form_type && !@dynamic_form_type.new_record?  %>
 					<li><%= link_to("This Form's Entries", form_entries_path(@dynamic_form_type.id))%></li>
 				<% end %>
