@@ -7,11 +7,11 @@ require "dynamic_forms_engine/version"
 Gem::Specification.new do |s|
   s.name        = "dynamic_forms_engine"
   s.version     = DynamicFormsEngine::VERSION
-  s.authors     = ["TODO: Your name"]
-  s.email       = ["TODO: Your email"]
-  s.homepage    = "TODO"
-  s.summary     = "TODO: Summary of DynamicFormsEngine."
-  s.description = "TODO: Description of DynamicFormsEngine."
+  s.authors     = ["IncuTech, LLC.", "Andrew Garcia" "Max Kaplan", "James Bowden"]
+  s.email       = ["contact@incu-tech.co"]
+  s.homepage    = "https://github.com/maxkaplan/dynamic-forms-engine"
+  s.summary     = "Create custom forms."
+  s.description = "Create forms and reports with ease."
 
   s.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.rdoc"]
   s.test_files = Dir["test/**/*"]
