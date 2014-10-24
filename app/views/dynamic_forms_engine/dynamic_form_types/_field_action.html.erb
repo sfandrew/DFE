@@ -1,24 +1,8 @@
 <script type="text/javascript">
 
-// $('main').on('change', '.field_type:first', function() {
-
-//   alert("I got it!");
-// });
-
-
 window.fieldGroupValidation = function(){
-  $('main').on('change', '.field_type:first', function() {
-    var $first_field = $('.field_type:first');
-    var $first_row = $('fieldset.dynamic-form-field').eq(0);
-    var $form_type = $('#form-type');
-    if($form_type.val() == "Multi-step" && $first_field.val() != "field_group"){
-      $first_row.addClass('alert alert-danger');
-      alert("First field must be a Field group!");
-    }else{
-      $first_row.removeClass('alert alert-danger');
-    }
-  });
-  $('main').on('change', '.form-type', function() {
+
+  var myFunction = function() {
     var $first_field = $('.field_type:first');
     var $first_row = $('fieldset.dynamic-form-field').eq(0);
     var $form_type = $('#form-type');
@@ -28,30 +12,13 @@ window.fieldGroupValidation = function(){
     }else{
       $first_row.removeClass('alert alert-danger');
     }
-  });
-
-
-  // var $form_type = $('#form-type');
-  // var $add_fields = $('.add_many_fields');
-  // $add_fields.on('click',function(){
-  //   var $first_field = $('.field_type').eq(0);
-
-  //   console.log("$first_field.val()");
-
-  //     $first_field.change(function(){
-  //             console.log("This was changed!");
-  //     });
-
-  // });
-  // $form_type.change(function(){
-  //   if($form_type.val() == "Multi-step"){
-  //     console.log("test");
-  //   }
-  // });
-
+  }
+  $('main').on('change', '.field_type:first', myFunction);
+  $('main').on('change', '.form-type', myFunction);
 }
 
 window.publicDisable = function(){
+
   var $form_type = $('.form-type');
   var $form_public = $('#public');
 
@@ -66,53 +33,28 @@ window.publicDisable = function(){
 }
 
 window.publicFormValidation = function(){
-  $('#public').change(function(){
+  $('main').on('click', '.field_type', function(){
     if(checkForm()){
-      $('.field_type option[value="file_upload"]').hide();
-      $('.field_type option[value="contacts"]').hide();
-      $('.add_many_fields').on('click',function(){
-        setTimeout(function(){
-          $('.field_type option[value="file_upload"]').hide();
-          $('.field_type option[value="contacts"]').hide();
-        }, 500);
+      $(this).find('option[value="file_upload"]').hide();
+      $(this).find('option[value="contacts"]').hide();
+      $(this).closest('.dynamic-form-field').removeClass('alert alert-danger');
+    }else{
+      $(this).find('option[value="file_upload"]').show();
+      $(this).find('option[value="contacts"]').show();
+    }
+  });
+  $('main').on('change','.public',function(){
+    if(checkForm() && $('.dynamic-form-field').length > 0){
+      var $fields = $('.dynamic-form-field');
+      $.each($fields,function(index,fieldset){
+        var $each_fs = $(fieldset);    
+        if($each_fs.find('.field_type').val() == "contacts" || $each_fs.find('.field_type').val() == "file_upload"){
+          $each_fs.addClass('alert alert-danger');
+        }       
       }); 
-    }else {
-      var $contacts = $('.field_type option[value="contacts"]');
-      var $file_uploads = $('.field_type option[value="file_upload"]');
-      $contacts.show();
-      $file_uploads.show();
-        $('.add_many_fields').on('click',function(){
-          setTimeout(function(){
-            var $contacts = $('.field_type option[value="contacts"]');
-            var $file_uploads = $('.field_type option[value="file_upload"]');
-            $contacts.show();
-            $file_uploads.show();
-        }, 500);
-      });
-    };
+    }
   });
 }
-// window.publicFormValidation = function(){
-//   $public_val = $('#public');
-//   $('.add_many_fields').on('click',function(){
-//     setTimeout(function(){
-//         $contacts = $('.field_type option[value="contacts"]');
-//         $file_uploads = $('.field_type option[value="file_upload"]');
-//         }, 500);
-//       if($public_val.val() == "true"){
-//         setTimeout(function(){
-//             $contacts.hide();
-//             $file_uploads.hide();
-//           }, 1000);
-         
-//       }else{
-//         setTimeout(function(){
-//             $contacts.show();
-//             $file_uploads.show();
-//           }, 1000);
-//       }
-//    });
-// }
 
 checkForm = function(){
   var public_val = $('#public').val();
