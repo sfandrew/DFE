@@ -20,5 +20,8 @@ gem 'ransack'
 # Git. Remember to move these dependencies to your gemspec before releasing
 # your gem to rubygems.org.
 
-# To use debugger
-# gem 'debugger'
+group :development do 
+	# To use debugger
+	gem 'pry'
+	gem 'pry-debugger'
+end
