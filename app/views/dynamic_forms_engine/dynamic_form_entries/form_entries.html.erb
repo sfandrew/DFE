@@ -1,21 +1,9 @@
-<style type="text/css">
-  th{
-    text-align: center;
-    vertical-align: middle;
-  }
-  .table > thead > tr > th {
-    vertical-align: middle;
-  }
-  td{
-    text-align: center;
-  }
 
-</style>
 <div class="row">
   <div class="col-md-6">
 
     <ol class="breadcrumb header transparent-background">
-      <li><%= link_to "Forms", dynamic_form_types_path %></li>
+        <li><%= link_to "Forms", dynamic_form_types_path %></li>
         <li><%= @dynamic_form_type.name %></li>
         <li class="active"><%= @dynamic_form_entries.size %> Entries</li>
     </ol>
@@ -23,7 +11,9 @@
   </div>
   <div class="col-md-6">
     <div class="btn-group pull-right">
-      <%= link_to "Embed", form_entries_path(@dynamic_form_type, format: 'iframe'), class: 'btn btn-default' %>
+      <%= link_to "Share", '#', data: {toggle: 'modal', target: "#share-#{@dynamic_form_type.id}"}, class: 'btn btn-default' %>
+      <%= render partial: 'dynamic_forms_engine/dynamic_form_types/share_modal', locals: {dynamic_form_type: @dynamic_form_type} %>
+
       <%= link_to "CSV", form_entries_path(@dynamic_form_type, format: 'csv'), class: 'btn btn-default' %>
       <%= link_to "Excel", form_entries_path(@dynamic_form_type, format: 'xml'), class: 'btn btn-default' %>
       <%= link_to 'Edit Form', edit_dynamic_form_type_path(@dynamic_form_type), class: 'btn btn-primary ' %>

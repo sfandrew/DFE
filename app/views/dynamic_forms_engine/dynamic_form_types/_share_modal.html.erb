@@ -1,0 +1,17 @@
+<!-- Share Modal -->
+<div class="modal fade" id="share-<%= dynamic_form_type.id %>"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel"          aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Share: <%= dynamic_form_type.name %></h4>
+      </div>
+
+      <div class="modal-body">
+        <p>Copy and paste the following code below onto your website.</p>
+        <textarea rows="3"class="form-control"><iframe src="http://localhost:3000/dynamic_forms_engine/dynamic_form_entries/new/<%= dynamic_form_type.id %>?iframe=1" height="800" width="1280"></iframe></textarea>        
+      </div>
+
+    </div>
+  </div>
+</div>
