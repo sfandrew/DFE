@@ -23,6 +23,21 @@
 					<li><%= link_to("New Entry", new_dynamic_form_entry_path + "/#{@dynamic_form_type.id}") %></li>
 				<% end %>
 			</ul>
+			
+			<ul class="nav navbar-nav navbar-right">
+				<li>
+					<% if user_signed_in? %>
+						<%= link_to('#', :id => 'logout',  :method=>'delete') do %>
+				         	Logout  <span class="glyphicon glyphicon-log-out"></span>
+				        <% end %>
+				    <% else %>
+						<%= link_to('#', :id => 'login') do %>
+				         	Login <span class="glyphicon glyphicon-log-in"></span> 
+				        <% end %>
+				    <% end %>
+				</li>
+			</ul>
+
 
 		</div><!-- /.navbar-collapse -->
 

@@ -13,8 +13,4 @@ class ApplicationController < ActionController::Base
   	@current_user = current_user
   end
 
-  def authenticate_user!
-    #stub
-  end
-
 end
