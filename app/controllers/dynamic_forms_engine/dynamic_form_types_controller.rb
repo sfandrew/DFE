@@ -2,9 +2,12 @@ require_dependency "dynamic_forms_engine/application_controller"
 
 module DynamicFormsEngine
   class DynamicFormTypesController < ApplicationController
+    
+    before_filter :authenticate_user!
+
     before_action :set_dynamic_form_type, only: [:show, :edit, :update, :destroy]
     before_filter :non_editable_dynamic_forms, only: [:show, :edit, :update, :destroy]
-    before_filter :authenticate_user!
+
 
     # GET /dynamic_form_types
     # GET /dynamic_form_types.json

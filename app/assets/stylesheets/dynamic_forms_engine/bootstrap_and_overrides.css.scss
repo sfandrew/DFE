@@ -1,6 +1,6 @@
 // following this guide: http://railsapps.github.io/twitter-bootstrap-rails.html
 // This separates any bootstrap style changes to this file
-@import "bootstrap";
+// @import "bootstrap";
 
 .breadcrumb.header{
 	font-size: 20px;
@@ -10,7 +10,8 @@
 	background: transparent;
 }
 
-/*for nav bar collapse break point*/
+
+/* for nav bar collapse break point */
 @media (max-width: 990px) {
     .navbar-header {
         float: none;

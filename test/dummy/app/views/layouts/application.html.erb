@@ -7,18 +7,18 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-	
-<%= render :partial => "layouts/nav" %>
+		
+	<%= render :partial => "layouts/nav" %>
 
-<main role="main">
-  <div class="container">
-    <% #alert %>
-    <%= yield %>
-  </div>
-</main>
+	<main role="main">
+	  <div class="container">
+	    <%= render :partial => "layouts/notice" %>
+	    <%= yield %>
+	  </div>
+	</main>
 
-<footer>
-</footer>
+	<footer>
+	</footer>
 
 </body>
 </html>

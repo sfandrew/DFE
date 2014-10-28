@@ -8,8 +8,8 @@ gemspec
 gem "jquery-rails"
 gem 'jquery-ui-rails'
 gem "sass-rails", '~> 4.0.2'
-gem 'bootstrap-sass', '~> 3.0.3.0'
-gem 'less-rails-bootstrap'
+#gem 'bootstrap-sass', '~> 3.0.3.0'
+#gem 'less-rails-bootstrap'
 gem "therubyracer"
 gem 'bootstrap-datepicker-rails'
 gem 'ransack'
@@ -20,5 +20,8 @@ gem 'ransack'
 # Git. Remember to move these dependencies to your gemspec before releasing
 # your gem to rubygems.org.
 
-# To use debugger
-# gem 'debugger'
+group :development do 
+	# To use debugger
+	gem 'pry'
+	gem 'pry-debugger'
+end

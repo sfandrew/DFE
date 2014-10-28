@@ -1,15 +1,4 @@
-<style type="text/css">
-  th{
-    text-align: center;
-    vertical-align: middle;
-  }
-  .table > thead > tr > th {
-    vertical-align: middle;
-  }
-  td{
-    text-align: center;
-  }
-</style>
+
 <div class="row">
   <h1 class="col-xs-12 col-sm-6 col-md-6 col-lg-6" id="main-header">My Forms</h1>
   <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
@@ -43,8 +32,13 @@
 
         <td><i><%= dynamic_form_type.is_public ? 'Yes' : 'No' %></i></td>
 
-        <td><%= button_tag 'Share', :class => 'btn btn-sm btn-default',
-                                  :data => {toggle: 'modal', target: ".iframe-#{dynamic_form_type.id}"} %></td>
+        <td>
+          <%= button_tag 'Share', :class => 'btn btn-sm btn-default',
+                                  :data => {toggle: 'modal', target: "#share-#{dynamic_form_type.id}"} %>
+
+          <%= render partial: 'share_modal', locals: {dynamic_form_type: dynamic_form_type} %>
+
+        </td>
 
         <td>
           <%= link_to new_form_entry_path(dynamic_form_type), 
@@ -52,6 +46,7 @@
             <i class="fa fa-pencil-square-o"></i> <%= "View" %>
           <% end %>
         </td>
+
         <td>
           <a href="<%= form_entries_path(dynamic_form_type) %>">
             <button class="btn btn-sm btn-primary" type="button">
@@ -65,24 +60,7 @@
 
         <td><%= link_to 'Edit', edit_dynamic_form_type_path(dynamic_form_type), :class => 'btn btn-sm btn-info' %></td>
 
-        <!-- Modal -->
-        <div class="modal iframe-<%= dynamic_form_type.id %> fade"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel"          aria-hidden="true">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="myModalLabel">Share: <%= dynamic_form_type.name %></h4>
-              </div>
 
-              <div class="modal-body">
-                <p>Copy and paste the following code below onto your website.</p>
-                <textarea rows="3"class="form-control"><iframe src="http://localhost:3000/dynamic_forms_engine/dynamic_form_entries/new/<%= dynamic_form_type.id %>?iframe=1" height="800" width="1280"></iframe></textarea>        
-              </div>
-
-            </div>
-          </div>
-        </div>
-        
       </tr>
     <% end %>
   </tbody>

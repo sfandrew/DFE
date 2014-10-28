@@ -61,7 +61,6 @@ module DynamicFormsEngine
         @dynamic_form_entry = DynamicFormEntry.new(dynamic_form_entry_params)
       end
 
-
       if params[:signature]
         @dynamic_form_entry.signature = params[:signature]
       end
@@ -73,9 +72,9 @@ module DynamicFormsEngine
       end
 
       if params[:submit_entry] && @dynamic_form_entry.save
-        redirect_to dynamic_form_entry_path(@dynamic_form_entry), notice: "<strong>You have submitted your form entry!</strong>".html_safe
+        redirect_to dynamic_form_entry_path(@dynamic_form_entry) + "?iframe=" + (params[:iframe] == "1" ? "1" : "0"), notice: "<strong>You have submitted your form entry!</strong>".html_safe
       elsif params[:save_draft] && @dynamic_form_entry.save
-        redirect_to edit_dynamic_form_entry_path(@dynamic_form_entry), alert: "<strong> You have temporary saved your draft. Come back to submit it when ready!</strong>".html_safe
+        redirect_to edit_dynamic_form_entry_path(@dynamic_form_entry) + "?iframe=" + (params[:iframe] == "1" ? "1" : "0"), alert: "<strong> You have temporary saved your draft. Come back to submit it when ready!</strong>".html_safe
       else       
         @dynamic_form_entry.format_properties
         render "new"

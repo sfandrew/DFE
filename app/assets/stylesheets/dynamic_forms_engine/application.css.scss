@@ -8,7 +8,6 @@
  * You're free to add application-wide styles to this file and they'll appear at the top of the
  * compiled file, but it's generally better to create a new file per style scope.
  *= require_self
- 
  *= require_tree .
  */
 
@@ -26,7 +25,6 @@
     color: #f00;
     font-size: 15px;
 }
-
 
 
 #friends_list li {
@@ -54,4 +52,23 @@
 	margin-bottom: 20px;
 	border: 1px solid transparent;
 	border-radius: 4px;
+}
+
+
+
+.required{
+  color: red;
+  font-size: 22px;
+  text-shadow: 0 0 5px red;
+}
+
+.required-field{
+  margin-left: -25px;
+}
+
+
+
+/* iframe Rules */
+body.iframe .breadcrumb.header{
+	display: none;
 }

@@ -1,30 +1,22 @@
-<style type="text/css">
-    .required{
-      color: red;
-      font-size: 22px;
-      text-shadow: 0 0 5px red;
-    }
-    .required-field{
-      margin-left: -25px;
-    }
-</style>
 
-<%= form_for(@dynamic_form_entry, 
+<
+DEPRECATED???
+%= form_for(@dynamic_form_entry, 
     :html => {:class => "form-horizontal", :multipart => true}) do |f| %>
 
-        <% if @dynamic_form_entry.errors.any? %>
-            <div class="row">
-                <div class="well" id ="errors">
-                    <h2>This form contains <%= pluralize(@dynamic_form_entry.errors.count, "error") %></h2>
-                    <ul>
-                        <% @dynamic_form_entry.errors.full_messages.each do |msg| %>
-                          <li><%= msg %></li>
-                        <% end %>
-                    </ul>
-                </div>
-            </div><!-- /row -->
-        <% end %>
-    
+    <% if @dynamic_form_entry.errors.any? %>
+        <div class="row">
+          <div class="well" id ="errors">
+              <h2>This form contains <%= pluralize(@dynamic_form_entry.errors.count, "error") %></h2>
+              <ul>
+                  <% @dynamic_form_entry.errors.full_messages.each do |msg| %>
+                    <li><%= msg %></li>
+                  <% end %>
+              </ul>
+          </div>
+        </div><!-- /row -->
+    <% end %>
+
     <div class="row">
       <div class="col-md-12">
         <%= f.hidden_field  :dynamic_form_type_id, :value => @dynamic_form_type.id %>

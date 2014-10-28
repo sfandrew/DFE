@@ -1,5 +1,6 @@
 
 class DynamicFormsEngine::ApplicationController < ApplicationController
+	
 	layout :set_iframe_layout
 
 	def set_iframe_layout
@@ -13,4 +14,11 @@ class DynamicFormsEngine::ApplicationController < ApplicationController
 	    	"application"
 	    end	
 	end
+
+	# def authenticate_user!
+	    
+	#     # stub
+	    
+	# end
+
 end
