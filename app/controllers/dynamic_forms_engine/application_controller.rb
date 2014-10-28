@@ -7,10 +7,10 @@ class DynamicFormsEngine::ApplicationController < ApplicationController
 	    params[:iframe] == "1" ? "dynamic_forms_engine/iframe" : "application"
 	end
 
-	def authenticate_user!
+	# def authenticate_user!
 	    
-	    # stub
+	#     # stub
 	    
-	end
+	# end
 
 end
