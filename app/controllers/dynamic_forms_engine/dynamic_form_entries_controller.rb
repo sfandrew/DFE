@@ -26,7 +26,7 @@ module DynamicFormsEngine
       @entries_name = @dynamic_form_entries.map { |form_entry| [form_entry.dynamic_form_type.name, form_entry.dynamic_form_type.id] }
       respond_to do |format|
         format.html
-        
+        format.print { render "form_entries.html.erb" }
         format.csv { render text: DynamicFormEntry.entries_to_csv(@dynamic_form_entries, @dynamic_form_type)}
         format.xml { 
           @array_for_xml = DynamicFormEntry.entries_to_array(@dynamic_form_entries, @dynamic_form_type)
@@ -40,6 +40,7 @@ module DynamicFormsEngine
     def show
       respond_to do |format|
         format.html
+        format.print { render "show.html.erb" }
         format.csv { render text: @dynamic_form_entry.to_csv }
         format.xml { @array_for_xml = @dynamic_form_entry.to_array}
       end

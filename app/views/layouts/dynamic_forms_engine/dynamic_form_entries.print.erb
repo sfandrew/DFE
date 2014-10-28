@@ -1,14 +1,26 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Print form</title>
+  <title></title>
 
   <%= stylesheet_link_tag  "dynamic_forms_engine/dynamic_form_entries_print", media: "print" %>
+  <%= stylesheet_link_tag  "dynamic_forms_engine/dynamic_form_entries_print", media: "screen" %>
+  <%= javascript_include_tag "dynamic_forms_engine/dynamic_form_entries_print" %>
 
 </head>
 <body>
-
+	<%= content_tag(:h1, !@dynamic_form_type.nil? ? @dynamic_form_type.name : '', :class => 'print-title') %>
+	<% if !@dynamic_form_entries.nil? %>
+		<%= content_tag(:h3, @dynamic_form_entries.size.to_s + ' Entries', :class => 'print-title-size') %>
+	<% end %>
+	<div class="back-button">
+    	<% print_url = request.original_url %>
+    	<% slice_print = print_url.slice!(/.print/) %>
+    	
+    	<h1 style="text-align:center;"><%= link_to "Back", print_url  %></h1>
+    </div>
     <%= yield %>
-
+    
+    
 </body>
 </html>

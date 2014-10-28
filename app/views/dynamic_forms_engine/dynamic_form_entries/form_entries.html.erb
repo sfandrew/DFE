@@ -22,7 +22,7 @@
 
   </div>
   <div class="col-md-6">
-    <div class="btn-group pull-right">
+    <div class="btn-group pull-right hide-print">
       <%= link_to "Embed", form_entries_path(@dynamic_form_type, format: 'iframe'), class: 'btn btn-default' %>
       <%= link_to "CSV", form_entries_path(@dynamic_form_type, format: 'csv'), class: 'btn btn-default' %>
       <%= link_to "Excel", form_entries_path(@dynamic_form_type, format: 'xml'), class: 'btn btn-default' %>
@@ -51,11 +51,20 @@
            <%= text_field 'search', 'end', :class => "form-control", :placeholder => "End Date" %>
         </div>
       </div>
+
+       <% if params[:search]
+        print_url = request.original_url.sub!('form_entries?','form_entries.print?')
+      else 
+        print_url = form_entries_path(@dynamic_form_type, format: :print)
+      end %>
       
       <div class="col-xs-6 col-sm-3">
         <div class="btn-group pull-right">
           <%= link_to "Reset", dynamic_form_entries_path, :class => 'btn btn-danger' %>
           <button type="submit" class="btn btn-info"><i class="fa fa-search"></i> Search</button>
+          <%= link_to print_url,:class => 'print-index btn btn-success' do %>
+            <i class="fa fa-print"></i> Print
+          <% end %>
         </div>
       </div>
     </div>
