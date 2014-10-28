@@ -16,15 +16,17 @@ module DynamicFormsEngine
         @dynamic_form_entries = current_user.dynamic_form_entries.all #DynamicFormEntry.all
       end
       @entries_name = @dynamic_form_entries.map { |form_entry| [form_entry.dynamic_form_type.name, form_entry.dynamic_form_type.id] }
-      
+      respond_to do |format|
+        format.print { render "index.html.erb" }
+      end
     end
 
     def form_entries      
       @dynamic_form_entries   = current_user.dynamic_form_entries.where(:dynamic_form_type_id =>  @dynamic_form_type.id).all
       @entries_name = @dynamic_form_entries.map { |form_entry| [form_entry.dynamic_form_type.name, form_entry.dynamic_form_type.id] }
-
       respond_to do |format|
         format.html
+        
         format.csv { render text: DynamicFormEntry.entries_to_csv(@dynamic_form_entries, @dynamic_form_type)}
         format.xml { 
           @array_for_xml = DynamicFormEntry.entries_to_array(@dynamic_form_entries, @dynamic_form_type)

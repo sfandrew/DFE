@@ -47,11 +47,13 @@
            <%= text_field 'search', 'end', :class => "form-control", :placeholder => "End Date" %>
         </div>
       </div>
-      
       <div class="col-xs-6 col-sm-3">
         <div class="btn-group pull-right">
           <%= link_to "Reset", dynamic_form_entries_path, :class => 'btn btn-danger' %>
           <button type="submit" class="btn btn-info"><i class="fa fa-search"></i> Search</button>
+          <%= link_to dynamic_form_entries_path(:format => :print),:class => 'btn btn-success' do %>
+            <i class="fa fa-print"></i> Print
+          <% end %>
         </div>
       </div>
     </div>
