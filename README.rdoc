@@ -4,9 +4,8 @@
 
 - In your Gemfile: gem 'dynamic_forms_engine', path: "path/to/gem"
 
-- Run ...
-
-```ruby
+- Install gems ...
+```
 bundle install
 ```
 
