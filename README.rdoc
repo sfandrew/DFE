@@ -5,27 +5,28 @@
 - In your Gemfile: gem 'dynamic_forms_engine', path: "path/to/gem"
 
 - Run ...
+
 ```ruby
-    bundle install
+bundle install
 ```
 
 - Install migrations: 
 ```ruby
-    rake dynamic_forms_engine:install:migrations
+rake dynamic_forms_engine:install:migrations
 ```
 
-- Migrat
+- Migrate db:
 ```ruby
-    rake db:migrate
+rake db:migrate
 ```
 
 - add to User model
 ```ruby
-    has_many :dynamic_form_entries, class_name: "DynamicFormsEngine::DynamicFormEntry"
+has_many :dynamic_form_entries, class_name: "DynamicFormsEngine::DynamicFormEntry"
 ```
 - in config/routes.rb: 
 ```ruby 
-    mount DynamicFormsEngine::Engine => "/dynamic_forms_engine"
+mount DynamicFormsEngine::Engine => "/dynamic_forms_engine"
 ```
 
 - prepend any link paths in application layouts with "main_app.", e.g. "main_app.new_foo_path" instead of "new_foo_path"
