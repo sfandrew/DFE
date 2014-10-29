@@ -1,6 +1,6 @@
 = DynamicFormsEngine
 
-## Installation
+== Installation
 
 In your Gemfile: gem 'dynamic_forms_engine', path: "path/to/gem"
 
@@ -34,12 +34,14 @@ prepend any link paths in application layouts with `main_app.`, e.g. `main_app.n
 Add `bootstrap-datepicker-rails` to your gemfile, `*= require bootstrap-datepicker` to application.css, and `//= require bootstrap-datepicker` to application.js . 
 This is a workaround because rails didn't like it being included in the engine for some reason.
 
-## Front Dependencies
+== Front Dependencies
 - jQuery
 - jQuery UI
 - Bootstrap
 
-## Customization
+== Customiz
+ation
+
 To extend controllers or models, put decorators in i.e. app/decorators/controllers/dynamic_forms_engine/foobars_controller_decorator.rb where it will be included automatically by the engine, e.g.: 
 # app/decorators/controllers/dynamic_forms_engine/dynamic_form_types_controller_decorator.rb
 DynamicFormsEngine::DynamicFormTypesController.class_eval do
