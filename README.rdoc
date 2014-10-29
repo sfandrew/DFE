@@ -6,9 +6,8 @@ In your Gemfile: gem 'dynamic_forms_engine', path: "path/to/gem"
 
 Install gems:
 
-```
  bundle install
-```
+
 
 - Install migrations: 
 ```ruby
