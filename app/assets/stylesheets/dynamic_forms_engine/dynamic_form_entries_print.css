@@ -1,0 +1,18 @@
+@media print{ 
+	fieldset, .breadcrumb, .hide-print, .back-button{
+		display: none;
+	}
+	table, th,td, .print-table{
+		border: 1px solid black;
+	}
+	th:nth-child(n+5), td:nth-child(n+5){
+		display: none;
+	}
+	.print-title, .print-title-size{
+		display: block;
+		text-align: center;
+	}
+
+
+}
+

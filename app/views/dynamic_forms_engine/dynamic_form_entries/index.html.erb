@@ -1,4 +1,3 @@
-
 <div class="row">
   <div class="col-md-12">
 
@@ -35,17 +34,25 @@
            <%= text_field 'search', 'end', :class => "form-control", :placeholder => "End Date" %>
         </div>
       </div>
-      
+
+      <% if params[:search]
+        print_url = request.original_url.sub!('dynamic_form_entries?','dynamic_form_entries.print?')
+      else 
+        print_url = dynamic_form_entries_path(format: :print)
+      end %>
+
       <div class="col-xs-6 col-sm-3">
         <div class="btn-group pull-right">
           <%= link_to "Reset", dynamic_form_entries_path, :class => 'btn btn-danger' %>
           <button type="submit" class="btn btn-info"><i class="fa fa-search"></i> Search</button>
+          <%= link_to print_url,:class => 'print-index btn btn-success' do %>
+            <i class="fa fa-print"></i> Print
+          <% end %>
         </div>
       </div>
     </div>
   <% end %>
 </fieldset>
-
 <%= content_tag :div, nil, class: 'clear spacer' %>
 
 <table class="table table-striped table-hover">
@@ -125,6 +132,7 @@
   $(document).ready(function(){
     $('.date input').datepicker({
     });
+
   });
 </script>
 
