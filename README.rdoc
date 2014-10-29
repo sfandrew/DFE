@@ -2,9 +2,9 @@
 
 ## Installation
 
-- In your Gemfile: gem 'dynamic_forms_engine', path: "path/to/gem"
+In your Gemfile: gem 'dynamic_forms_engine', path: "path/to/gem"
 
-- Install gems ...
+Install gems ...
 ```
 bundle install
 ```
