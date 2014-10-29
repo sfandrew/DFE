@@ -10,5 +10,7 @@
 // Read Sprockets README (https://github.com/sstephenson/sprockets#sprockets-directives) for details
 // about supported directives.
 //
+//= require jquery-1.11.1
+//= require bootstrap
 //= require_tree .
 //= require dynamic_forms_engine/application

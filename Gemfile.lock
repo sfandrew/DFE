@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    dynamic_forms_engine (0.0.1)
+    dynamic_forms_engine (0.0.2)
       bootstrap-datepicker-rails (>= 1.1.1.11)
       bootstrap-sass (>= 3.0.3.0)
       coffee-rails
@@ -150,11 +150,9 @@ PLATFORMS
 
 DEPENDENCIES
   bootstrap-datepicker-rails
-  bootstrap-sass (~> 3.0.3.0)
   dynamic_forms_engine!
   jquery-rails
   jquery-ui-rails
-  less-rails-bootstrap
   pry
   pry-debugger
   ransack
