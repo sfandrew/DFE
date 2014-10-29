@@ -29,9 +29,10 @@ in config/routes.rb:
  mount DynamicFormsEngine::Engine => "/dynamic_forms_engine"
 
 
-prepend any link paths in application layouts with "main_app.", e.g. "main_app.new_foo_path" instead of "new_foo_path"
+prepend any link paths in application layouts with `main_app.`, e.g. `main_app.new_foo_path` instead of `new_foo_path`
 
-add "bootstrap-datepicker-rails" to your gemfile, '*= require bootstrap-datepicker' to application.css, and '//= require bootstrap-datepicker' to application.js . This is a workaround because rails didn't like it being included in the engine for some reason.
+Add `bootstrap-datepicker-rails` to your gemfile, `*= require bootstrap-datepicker` to application.css, and `//= require bootstrap-datepicker` to application.js . 
+This is a workaround because rails didn't like it being included in the engine for some reason.
 
 ## Front Dependencies
 - jQuery
