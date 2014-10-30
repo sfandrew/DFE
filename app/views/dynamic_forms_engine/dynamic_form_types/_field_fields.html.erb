@@ -29,7 +29,7 @@
 			<%= f.text_field :name, placeholder: "Name of field", :class => "form-control user-input" %>
 		</div>
 
-		<div class="col-md-2 checkbox"
+		<div class="col-md-2 checkbox required-checkbox"
 		data-toggle="popover" 
 		data-trigger="focus" 
 		data-content="Have this as a required field" 
@@ -39,7 +39,7 @@
 			<% end %>
 		</div>
 
-		<div class="col-md-2 checkbox include-report" 
+		<div class="col-md-2 checkbox include-checkbox" 
 		data-toggle="popover" data-trigger="focus" 
 		data-content="Include this field in the entries report" 
 		data-placement="top">
@@ -75,8 +75,8 @@
 
 <script type="text/javascript">
 $(document).ready(function(){
-	$('.include-report').popover({trigger: 'hover'});
-	$('.required').popover({trigger: 'hover'});
+	$('.include-checkbox').popover({trigger: 'hover'});
+	$('.required-checkbox').popover({trigger: 'hover'});
 	$('.field-size').popover({trigger: 'hover'});
 });
 </script>

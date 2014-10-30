@@ -17,6 +17,63 @@ fieldset.dynamic-form-field{
   padding-right: 15px;
   padding-left: 15px;
 }
+.include-checkbox, .required-checkbox{
+  display: block;
+}
+.options_select{
+  display: none;
+}
+
+fieldset[selection="contacts"] .required-checkbox, fieldset[selection="contacts"] .include-checkbox, 
+    fieldset[selection="contacts"] .field-size{
+            display: none
+}
+fieldset[selection="description"] .include-checkbox, fieldset[selection="description"] .required-checkbox{
+  display:none;
+}
+fieldset[selection="divider"] .required-checkbox, fieldset[selection="divider"] .include-checkbox, 
+    fieldset[selection="divider"] .field-size, fieldset[selection="divider"] .user-input{
+            display: none
+}
+fieldset[selection="field_group"] .required-checkbox, fieldset[selection="field_group"] .include-checkbox, 
+    fieldset[selection="field_group"] .field-size{
+            display: none
+}
+fieldset[selection="file_upload"] .include-checkbox{
+  display:none;
+}
+fieldset[selection="large_header"] .include-checkbox, fieldset[selection="large_header"] .required-checkbox{
+  display:none;
+}
+fieldset[selection="medium_header"] .include-checkbox, fieldset[selection="medium_header"] .required-checkbox{
+  display:none;
+}
+fieldset[selection="options_select_with_other"] .options_select{
+  display:block;
+}
+fieldset[selection="signature"] .field-size, fieldset[selection="medium_header"] .include-checkbox{
+  display:none;
+}
+fieldset[selection="small_header"] .include-checkbox, fieldset[selection="small_header"] .required-checkbox{
+  display:none;
+}
+fieldset[selection="spacer"] .required-checkbox, fieldset[selection="spacer"] .include-checkbox, 
+    fieldset[selection="spacer"] .field-size, fieldset[selection="spacer"] .user-input{
+            display: none
+}
+/*fieldset[selection="contacts"] .include-checkbox, .required-checkbox {
+  display: none;
+}*/
+/*fieldset[selection="agreement"] .include-checkbox, .{
+  display: block
+}
+fieldset[selection="agreement"] .required{
+  display: none
+}
+
+fieldset[selection="field_group"] .include-checkbox, .required-checkbox{
+  display:none;
+}
 
 fieldset[selection="options_select"] .required {
   display:block;
@@ -27,7 +84,7 @@ fieldset[selection="contacts"] .field-size, fieldset .required, .options_select{
 fieldset[selection="agreement"] .required, fieldset[selection="check_box"] .required{
   display: block;
 }
-fieldset[selection="field_group"] .field-size, fieldset[selection="file_upload"] .include-report{
+fieldset[selection="field_group"] .field-size, fieldset[selection="file_upload"] .include-checkbox{
   display:none;
 }
 fieldset[selection="spacer"] .field-size, fieldset[selection="divider"] .field-size{
@@ -39,7 +96,7 @@ fieldset[selection="large_header"] .include-report, fieldset[selection="signatur
 fieldset[selection="large_header"] .include-report, fieldset[selection="signature"] .include-report{
   display:none;
 }
-fieldset[selection="text_field"] .options_select,fieldset[selection="field_group"] .include-report{
+fieldset[selection="text_field"] .options_select,fieldset[selection="field_group"] .include-checkbox{
   display:none;
 }
 fieldset[selection="spacer"] .include-report, fieldset[selection="small_header"] .include-report {
@@ -77,4 +134,4 @@ fieldset[selection="contacts"] .include-report, fieldset[selection="divider"] .i
 }
 fieldset[selection="contacts"] .options_select,fieldset[selection="contacts"] .required{
   display: none;
-}
+}*/
