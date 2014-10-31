@@ -22,11 +22,11 @@
 
 		
 		<div class="col-sm-3">
-			<%= f.select(:field_type, DynamicFormsEngine::DynamicFormType.field_types.map{|x| [x.titleize, x] }, {:include_blank => 'Select a field', disabled: ''}, {:class => "field_type form-control"})  %>
+			<%= f.select(:field_type, DynamicFormsEngine::DynamicFormType.field_types.map{|x| [x.titleize, x] }, {:include_blank => 'Select a field', disabled: ''}, {:class => "field_type form-control", :data => {:toggle =>'dropdown'}})  %>
 		</div>
 
 		<div class="col-sm-2 field-popover">
-			<%= f.text_field :name, placeholder: "Name of field", :class => "form-control user-input" %>
+			<%= f.text_field :name, placeholder: "Name of field", :class => "form-control user-input", :data => { :toggle => 'dropdown'} %>
 		</div>
 
 		<div class="col-md-2 checkbox required-checkbox"
@@ -57,7 +57,7 @@
 					["Width: 75%", 8, style: "background-color:white; color:black;"],
 					["Width: 100%", 12, style: "background-color:white; color:black;"]
 					], :selected => f.object.field_width),
-				{}, {:class => "form-control btn btn-info field-size", :data => {:toggle => 'popover', :trigger => 'focus',:content => 'Choose the size of the field',:placement => 'top'}} ) %>
+				{}, {:class => "form-control btn btn-info field-size", :data => {:toggle => 'popover',:toggle => 'dropdown', :trigger => 'focus',:content => 'Choose the size of the field',:placement => 'top'}} ) %>
 		</div>
 	</div><!-- row -->
 
@@ -66,7 +66,7 @@
 			<%= content_tag :div, nil, class: 'dynamic-form-field-number' %>
 			<%= label_tag :content_meta, "Options :", class: 'control-label col-md-3' %>
 			<div class="options_field col-md-6">
-				<%= f.text_field :content_meta, placeholder: "Option 1, Option 2, Option 3", :class => "form-control"  %>
+				<%= f.text_field :content_meta, placeholder: "Option 1, Option 2, Option 3", :class => "form-control", :data => {:toggle => 'dropdown'}  %>
 			</div>
 		</div>
 	</div><!-- row options -->
