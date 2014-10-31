@@ -109,6 +109,11 @@
                 <td>
                   <%= "Approve" if dynamic_form_entry.properties.find { |key, value| value[:id].to_i == field.id } %>
                 </td>
+              <% elsif field.field_type == "signature" %>
+                <td>
+            
+                  <%= "Signed" if !dynamic_form_entry.signature.nil? %>
+                </td>
               <% else %>
                 <td>
                   <% if !dynamic_form_entry.properties.blank? %>

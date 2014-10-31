@@ -36,7 +36,7 @@
 			
 			<% if field[:type] == "file_upload" %>
 				<label class="col-sm-3 control-label">
-					<%= index[:name] %>:
+					<%= index[:content_name] %>:
 				</label>
 				<div class="col-sm-9">
 					<%= link_to("Download", index.filename.url, class: 'btn btn-success') %>
