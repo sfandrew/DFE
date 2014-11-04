@@ -13,8 +13,8 @@ window.fieldGroupValidation = function(){
       $first_row.removeClass('alert alert-danger');
     }
   }
-  $('#new_dynamic_form_type').on('change', '.field_type:first', myFunction);
-  $('#new_dynamic_form_type').on('change', '.form-type', myFunction);
+  $('.dft-validation').on('change', '.field_type:first', myFunction);
+  $('.dft-validation').on('change', '.form-type', myFunction);
 }
 
 window.publicDisable = function(){
@@ -33,7 +33,7 @@ window.publicDisable = function(){
 }
 
 window.publicFormValidation = function(){
-  $('#new_dynamic_form_type').on('click', '.field_type', function(){
+  $('.dft-validation').on('click', '.field_type', function(){
     if(checkForm()){
       $(this).find('option[value="file_upload"]').hide();
       $(this).find('option[value="contacts"]').hide();
@@ -43,7 +43,7 @@ window.publicFormValidation = function(){
       $(this).find('option[value="contacts"]').show();
     }
   });
-  $('#new_dynamic_form_type').on('change','.public',function(){
+  $('.dft-validation').on('change','.public',function(){
     if(checkForm() && $('.dynamic-form-field').length > 0){
       var $fields = $('.dynamic-form-field');
       $.each($fields,function(index,fieldset){

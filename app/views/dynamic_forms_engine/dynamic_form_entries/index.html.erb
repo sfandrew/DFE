@@ -19,13 +19,10 @@
   <%= form_for(:search, :url => dynamic_form_entries_path, :html => { :method => :get }) do  %>
     <div class="row">
       <div class="col-xs-6 col-sm-3">
-        <select name="search[name]" class="form-control">
-          <%=raw "<option value=\"\">[ALL]</option>" %>
-          <%= options_for_select(@entries_name) %>
-        </select>
+        <%= select("search","name",@entries_name, {:prompt => 'Select Form Type'},:class => 'form-control') %>
       </div>
       <div class="col-xs-3 col-sm-3">
-        <%=raw text_field 'search', 'properties', :class => "col-xs-6 form-control", :placeholder => "Enter properties like" %>
+        <%= text_field 'search', 'properties', :class => "col-xs-6 form-control", :placeholder => "Enter properties like" %>
       </div>
       <div class="col-md-3">
         <div class="input-daterange input-group date">

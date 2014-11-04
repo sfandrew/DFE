@@ -1,4 +1,4 @@
-<%= form_for(@dynamic_form_type, :html => {:class => "form-horizontal"}) do |f| %>
+<%= form_for(@dynamic_form_type, :html => {:class => "form-horizontal dft-validation"}) do |f| %>
   <% if @dynamic_form_type.errors.any? %>
     <div class="well" id ="errors">
       <h2>This form type contains <%= pluralize(@dynamic_form_type.errors.count, "error") %></h2>
