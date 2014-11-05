@@ -7,7 +7,6 @@
 		<small style="color:red"><%= errors.join(', ') %></small>
 	 <% end %>
   </div>
-
   <% if field_value.is_a? Integer %>
     <% @dynamic_form_entry.each_field_with_value do |index, field| %>
       <% if field[:type] == "file_upload" && field[:value] == field_value %>
