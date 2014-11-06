@@ -7,6 +7,7 @@ module DynamicFormsEngine
 
     validate :in_progress_validation, :if => Proc.new { |properties| properties.in_progress == true }
     validate :validate_on_submit, :if => Proc.new { |properties| properties.in_progress != true}
+    after_validation :file_upload_error_msgs, :if => Proc.new { |entry| entry.id.nil? }
     before_create :format_properties, :if => Proc.new { |properties| !properties.properties.nil? }
     before_update :format_properties, :if => Proc.new { |properties| !properties.properties.nil? }
 
@@ -42,11 +43,7 @@ module DynamicFormsEngine
 
    # http://stackoverflow.com/questions/8634139/phone-validation-regex
     def validate_on_submit
-      
-      #binding.pry
-
       if dynamic_form_type.fields
-
         dynamic_form_type.fields.each do |field|
           if field.field_type == "email_validation"
             unless self.properties[field.id.to_s] =~ /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i
@@ -70,6 +67,12 @@ module DynamicFormsEngine
             errors.add field.name, "must not be blank"
           end
         end
+      end
+    end
+
+    def file_upload_error_msgs
+      if self.errors.size >= 1
+        errors[:base] << "if you uploaded any files, please re-upload them again."
       end
     end
 
@@ -122,7 +125,8 @@ module DynamicFormsEngine
         new_properties[index] = {name: field.name, type: field.field_type, value: field_value, id: field_id}
       end
       # this re-submits the file upload file without the user to re-submit the file again
-      if old_entry
+      
+      if old_entry && self.errors.size == 0 
         old_entry.each_field_with_value do |index_val, field|
           if field[:type] == "file_upload" && !old_properties.has_key?(field[:id])
             last_property = new_properties.size
