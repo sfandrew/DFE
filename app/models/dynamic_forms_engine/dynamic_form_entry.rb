@@ -12,11 +12,22 @@ module DynamicFormsEngine
     before_update :format_properties, :if => Proc.new { |properties| !properties.properties.nil? }
 
 
+
     def get_property_value(field_id)
       if !properties.blank?
         temp = properties.find { |key, value|  value[:id].to_i == field_id }
         temp[1][:value] if temp && temp[1]
       end
+    end
+
+    def file_upload_preview(field_id)
+      self.properties.each do |index, field|
+        if field[:type] == 'file_upload' && field[:id].to_i == field_id && !field[:value].to_s.empty?
+          attachment = Attachment.find(field[:value])
+          return attachment
+        end
+      end    
+      return nil
     end
 
     def in_progress_validation
@@ -125,7 +136,7 @@ module DynamicFormsEngine
         new_properties[index] = {name: field.name, type: field.field_type, value: field_value, id: field_id}
       end
       # this re-submits the file upload file without the user to re-submit the file again
-      
+
       if old_entry && self.errors.size == 0 
         old_entry.each_field_with_value do |index_val, field|
           if field[:type] == "file_upload" && !old_properties.has_key?(field[:id])

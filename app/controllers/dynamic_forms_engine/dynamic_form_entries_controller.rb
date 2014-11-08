@@ -82,10 +82,13 @@ module DynamicFormsEngine
     end
 
     def edit
+      @file_upload = current_user.dynamic_form_entries.where(:id => params[:id]).first
 
     end
 
     def update
+
+      @file_upload = current_user.dynamic_form_entries.where(:id => params[:id]).first
 
       if params[:signature]
         @dynamic_form_entry.signature = params[:signature]
@@ -103,8 +106,9 @@ module DynamicFormsEngine
         redirect_to edit_dynamic_form_entry_path(@dynamic_form_entry), alert: "<strong> You have temporary saved your draft. Come back to submit it when ready!</strong>".html_safe 
 
       else
+       
         # @dynamic_form_entry.assign_attributes(dynamic_form_entry_params)
-        @dynamic_form_entry.format_properties
+        # @dynamic_form_entry.format_properties
         render "edit"
       end
 

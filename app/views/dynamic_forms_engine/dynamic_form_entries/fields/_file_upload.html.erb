@@ -8,11 +8,10 @@
 	 <% end %>
   </div>
 
-  <% if field_value.is_a?(Integer) && !@dynamic_form_entry.new_record? && @dynamic_form_entry.errors.size == 0 %>
-    <% @dynamic_form_entry.each_field_with_value do |index, field| %>
-      <% if field[:type] == "file_upload" && field[:value] == field_value %>
-        <%= link_to("Preview Attachment", index.filename.url, class: 'btn btn-success') %>
-      <% end %>
+  <% if !@dynamic_form_entry.new_record?  %>
+    <% if !@file_upload.file_upload_preview(field.id).nil? %>
+      <% attachment_url = @file_upload.file_upload_preview(field.id) %>
+      <%=  link_to('Preview Attachment', attachment_url.filename.url, class: 'btn btn-success') %>
     <% end %>
   <% end %>
 
