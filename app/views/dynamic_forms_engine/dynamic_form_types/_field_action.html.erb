@@ -4,16 +4,33 @@ window.fieldGroupValidation = function(){
 
   var myFunction = function() {
     var $first_field = $('.field_type:first');
-    var $first_row = $('fieldset.dynamic-form-field').eq(0);
+    var $fieldsets = $('fieldset.dynamic-form-field');
     var $form_type = $('#form-type');
-    if($form_type.val() == "Multi-step" && $first_field.val() != "field_group"){
-      $first_row.addClass('alert alert-danger');
-      alert("First field must be a field group!");
-    }else{
-      $first_row.removeClass('alert alert-danger');
-    }
+    $.each($fieldsets,function(index, value){
+      var $field_value = $(value).find('.field_type').val();
+      if($form_type.val() == "Multi-step"){
+      	if(index == 0 && $field_value != "field_group"){
+      		$fieldsets.eq(0).addClass('alert alert-danger');
+      		alert("First field must be a field group!");	
+      	}else if(index > 0 && $fieldsets.eq(index+1).length == 0 && $fieldsets.eq(index).find('.field_type').val() == "field_group"){
+      		debugger;
+      		$fieldsets.eq(index).addClass('alert alert-danger');
+      		alert("You must add another field besides a field group!");
+      	}else{
+      		debugger;
+      		$fieldsets.eq(0).removeClass('alert alert-danger');
+      		$fieldsets.removeClass('alert alert-danger');
+      	}
+      }
+    });
+    // if($form_type.val() == "Multi-step" && $first_field.val() != "field_group"){
+    //   $fieldsets.eq(0).addClass('alert alert-danger');
+    //   alert("First field must be a field group!");
+    // }else{
+    //   $fieldsets.eq(0).removeClass('alert alert-danger');
+    // }
   }
-  $('.dft-validation').on('change', '.field_type:first', myFunction);
+  $('.dft-validation').on('change', '.field_type', myFunction);
   $('.dft-validation').on('change', '.form-type', myFunction);
 }
 
