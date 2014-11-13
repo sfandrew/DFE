@@ -10,6 +10,7 @@ module DynamicFormsEngine
                                           message: "%{value} is not a valid choice!" 
                                         }
     validates_presence_of :name, if: :divider_spacer_fields
+    before_save :valid_field_width
 
     def divider_spacer_fields
     	if self.field_type == 'divider' && !self.name.blank? || self.field_type == 'spacer' && !self.name.blank?
@@ -20,5 +21,13 @@ module DynamicFormsEngine
     def attachment?
       field_type.to_s == 'file_upload'
     end
+
+    private 
+
+    def valid_field_width
+      field_width_val = ["3","6","8","12"]
+      self.field_width = "6" if !field_width_val.include?(self.field_width)
+    end
+
   end
 end
