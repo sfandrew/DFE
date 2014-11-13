@@ -4,31 +4,37 @@ window.fieldGroupValidation = function(){
 
   var myFunction = function() {
     var $first_field = $('.field_type:first');
-    var $fieldsets = $('fieldset.dynamic-form-field');
+    var $fieldsets = $('.field_type');
     var $form_type = $('#form-type');
     $.each($fieldsets,function(index, value){
-      var $field_value = $(value).find('.field_type').val();
+      var $field_value = $(value).val();
       if($form_type.val() == "Multi-step"){
       	if(index == 0 && $field_value != "field_group"){
-      		$fieldsets.eq(0).addClass('alert alert-danger');
-      		alert("First field must be a field group!");	
-      	}else if(index > 0 && $fieldsets.eq(index+1).length == 0 && $fieldsets.eq(index).find('.field_type').val() == "field_group"){
-      		debugger;
-      		$fieldsets.eq(index).addClass('alert alert-danger');
+      		$fieldsets.eq(0).closest('fieldset').addClass('alert alert-danger');
+      		alert("First field must be a field group!");
+          // user must add another field	
+      	}else if(index > 0 && $fieldsets.eq(index+1).length == 0 && $fieldsets.eq(index).val() == "field_group"){
+      		$fieldsets.eq(index).closest('fieldset').addClass('alert alert-danger');
       		alert("You must add another field besides a field group!");
-      	}else{
-      		debugger;
-      		$fieldsets.eq(0).removeClass('alert alert-danger');
-      		$fieldsets.removeClass('alert alert-danger');
+          // if 2 field groups are next to each other
+      	}else if(index > 0 && $fieldsets.eq(index).val() == "field_group" && $fieldsets.eq(index-1).val() == "field_group"){
+          $fieldsets.eq(index+1).closest('fieldset').addClass('alert alert-danger');
+          alert("You cannot have two field groups next to each other!");
+        }
+        else{
+      		$fieldsets.eq(0).closest('fieldset').removeClass('alert alert-danger');
+      		$fieldsets.closest('fieldset').removeClass('alert alert-danger');
       	}
       }
+      else{
+        if(index > 0 && $field_value == "field_group" && $fieldsets.eq(index-1).val() == "field_group"){
+          $fieldsets.eq(index).closest('fieldset').addClass('alert alert-danger');
+          alert("You cannot have two field groups next to each other!");
+        }else{
+          $fieldsets.closest('fieldset').removeClass('alert alert-danger');
+        }
+      }
     });
-    // if($form_type.val() == "Multi-step" && $first_field.val() != "field_group"){
-    //   $fieldsets.eq(0).addClass('alert alert-danger');
-    //   alert("First field must be a field group!");
-    // }else{
-    //   $fieldsets.eq(0).removeClass('alert alert-danger');
-    // }
   }
   $('.dft-validation').on('change', '.field_type', myFunction);
   $('.dft-validation').on('change', '.form-type', myFunction);

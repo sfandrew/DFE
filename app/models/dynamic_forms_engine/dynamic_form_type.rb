@@ -66,6 +66,8 @@ module DynamicFormsEngine
           elsif !fields[index+1].nil? && fields[index+1].field_type =="field_group"
             errors.add item.name, "You cannot have two field groups next to each other"
           end
+        elsif index == 0 && self.form_type == "Multi-step" && item.field_type != "field_type"
+          errors.add(item.name, "first field must be a field group!")
         end
       end
     end
