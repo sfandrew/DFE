@@ -42,11 +42,13 @@ fieldset[selection="field_group"] .required-checkbox, fieldset[selection="field_
 fieldset[selection="file_upload"] .include-checkbox{
   display:none;
 }
-fieldset[selection="large_header"] .include-checkbox, fieldset[selection="large_header"] .required-checkbox{
-  display:none;
+fieldset[selection="large_header"] .include-checkbox, fieldset[selection="large_header"] .required-checkbox,
+  fieldset[selection="large_header"] .field-size{
+    display:none;
 }
-fieldset[selection="medium_header"] .include-checkbox, fieldset[selection="medium_header"] .required-checkbox{
-  display:none;
+fieldset[selection="medium_header"] .include-checkbox, fieldset[selection="medium_header"] .required-checkbox,
+  fieldset[selection="medium_header"] .field-size{
+    display:none;
 }
 fieldset[selection="options_select"] .options_select{
   display:block;
@@ -57,8 +59,9 @@ fieldset[selection="options_select_with_other"] .options_select{
 fieldset[selection="signature"] .field-size, fieldset[selection="medium_header"] .include-checkbox{
   display:none;
 }
-fieldset[selection="small_header"] .include-checkbox, fieldset[selection="small_header"] .required-checkbox{
-  display:none;
+fieldset[selection="small_header"] .include-checkbox, fieldset[selection="small_header"] .required-checkbox,
+  fieldset[selection="small_header"] .field-size{
+    display:none;
 }
 fieldset[selection="spacer"] .required-checkbox, fieldset[selection="spacer"] .include-checkbox, 
     fieldset[selection="spacer"] .field-size, fieldset[selection="spacer"] .user-input{

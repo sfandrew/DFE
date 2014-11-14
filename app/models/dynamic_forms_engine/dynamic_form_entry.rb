@@ -118,35 +118,7 @@ module DynamicFormsEngine
       end
     end
 
-    # Properties are initially saved as {"<field_id>" => "<field_value>"} 
-    # However, relying on the original field object is bad because it might change
-    #  This function transmutes the properties to a form that doesn't rely on the original field object
-    # Should be run as before_create filter
-     def format_properties
-      old_properties = self.properties
-      old_entry = DynamicFormEntry.find(self.id) if !self.new_record?
-      new_properties = {}
-      old_properties.each_with_index do |(field_id, field_value), index|
-        field = DynamicFormField.find(field_id.to_i)
-        
-        # Prepend "Other: " to options_select_with_other field types
-        if field.field_type == "options_select_with_other" && !field.content_meta.include?(field_value)
-          field_value = "Other: " + field_value
-        end
-        new_properties[index] = {name: field.name, type: field.field_type, value: field_value, id: field_id}
-      end
-      # this re-submits the file upload file without the user to re-submit the file again
-
-      if old_entry && self.errors.size == 0 
-        old_entry.each_field_with_value do |index_val, field|
-          if field[:type] == "file_upload" && !old_properties.has_key?(field[:id])
-            last_property = new_properties.size
-            new_properties[last_property] = { name: field[:name], type: field[:type], value: field[:value], id: field[:id] } 
-          end
-        end
-      end
-      self.properties = new_properties
-    end
+    
 
     def self.search(terms)
       search_query = DynamicFormsEngine::DynamicFormEntry.includes(:dynamic_form_type)
@@ -257,6 +229,37 @@ module DynamicFormsEngine
       end
       return arr
     end
+
+    private
+      # Properties are initially saved as {"<field_id>" => "<field_value>"} 
+      # However, relying on the original field object is bad because it might change
+      #  This function transmutes the properties to a form that doesn't rely on the original field object
+      # Should be run as before_create filter
+      def format_properties
+        old_properties = self.properties
+        old_entry = DynamicFormEntry.find(self.id) if !self.new_record?
+        new_properties = {}
+        old_properties.each_with_index do |(field_id, field_value), index|
+          field = DynamicFormField.find(field_id.to_i)
+          
+          # Prepend "Other: " to options_select_with_other field types
+          if field.field_type == "options_select_with_other" && !field.content_meta.include?(field_value)
+            field_value = "Other: " + field_value
+          end
+          new_properties[index] = {name: field.name, type: field.field_type, value: field_value, id: field_id}
+        end
+        # this re-submits the file upload file without the user to re-submit the file again
+
+        if old_entry && self.errors.size == 0 
+          old_entry.each_field_with_value do |index_val, field|
+            if field[:type] == "file_upload" && !old_properties.has_key?(field[:id])
+              last_property = new_properties.size
+              new_properties[last_property] = { name: field[:name], type: field[:type], value: field[:value], id: field[:id] } 
+            end
+          end
+        end
+        self.properties = new_properties
+      end
 
   end
 end

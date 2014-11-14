@@ -6,7 +6,8 @@
       <ul>
       
       <% @dynamic_form_type.errors.each do |attribute, error| %>
-        <li class="field-errors" data-name="<%= attribute.to_s %>"><%= attribute %> field <%= error %></li>
+        <li class="field-errors" data-name="<%= attribute.to_s %>"><%= error %></li>
+        
       <% end %>
       </ul>
     </div>
