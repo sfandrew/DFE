@@ -107,8 +107,8 @@ module DynamicFormsEngine
 
       else
        
-        # @dynamic_form_entry.assign_attributes(dynamic_form_entry_params)
-        # @dynamic_form_entry.format_properties
+        @dynamic_form_entry.assign_attributes(dynamic_form_entry_params)
+        @dynamic_form_entry.format_properties
         render "edit"
       end
 

@@ -5,9 +5,9 @@ module DynamicFormsEngine
 
     serialize :properties, Hash
 
-    validate :in_progress_validation, :if => Proc.new { |properties| properties.in_progress == true }
+    validate :validate_on_draft, :if => Proc.new { |properties| properties.in_progress == true }
     validate :validate_on_submit, :if => Proc.new { |properties| properties.in_progress != true}
-    after_validation :file_upload_error_msgs, :if => Proc.new { |entry| entry.id.nil? }
+    # after_validation :file_upload_error_msgs, :if => Proc.new { |entry| entry.id.nil? }
     before_create :format_properties, :if => Proc.new { |properties| !properties.properties.nil? }
     before_update :format_properties, :if => Proc.new { |properties| !properties.properties.nil? }
 
@@ -30,53 +30,52 @@ module DynamicFormsEngine
       return nil
     end
 
-    def in_progress_validation
+    def valid_email?(field_value)
+      !(field_value =~ /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/).nil?
+    end
+
+    # http://stackoverflow.com/questions/8634139/phone-validation-regex
+    def valid_phone?(field_value)
+      !(field_value =~ /(?:(?:\+?1\s*(?:[.-]\s*)?)?(?:(\s*([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]‌​)\s*)|([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]))\s*(?:[.-]\s*)?)([2-9]1[02-9]‌​|[2-9][02-9]1|[2-9][02-9]{2})\s*(?:[.-]\s*)?([0-9]{4})\s*(?:\s*(?:#|x\.?|ext\.?|extension)\s*(\d+)\s*)?$/).nil?
+    end
+
+    def valid_currency?(field_value)
+      !(field_value =~ /\A\d+(?:\.\d{0,2})?\z/).nil?
+    end
+
+    def valid_agreement?(field_value)
+      field_value == "1"
+    end
+
+
+    def validate_on_draft
       dynamic_form_type.fields.each do |field|
-        if field.field_type == "email_validation" && !self.properties[field.id.to_s].blank?
-          unless self.properties[field.id.to_s] =~ /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i
-            errors.add field.name, "Not a valid email!"
-          end
-        elsif field.field_type == "phone_validation" && !self.properties[field.id.to_s].blank?
-          unless self.properties[field.id.to_s] =~ /(?:(?:\+?1\s*(?:[.-]\s*)?)?(?:(\s*([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]‌​)\s*)|([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]))\s*(?:[.-]\s*)?)([2-9]1[02-9]‌​|[2-9][02-9]1|[2-9][02-9]{2})\s*(?:[.-]\s*)?([0-9]{4})\s*(?:\s*(?:#|x\.?|ext\.?|extension)\s*(\d+)\s*)?$/
-            errors.add field.name, "Enter a valid phone number including area code!"
-          end
-        elsif field.field_type == "currency" && !self.properties[field.id.to_s].blank?
-          unless self.properties[field.id.to_s] =~ /\A\d+(?:\.\d{0,2})?\z/
-            errors.add field.name, "Enter a valid amount!"
-          end
-        elsif field.field_type == "agreement" && !self.properties[field.id.to_s] != "0"
-          unless self.properties[field.id.to_s] == "1"
-            errors.add field.name, "You must agree to the form before you can submit!"
+        if !self.properties[field.id.to_s].blank?
+          if field.field_type == "email_validation"
+            errors.add(field.name,'Not a valid email!') unless valid_email?(self.properties[field.id.to_s])
+          elsif field.field_type == "phone_validation"
+            errors.add(field.name,'Enter a valid phone number including area code!') unless valid_phone?(self.properties[field.id.to_s])
+          elsif field.field_type == "currency"
+            errors.add(field.name, 'Enter a valid amount!') unless valid_currency?(self.properties[field.id.to_s])
           end
         end
       end
     end
 
-   # http://stackoverflow.com/questions/8634139/phone-validation-regex
     def validate_on_submit
-      if dynamic_form_type.fields
-        dynamic_form_type.fields.each do |field|
-          if field.field_type == "email_validation"
-            unless self.properties[field.id.to_s] =~ /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i
-              errors.add field.name, "Not a valid email!"
-            end
-          elsif field.field_type == "phone_validation"
-            unless self.properties[field.id.to_s] =~ /(?:(?:\+?1\s*(?:[.-]\s*)?)?(?:(\s*([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]‌​)\s*)|([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]))\s*(?:[.-]\s*)?)([2-9]1[02-9]‌​|[2-9][02-9]1|[2-9][02-9]{2})\s*(?:[.-]\s*)?([0-9]{4})\s*(?:\s*(?:#|x\.?|ext\.?|extension)\s*(\d+)\s*)?$/
-              errors.add field.name, "Enter a valid phone number including area code!"
-            end
-          elsif field.field_type == "currency"
-            unless self.properties[field.id.to_s] =~ /\A\d+(?:\.\d{0,2})?\z/
-              errors.add field.name, "Enter a valid amount!"
-            end
-          elsif field.field_type == "agreement"
-            unless self.properties[field.id.to_s] == "1"
-              errors.add field.name, "You must agree to the form before you can submit!"
-            end
-          elsif field.field_type == "signature" && field.required? &&  self.signature.size < 25
-            errors.add field.name, "must not be blank"
-          elsif field.field_type != "signature" && field.required? && properties[field.id.to_s].blank?
-            errors.add field.name, "must not be blank"
-          end
+      dynamic_form_type.fields.each do |field|
+        if field.field_type == "email_validation"
+          errors.add(field.name,'Not a valid email!') unless valid_email?(self.properties[field.id.to_s])
+        elsif field.field_type == "phone_validation"
+          errors.add(field.name,'Enter a valid phone number including area code!') unless valid_phone?(self.properties[field.id.to_s])
+        elsif field.field_type == "currency"
+          errors.add(field.name, 'Enter a valid amount!') unless valid_currency?(self.properties[field.id.to_s])
+        elsif field.field_type == "agreement"
+          errors.add(field.name 'You must agree to the form before you can submit!') unless valid_agreement?(self.properties[field.id.to_s])
+        elsif field.field_type == "signature" && field.required? &&  self.signature.size < 25
+          errors.add field.name, 'must not be blank'
+        elsif field.field_type != "signature" && field.required? && properties[field.id.to_s].blank?
+          errors.add field.name, 'must not be blank'
         end
       end
     end
@@ -87,8 +86,7 @@ module DynamicFormsEngine
       end
     end
 
-    
-    
+     
     # def save_new_contacts(current_user)
     #   if self.contacts
     #     current_user_contact_emails = current_user.contacts.pluck(:email)
@@ -155,7 +153,7 @@ module DynamicFormsEngine
         when "agreement"
           arr_row << "Approved"
         when "file_upload"
-          arr_row << field[:value].filename.url
+          arr_row << field[:attachment].filename.url
         else
           arr_row << field[:value]
         end
@@ -230,36 +228,36 @@ module DynamicFormsEngine
       return arr
     end
 
-    private
-      # Properties are initially saved as {"<field_id>" => "<field_value>"} 
-      # However, relying on the original field object is bad because it might change
-      #  This function transmutes the properties to a form that doesn't rely on the original field object
-      # Should be run as before_create filter
-      def format_properties
-        old_properties = self.properties
-        old_entry = DynamicFormEntry.find(self.id) if !self.new_record?
-        new_properties = {}
-        old_properties.each_with_index do |(field_id, field_value), index|
-          field = DynamicFormField.find(field_id.to_i)
-          
-          # Prepend "Other: " to options_select_with_other field types
-          if field.field_type == "options_select_with_other" && !field.content_meta.include?(field_value)
-            field_value = "Other: " + field_value
-          end
-          new_properties[index] = {name: field.name, type: field.field_type, value: field_value, id: field_id}
+    
+    # Properties are initially saved as {"<field_id>" => "<field_value>"} 
+    # However, relying on the original field object is bad because it might change
+    #  This function transmutes the properties to a form that doesn't rely on the original field object
+    # Should be run as before_create filter
+    def format_properties
+      old_properties = self.properties
+      old_entry = DynamicFormEntry.find(self.id) if !self.new_record?
+      new_properties = {}
+      old_properties.each_with_index do |(field_id, field_value), index|
+        field = DynamicFormField.find(field_id.to_i)
+        
+        # Prepend "Other: " to options_select_with_other field types
+        if field.field_type == "options_select_with_other" && !field.content_meta.include?(field_value)
+          field_value = "Other: " + field_value
         end
-        # this re-submits the file upload file without the user to re-submit the file again
-
-        if old_entry && self.errors.size == 0 
-          old_entry.each_field_with_value do |index_val, field|
-            if field[:type] == "file_upload" && !old_properties.has_key?(field[:id])
-              last_property = new_properties.size
-              new_properties[last_property] = { name: field[:name], type: field[:type], value: field[:value], id: field[:id] } 
-            end
-          end
-        end
-        self.properties = new_properties
+        new_properties[index] = {name: field.name, type: field.field_type, value: field_value, id: field_id}
       end
+      # this re-submits the file upload file without the user to re-submit the file again
+
+      if old_entry && self.errors.size == 0 
+        old_entry.each_field_with_value do |index_val, field|
+          if field[:type] == "file_upload" && !old_properties.has_key?(field[:id])
+            last_property = new_properties.size
+            new_properties[last_property] = { name: field[:name], type: field[:type], value: field[:value], id: field[:id] } 
+          end
+        end
+      end
+      self.properties = new_properties
+    end
 
   end
 end

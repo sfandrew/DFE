@@ -2,7 +2,7 @@ module DynamicFormsEngine
   class DynamicFormField < ActiveRecord::Base
   	belongs_to :dynamic_form_type
     validates  :field_type, presence: true
-    validates :field_width, inclusion: { in: [false,"3","6","8","12"], message: "%{value} is not a valid choice!" }
+    validates :field_width, inclusion: { in: ["false","3","6","8","12"], message: "%{value} is not a valid choice!" }
     validates :field_type , inclusion: { 
                                         in: ["agreement", "calendar", "check_box", "contacts", "currency", "description", 
                                             "divider", "email_validation", "field_group", "file_upload", "large_header", "medium_header", 
@@ -18,7 +18,7 @@ module DynamicFormsEngine
       field_width_val = ["3","6","8","12"]
       field = self.field_type
       error_msg = field + ' field has a fixed width'
-      non_valid_fields =  ["divider","field_group","large_header","medium_header","small_header","signature","spacer"]
+      non_valid_fields =  ["contacts","divider","field_group","large_header","medium_header","small_header","signature","spacer"]
       if field_width_val.include?(self.field_width) && non_valid_fields.include?(field)
         errors.add field, error_msg
       end
