@@ -51,7 +51,8 @@ module DynamicFormsEngine
     end
 
     def ordered_fields
-      fields.order("field_order ASC")
+      #fields.order("field_order ASC")
+      fields.sort_by { |x| x.field_order }
     end
 
     #checks to see if user deleted other option 

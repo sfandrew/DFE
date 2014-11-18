@@ -71,8 +71,10 @@ module DynamicFormsEngine
     private 
 
       def valid_field_width
-        field_width_val = ["3","6","8","12"]
-        self.field_width = "6" if !field_width_val.include?(self.field_width)
+        non_valid_fields =  ["contacts","divider","field_group","large_header","medium_header","small_header","signature","spacer"]
+        if self.field_width == "false" && !non_valid_fields.include?(self.field_type)
+          self.field_width = "6"
+        end
       end
 
   end
