@@ -1,7 +1,7 @@
 <% field_value ||= nil %>
 <div class="col-md-<%= field.field_width %>">
 	<%= f.label field.id, field.name.humanize, :class => "col-md-2 control-label" %>
-	<div class="col-md-8">
+	<div class="col-md-7">
 		<%= f.email_field field.id, value: field_value, :class => "form-control email", :placeholder => "abc@yahoo.com" %>
 		<% if defined?(errors) and errors.present? %>
 			<small class="error-msg" style="color:red"><%= errors.join(', ') %></small>

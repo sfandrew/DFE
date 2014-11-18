@@ -64,18 +64,20 @@ module DynamicFormsEngine
 
     def validate_on_submit
       dynamic_form_type.fields.each do |field|
-        if field.field_type == "email_validation"
-          errors.add(field.name,'Not a valid email!') unless valid_email?(self.properties[field.id.to_s])
-        elsif field.field_type == "phone_validation"
-          errors.add(field.name,'Enter a valid phone number including area code!') unless valid_phone?(self.properties[field.id.to_s])
-        elsif field.field_type == "currency"
-          errors.add(field.name, 'Enter a valid amount!') unless valid_currency?(self.properties[field.id.to_s])
-        elsif field.field_type == "agreement"
-          errors.add(field.name 'You must agree to the form before you can submit!') unless valid_agreement?(self.properties[field.id.to_s])
-        elsif field.field_type == "signature" && field.required? &&  self.signature.size < 25
-          errors.add field.name, 'must not be blank'
-        elsif field.field_type != "signature" && field.required? && properties[field.id.to_s].blank?
-          errors.add field.name, 'must not be blank'
+        if !self.properties[field.id.to_s].blank? || field.required?
+          if field.field_type == "email_validation"
+            errors.add(field.name,'Not a valid email!') unless valid_email?(self.properties[field.id.to_s])
+          elsif field.field_type == "phone_validation"
+            errors.add(field.name,'Enter a valid phone number including area code!') unless valid_phone?(self.properties[field.id.to_s])
+          elsif field.field_type == "currency"
+            errors.add(field.name, 'Enter a valid amount!') unless valid_currency?(self.properties[field.id.to_s])
+          elsif field.field_type == "agreement"
+            errors.add(field.name, 'You must agree to the form before you can submit!') unless valid_agreement?(self.properties[field.id.to_s])
+          elsif field.field_type == "signature" && field.required? &&  self.signature.size < 25
+            errors.add field.name, 'must not be blank'
+          elsif field.field_type != "signature" && field.required? && properties[field.id.to_s].blank?
+            errors.add field.name, 'must not be blank'
+          end
         end
       end
     end

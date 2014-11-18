@@ -33,7 +33,6 @@
 <div class="well col-md-12 col-lg-12">
 	<% @dynamic_form_entry.each_field_with_value do |index, field| %>
 		<div class="row row-table print-table">
-			
 			<% if field[:type] == "file_upload" %>
 				<label class="col-sm-3 control-label">
 					<%= index[:content_name] %>:
@@ -81,7 +80,7 @@
 					<%= field[:name] %>:
 				</label>
 				<div class="col-sm-9">
-					<%= field[:value] %>
+					<%= !field[:value].blank? ? field[:value] : 'No value provided' %>
 				</div>
 			<% end %>
 		</div>

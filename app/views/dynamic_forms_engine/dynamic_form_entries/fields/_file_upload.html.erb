@@ -1,6 +1,6 @@
 <div class="col-md-<%= field.field_width %>">
   <%= f.label field.id, field.name.humanize, :class => "col-md-2 control-label" %>
-  <div class="col-md-6">
+  <div class="col-md-7">
     <%= f.file_field field.id, :multiple => true, :class => "form-control"  %>
 
     <% if defined?(errors) and errors.present? %>
