@@ -8,7 +8,7 @@ module DynamicFormsEngine
     validates :name, :description, :fields, presence: true
     validates :form_type, presence: true, :inclusion => { :in => %w(Default-form Multi-step), 
                                                       :message => "%{value} is not a valid choice" }
-    validate :field_group_requirement, :field_group_order, :public_form
+    validate :field_group_requirement, :field_group_order, :public_form, :contact_field_limit
  
     def public_form
       if self.is_public
@@ -34,19 +34,22 @@ module DynamicFormsEngine
       end
     end
 
+    def contact_field_limit
+      contact_fields = 0
+      self.fields.each do |check_field|
+        contact_fields += 1 if check_field.field_type == "contacts"
+      end
+      errors.add(:base, "You can only include one contact field") if contact_fields > 1 
+    end
 
     def field_group_requirement
-      if self.form_type == "Multi-step"
-        field_group_size = 0
-        self.fields.each do |check_field|
-          if check_field.field_type == "field_group"
-            field_group_size += 1
-          end
-        end
-        if field_group_size < 2
-          errors[:base] << "You must select at least 2 field groups for a Multi-step form"
-          return false
-        end
+      multi_step = true if self.form_type == "Multi-step"
+      field_group_size = 0
+      self.fields.each do |check_field|
+        field_group_size += 1 if check_field.field_type == "field_group"
+      end
+      if multi_step && field_group_size < 2
+        errors.add(:base, "You must select at least 2 field groups for a Multi-step form")
       end
     end
 

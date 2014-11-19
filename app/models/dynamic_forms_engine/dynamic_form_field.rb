@@ -2,6 +2,7 @@ module DynamicFormsEngine
   class DynamicFormField < ActiveRecord::Base
   	belongs_to :dynamic_form_type
     validates  :field_type, presence: true
+    validates :name, presence: true, if: :field_name_required?
     validates :field_width, inclusion: { in: ["false","3","6","8","12"], message: "%{value} is not a valid choice!" }
     validates :field_type , inclusion: { 
                                         in: ["agreement", "calendar", "check_box", "contacts", "currency", "description", 
@@ -13,6 +14,9 @@ module DynamicFormsEngine
     validate :field_size, :in_report, :is_required, :field_name, :other_option
     before_save :valid_field_width
 
+    def field_name_required?
+      self.field_type != "divider" || self.field_type != "spacer"
+    end
 
     def field_size
       field_width_val = ["3","6","8","12"]
@@ -50,6 +54,8 @@ module DynamicFormsEngine
       non_valid_fields = ["divider","spacer"]
       if !self.name.empty? && non_valid_fields.include?(field)
         errors.add field, error_msg
+      elsif field == "field_group" && self.name.empty?
+        errors.add field, 'Field group need to have names'
       end
     end
     
