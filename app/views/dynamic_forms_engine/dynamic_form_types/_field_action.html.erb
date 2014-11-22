@@ -40,6 +40,28 @@ window.fieldGroupValidation = function(){
   $('.dft-validation').on('change', '.form-type', myFunction);
 }
 
+window.contactFieldLimit = function(){
+  var contact_limit = 0;
+  var contactFunction = function(){
+    if ($(this).data("previous_value") == "contacts" && $(this).val() != "contacts") {
+      contact_limit = 0;
+    } else if ($(this).val() == "contacts" && contact_limit < 1){
+      contact_limit ++;
+      $(this).data("previous_value", "contacts");
+    }else if ($(this).val() == "contacts" && contact_limit >= 1) {
+      $(this).closest('fieldset').addClass('alert alert-danger');
+      alert('You can only select one contact field per form');
+    }
+  }
+  var $field_value = $('.field_type');
+  $.each($field_value,function(index, field){
+    if($(field).val() == "contacts"){
+      contact_limit++;
+    }
+  });
+  $('.dft-validation').on('change', '.field_type', contactFunction);
+}
+
 window.publicDisable = function(){
 
   var $form_type = $('.form-type');
@@ -290,6 +312,7 @@ $(document).ready(window.formTypePopover);
 $(document).ready(window.fieldGroupValidation);
 $(document).ready(window.formFieldGroupErrors);
 $(document).ready(window.publicFormValidation);
+$(document).ready(window.contactFieldLimit);
 $('.public').popover({trigger: 'hover'});
 
 
