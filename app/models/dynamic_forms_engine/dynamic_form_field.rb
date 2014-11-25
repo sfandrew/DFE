@@ -1,21 +1,21 @@
 module DynamicFormsEngine
   class DynamicFormField < ActiveRecord::Base
+    @@field_choices = ["agreement", "calendar", "check_box", "contacts", "currency", "description", "divider", "email_validation", "field_group", 
+                      "file_upload", "large_header", "medium_header", "options_select", "options_select_with_other", "phone_validation", "signature","small_header", 
+                      "spacer", "text_area", "text_field"]
   	belongs_to :dynamic_form_type
     validates  :field_type, presence: true
     validates :name, presence: true, if: :field_name_required?
     validates :field_width, inclusion: { in: ["false","3","6","8","12"], message: "%{value} is not a valid choice!" }
-    validates :field_type , inclusion: { 
-                                        in: ["agreement", "calendar", "check_box", "contacts", "currency", "description", 
-                                            "divider", "email_validation", "field_group", "file_upload", "large_header", "medium_header", 
-                                            "options_select", "options_select_with_other", "phone_validation", "signature", "small_header", 
-                                            "spacer", "text_area", "text_field"],
-                                          message: "%{value} is not a valid choice!" 
-                                        }
+    validates :field_type, inclusion: { in: @@field_choices, message: "%{value} is not a valid choice!" }
     validate :field_size, :in_report, :is_required, :field_name, :other_option
     before_save :valid_field_width
 
     def field_name_required?
-      self.field_type != "divider" || self.field_type != "spacer"
+      req_name_fields = @@field_choices.reject { |string| string == "divider" || string == "spacer" }
+      if self.name.empty? && req_name_fields.include?(self.field_type)
+        return true
+      end
     end
 
     def field_size

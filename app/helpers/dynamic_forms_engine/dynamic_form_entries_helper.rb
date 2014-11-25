@@ -32,13 +32,18 @@ module DynamicFormsEngine
 
         if field.field_type != "field_group"
           # ROWS
-          if !field.field_width.blank? && field.field_width.to_i > 0
+          if field.field_width != "false" && field.field_width.to_i > 0
+            # binding.pry
             return_html += '<div class="row dfe-fields-row">' if cols == 0  # New row
             # Update cols with field
             cols += field.field_width.to_i 
           end
 
-          if cols > 12
+          # if field.field_width == "false"
+          #   return_html += "</div>"
+          # end
+
+          if cols > 12 && field.field_width != "false"
             return_html += "</div>"                             # Close row
             return_html += "<div class='clear spacer'></div>"   # Add spacer
             return_html += "<div class='row dfe-fields-row'>"   # Open new row
