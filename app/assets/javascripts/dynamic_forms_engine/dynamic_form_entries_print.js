@@ -1,1 +1,1 @@
-// window.print();()
+window.print();
