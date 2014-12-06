@@ -10,37 +10,10 @@
  *= require_self
  *= require_tree .
  */
-
  
-#friends_list{
-	padding-left: 0;
-    -moz-column-count: 2;
-    -moz-column-gap: 10px;
-    -webkit-column-count: 2;
-    -webkit-column-gap: 10px;
-    column-count: 2;
-    column-gap: 10px;
-}
 #errors{
     color: #f00;
     font-size: 15px;
-}
-
-
-#friends_list li {
-	list-style: none;
-	margin-bottom: 7px;
-	font-size: 17px;
-	background-color: #f1f1f1;
-}
-
-#friends_list li.selected{
-	background-color: #575757;
-	color: #fff;
-}
-
-#friends_list li img{
-	margin-right: 8px;
 }
 
 /* alert alert-danger */
@@ -54,8 +27,6 @@
 	border-radius: 4px;
 }
 
-
-
 .required{
   color: red;
   font-size: 22px;
@@ -66,6 +37,12 @@
   margin-left: -25px;
 }
 
+fieldset.dynamic-form-field {
+margin-bottom: 7px;
+}
+fieldset.row-contact {
+margin-bottom: 7px;
+}
 
 
 /* iframe Rules */

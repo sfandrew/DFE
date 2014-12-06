@@ -31,9 +31,10 @@ module DynamicFormsEngine
         end
 
         if field.field_type != "field_group"
+
           # ROWS
           if field.field_width != "false" && field.field_width.to_i > 0
-            # binding.pry
+            
             return_html += '<div class="row dfe-fields-row">' if cols == 0  # New row
             # Update cols with field
             cols += field.field_width.to_i 
