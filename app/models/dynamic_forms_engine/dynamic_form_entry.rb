@@ -106,6 +106,7 @@ module DynamicFormsEngine
     # end
 
     def each_field_with_value
+      
       properties.each do |index, field|
         if field[:type].to_s == 'file_upload'
           attachment_id = field[:value]
