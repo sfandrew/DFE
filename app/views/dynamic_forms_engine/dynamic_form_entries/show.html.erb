@@ -131,3 +131,7 @@
 	    </div>
 	<% end %>
 </div>
+
+<% if request.original_url =~ /(.print)/ %>
+    <%= javascript_tag "window.print()" %>
+<% end %>
