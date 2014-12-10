@@ -6,7 +6,7 @@ module DynamicFormsEngine
   	belongs_to :dynamic_form_type
     validates  :field_type, presence: true
     validates :name, presence: true, if: :field_name_required?
-    validates :field_width, inclusion: { in: ["false","3","6","8","12"], message: "%{value} is not a valid choice!" }
+    validates :field_width, inclusion: { in: ["false","3","4","5","6","8","12"], message: "%{value} is not a valid choice!" }
     validates :field_type, inclusion: { in: @@field_choices, message: "%{value} is not a valid choice!" }
     validate :field_size, :in_report, :is_required, :field_name, :other_option
     before_save :valid_field_width
@@ -19,7 +19,7 @@ module DynamicFormsEngine
     end
 
     def field_size
-      field_width_val = ["3","6","8","12"]
+      field_width_val = ["3","4","5","6","8","12"]
       field = self.field_type
       error_msg = field + ' field has a fixed width'
       non_valid_fields =  ["contacts","divider","field_group","large_header","medium_header","small_header","signature","spacer"]
