@@ -75,7 +75,7 @@ module DynamicFormsEngine
         redirect_to dynamic_form_entry_path(@dynamic_form_entry) + "?iframe=" + (params[:iframe] == "1" ? "1" : "0"), notice: "<strong>You have submitted your form entry!</strong>".html_safe
       elsif params[:save_draft] && @dynamic_form_entry.save
         redirect_to edit_dynamic_form_entry_path(@dynamic_form_entry) + "?iframe=" + (params[:iframe] == "1" ? "1" : "0"), alert: "<strong> You have temporary saved your draft. Come back to submit it when ready!</strong>".html_safe
-      else       
+      else     
         @dynamic_form_entry.format_properties
         render "new"
       end

@@ -2,8 +2,7 @@
   <%= f.label field.id, field.name.humanize, :class => "col-md-2 control-label" %>
   <div class="col-md-7">
     <%= f.file_field field.id, :multiple => true, :class => "form-control uploader"  %>
-    
-    
+    <%# f.hidden_field :field_cache, value: field.filename_cache %>
 
     <% if defined?(errors) and errors.present? %>
 		<small style="color:red"><%= errors.join(', ') %></small>
