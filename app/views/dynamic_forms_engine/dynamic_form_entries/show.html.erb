@@ -6,6 +6,7 @@
 			<li><%= link_to "Forms", dynamic_form_types_path %></li>
 			<li><%= link_to @dynamic_form_type.name,  form_entries_path(@dynamic_form_type) %></li>
 			<li class="active">Entry: <%= @dynamic_form_entry.id %></li>
+
 		</ol>
 
 	</div>
@@ -30,10 +31,15 @@
 
 </div>
 
-<div class="well col-md-12 col-lg-12">
+<div class="well col-md-12 col-lg-10">
 	<% @dynamic_form_entry.each_field_with_value do |index, field| %>
+		
 		<div class="row row-table print-table">
-			<% if field[:type] == "file_upload" %>
+			<% if field[:type] == "field_group" %>
+				<h3 align="center">Field Group: <%= field[:name] %></h3>
+			<% elsif field[:type] == "description" %>
+				<h5 class="text-uppercase" align="center">Description: <%= field[:name] %></h5>
+			<% elsif field[:type] == "file_upload" %>
 				<label class="col-sm-3 control-label">
 					<%= index[:content_name] %>:
 				</label>
