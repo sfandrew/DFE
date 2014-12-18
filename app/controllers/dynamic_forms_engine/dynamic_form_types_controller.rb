@@ -8,29 +8,21 @@ module DynamicFormsEngine
     before_action :set_dynamic_form_type, only: [:show, :edit, :update, :destroy]
     before_filter :non_editable_dynamic_forms, only: [:show, :edit, :update, :destroy]
 
-
-    # GET /dynamic_form_types
-    # GET /dynamic_form_types.json
     def index
       @dynamic_form_types = DynamicFormType.where(:user_id => current_user.id)
     end
 
-    # GET /dynamic_form_types/1
-    # GET /dynamic_form_types/1.json
     def show
       @form_fields = @dynamic_form_type.ordered_fields
     end
 
-    # GET /dynamic_form_types/new
     def new
       @dynamic_form_type = DynamicFormType.new
     end
-    # GET /dynamic_form_types/1/edit
+
     def edit
     end
 
-    # POST /dynamic_form_types
-    # POST /dynamic_form_types.json
     def create
       create_dynamic_form_type(dynamic_form_type_params)
     end
@@ -50,8 +42,6 @@ module DynamicFormsEngine
       end
     end
 
-    # PATCH/PUT /dynamic_form_types/1
-    # PATCH/PUT /dynamic_form_types/1.json
     def update
       if params[:save_as_button]
           # Strip out ids from old form
@@ -72,9 +62,7 @@ module DynamicFormsEngine
           render action: 'edit'
       end
     end
-
-    # DELETE /dynamic_form_types/1
-    # DELETE /dynamic_form_types/1.json
+    
     def destroy
       @dynamic_form_type.destroy
       respond_to do |format|

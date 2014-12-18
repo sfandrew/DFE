@@ -6,6 +6,7 @@
         <li><%= link_to "Forms", dynamic_form_types_path %></li>
         <li><%= @dynamic_form_type.name %></li>
         <li class="active"><%= @dynamic_form_entries.size %> Entries</li>
+        
     </ol>
 
   </div>
@@ -66,8 +67,10 @@
   <thead>
     <tr class="well">
       <th>Status</th>
+
       <% @dynamic_form_type.fields.each do |field| %>
-        <% if field.included_in_report %>
+
+        <% if field.included_in_report  && !DynamicFormsEngine::DynamicFormField.default_width.include?(field.field_type) %>
           <th align="center">
             <%= field.name %>
             <h6>(<%= field.field_type.titleize  %>)</h6>
@@ -101,7 +104,8 @@
           </td>
 
           <% @dynamic_form_type.fields.each do |field| %>
-            <% if field.included_in_report %>
+          
+            <% if field.included_in_report && !DynamicFormsEngine::DynamicFormField.default_width.include?(field.field_type) %>
               <% if field.field_type == "agreement" || field.field_type == "check_box" %>
                 <td>
                   <%= "Approve" if dynamic_form_entry.properties.find { |key, value| value[:id].to_i == field.id } %>

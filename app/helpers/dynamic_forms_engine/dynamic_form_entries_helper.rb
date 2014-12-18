@@ -35,14 +35,9 @@ module DynamicFormsEngine
             return_html += '<div class="row dfe-fields-row">' if cols == 0  # New row
             # Update cols with field
             cols += field.field_width.to_i 
-          
-          # add a row when field is false
-          elsif field.field_width == "false"
-            return_html += "<div class='row dfe-fields-row'>"
-            cols += 12
           end
           # close row and open new row
-          if cols > 12 && field.field_width != "false"
+          if cols > 12
             return_html += "</div>"                             # Close row
             return_html += "<div class='clear spacer'></div>"   # Add spacer
             return_html += "<div class='row dfe-fields-row'>"   # Open new row

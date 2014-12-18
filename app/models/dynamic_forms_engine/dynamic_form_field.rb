@@ -1,15 +1,27 @@
 module DynamicFormsEngine
   class DynamicFormField < ActiveRecord::Base
+
     @@field_choices = ["agreement", "calendar", "check_box", "contacts", "currency", "description", "divider", "email_validation", "field_group", 
                       "file_upload", "large_header", "medium_header", "options_select", "options_select_with_other", "phone_validation", "signature","small_header", 
                       "spacer", "text_area", "text_field"]
+    @@default_field_width = ["contacts","divider","field_group","large_header","medium_header","small_header","signature","spacer"]
+    @@field_width_choices = ["false","3","4","5","6","8","12"]
+
   	belongs_to :dynamic_form_type
+
     validates  :field_type, presence: true
     validates :name, presence: true, if: :field_name_required?
-    validates :field_width, inclusion: { in: ["false","3","4","5","6","8","12"], message: "%{value} is not a valid choice!" }
-    validates :field_type, inclusion: { in: @@field_choices, message: "%{value} is not a valid choice!" }
-    validate :field_size, :in_report, :is_required, :field_name, :other_option
-    before_save :valid_field_width
+    validates :field_width, inclusion: { in: @@field_width_choices, message: "%{value} is not a valid choice!" }
+    validates :field_type, inclusion: { in: @@field_choices, message: "%{value} field must have a valid field width!" }
+    validate :in_report, :field_name, :is_required, on: :create 
+    validate  :other_option
+    
+    before_save :set_field_width
+
+    def self.default_width
+      @@default_field_width.delete("signature")
+      @@default_field_width
+    end
 
     def field_name_required?
       req_name_fields = @@field_choices.reject { |string| string == "divider" || string == "spacer" }
@@ -18,22 +30,10 @@ module DynamicFormsEngine
       end
     end
 
-    def field_size
-      field_width_val = ["3","4","5","6","8","12"]
-      field = self.field_type
-      error_msg = field + ' field has a fixed width'
-      non_valid_fields =  ["contacts","divider","field_group","large_header","medium_header","small_header","signature","spacer"]
-      if field_width_val.include?(self.field_width) && non_valid_fields.include?(field)
-        errors.add field, error_msg
-      end
-    end
-
     def in_report
       field = self.field_type
       error_msg = field + ' field cannot be included in report'
-      non_valid_fields = ["contacts","divider","field_group","large_header","medium_header","small_header",
-                            "description","signature"]
-      if self.included_in_report && non_valid_fields.include?(field)
+      if self.included_in_report && @@default_field_width.include?(field) 
         errors.add field, error_msg
       end
     end
@@ -76,10 +76,11 @@ module DynamicFormsEngine
 
     private 
 
-      def valid_field_width
-        non_valid_fields =  ["contacts","divider","field_group","large_header","medium_header","small_header","signature","spacer"]
-        if self.field_width == "false" && !non_valid_fields.include?(self.field_type)
+      def set_field_width
+        if self.field_width == "false" && !@@default_field_width.include?(self.field_type)
           self.field_width = "6"
+        elsif @@default_field_width.include?(self.field_type)
+          self.field_width = "12"
         end
       end
 
