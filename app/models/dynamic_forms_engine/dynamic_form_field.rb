@@ -8,6 +8,8 @@ module DynamicFormsEngine
     @@field_width_choices = ["false","3","4","5","6","8","12"]
 
   	belongs_to :dynamic_form_type
+    # has_many :attachment, :as => :attachable, :dependent => :destroy
+    # accepts_nested_attributes_for :attachments, :allow_destroy => :true, reject_if: proc { |attributes| attributes["filename"].nil? }
 
     validates  :field_type, presence: true
     validates :name, presence: true, if: :field_name_required?

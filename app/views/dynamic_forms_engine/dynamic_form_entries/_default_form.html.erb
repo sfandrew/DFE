@@ -9,6 +9,8 @@
       margin-left: -25px;
     }
 </style>
+<%# p @dynamic_form_entry.as_json  %>
+<%# p @dynamic_form_entry.attachments.as_json %>
 
 <%= form_for(@dynamic_form_entry, 
     :html => {:class => "form-horizontal", :multipart => true}) do |f| %>
@@ -42,8 +44,6 @@
   <%#= render_fields(@dynamic_form_entry, builder) %>
   <%# end %>
 <%# end %>
-
-
   <div class="actions col-md-offset-2 col-sm-8">
     <%= submit_tag "Save Form", :name => "submit_entry", :class => "btn btn-success btn-block btn-lg" %>
     <span class="required required-tag">* </span>Indicates a required field!
