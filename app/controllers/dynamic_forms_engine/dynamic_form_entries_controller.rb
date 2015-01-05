@@ -47,6 +47,7 @@ module DynamicFormsEngine
     end
 
     def new
+      @attachment = Attachment.new
       if current_user
         @dynamic_form_entry = current_user.dynamic_form_entries.new(dynamic_form_type_id: @dynamic_form_type.id)
       else
@@ -55,7 +56,7 @@ module DynamicFormsEngine
     end
 
     def create
-
+      params["dynamic_form_entry"]["attachments_attributes"]["2"]["field_id"] = 5
       if current_user
         @dynamic_form_entry = current_user.dynamic_form_entries.new(dynamic_form_entry_params)
         
@@ -81,7 +82,7 @@ module DynamicFormsEngine
       end
 
       if params[:submit_entry] && @dynamic_form_entry.save
-        binding.pry
+        
         redirect_to dynamic_form_entry_path(@dynamic_form_entry) + "?iframe=" + (params[:iframe] == "1" ? "1" : "0"), notice: "<strong>You have submitted your form entry!</strong>".html_safe
       elsif params[:save_draft] && @dynamic_form_entry.save
         redirect_to edit_dynamic_form_entry_path(@dynamic_form_entry) + "?iframe=" + (params[:iframe] == "1" ? "1" : "0"), alert: "<strong> You have temporary saved your draft. Come back to submit it when ready!</strong>".html_safe
