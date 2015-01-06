@@ -56,7 +56,7 @@ module DynamicFormsEngine
     end
 
     def create
-      params["dynamic_form_entry"]["attachments_attributes"]["2"]["field_id"] = 5
+      # params["dynamic_form_entry"]["attachments_attributes"]["2"]["field_id"] = 5
       if current_user
         @dynamic_form_entry = current_user.dynamic_form_entries.new(dynamic_form_entry_params)
         
