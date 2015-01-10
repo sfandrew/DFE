@@ -4,6 +4,7 @@ module DynamicFormsEngine
     belongs_to :user
 
     serialize :properties, Hash
+    
 
     validate :validate_on_draft, :if => Proc.new { |properties| properties.in_progress == true }
     validate :validate_on_submit, :if => Proc.new { |properties| properties.in_progress != true}
@@ -240,6 +241,7 @@ module DynamicFormsEngine
     # Should be run as before_create filter
     def format_properties
       old_properties = self.properties
+      p old_properties
       old_entry = DynamicFormEntry.find(self.id) if !self.new_record?
       new_properties = {}
       old_properties.each_with_index do |(field_id, field_value), index|
@@ -262,6 +264,7 @@ module DynamicFormsEngine
           end
         end
       end
+      p new_properties
       self.properties = new_properties
     end
 
