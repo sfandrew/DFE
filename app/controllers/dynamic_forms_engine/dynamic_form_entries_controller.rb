@@ -56,7 +56,10 @@ module DynamicFormsEngine
     end
 
     def create
+
       # params["dynamic_form_entry"]["attachments_attributes"]["2"]["field_id"] = 5
+
+
       if current_user
         @dynamic_form_entry = current_user.dynamic_form_entries.new(dynamic_form_entry_params)
         
@@ -81,17 +84,23 @@ module DynamicFormsEngine
         @dynamic_form_entry.in_progress = false
       end
 
+      dynamic_form_entry_params[:attachments_attributes].each do |key, value|    
+        attachment = @dynamic_form_entry.attachments.build(value)
+
+        if value['filename_cache'].presence
+          attachment.filename = File.open(File.join(Rails.root, "public", value['filename_cache'])) 
+        end
+
+      end
+
       if params[:submit_entry] && @dynamic_form_entry.save
-        
+    
         redirect_to dynamic_form_entry_path(@dynamic_form_entry) + "?iframe=" + (params[:iframe] == "1" ? "1" : "0"), notice: "<strong>You have submitted your form entry!</strong>".html_safe
       elsif params[:save_draft] && @dynamic_form_entry.save
         redirect_to edit_dynamic_form_entry_path(@dynamic_form_entry) + "?iframe=" + (params[:iframe] == "1" ? "1" : "0"), alert: "<strong> You have temporary saved your draft. Come back to submit it when ready!</strong>".html_safe
       else
        
-        dynamic_form_entry_params[:attachments_attributes].each do |key, value|
-            @dynamic_form_entry.attachments.build(value)
-        end
-        
+       
         # @dynamic_form_entry.attachments.assign_attributes(:filename => dynamic_form_entry_params[:attachments_attributes][:filename])
         @dynamic_form_entry.format_properties
         
