@@ -5,7 +5,7 @@ module DynamicFormsEngine
 
     accepts_nested_attributes_for :fields, allow_destroy: true
 
-    validates :name, :description, :fields, presence: true
+    #validates :name, :description, :fields, presence: true
     #validates :form_type, presence: true, :inclusion => { :in => %w(Default-form Multi-step), 
                                                       :message => "%{value} is not a valid choice" }
     #validate :field_group_requirement, :field_group_order, :public_form, :contact_field_limit
