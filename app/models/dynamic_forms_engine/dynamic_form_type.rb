@@ -21,11 +21,11 @@ module DynamicFormsEngine
     end
 
     def field_group_order
-      self.fields.each_with_index do |item, index|
+      self.ordered_fields.each_with_index do |item, index|
         if item.field_type == "field_group" 
-          if fields[index+1].nil?
+          if ordered_fields[index+1].nil?
             errors.add(item.name,"field group must have at least one field in it!!", { :id => 12 })
-          elsif !fields[index+1].nil? && fields[index+1].field_type =="field_group"
+          elsif !ordered_fields[index+1].nil? && ordered_fields[index+1].field_type =="field_group"
             errors.add item.name, "You cannot have two field groups next to each other"
           end
         elsif index == 0 && self.form_type == "Multi-step" && item.field_type != "field_type"
@@ -77,16 +77,6 @@ module DynamicFormsEngine
       true if form_type === "Default-form"
     end
 
-
-    #
-    # SELF
-    #
-    def self.field_types
-      ['agreement', 'calendar', 'check_box', 'contacts', 'currency', 'description', 
-        'divider', 'email_validation', 'field_group', 'file_upload', 'large_header', 
-        'medium_header', 'options_select', 'options_select_with_other', 'phone_validation', 
-        'signature', 'small_header', 'spacer', 'text_area', 'text_field']
-    end
     
   end
 end

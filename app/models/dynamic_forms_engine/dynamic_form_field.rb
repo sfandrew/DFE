@@ -1,19 +1,20 @@
 module DynamicFormsEngine
   class DynamicFormField < ActiveRecord::Base
+    cattr_accessor :field_choices, instance_writer: false
 
-    @@field_choices = ["agreement", "calendar", "check_box", "contacts", "currency", "description", "divider", "email_validation", "field_group", 
-                      "file_upload", "large_header", "medium_header", "options_select", "options_select_with_other", "phone_validation", "signature","small_header", 
+    @@field_choices = ["agreement", "calendar", "check_box", "contacts", "currency", "short_description", "divider", "email_validation", "field_group", 
+                      "file_upload", "large_header","long_description", "medium_header", "options_select", "options_select_with_other", "phone_validation", "signature","small_header", 
                       "spacer", "text_area", "text_field"]
     @@default_field_width = ["contacts","divider","field_group","large_header","medium_header","small_header","signature","spacer"]
     @@field_width_choices = ["false","3","4","5","6","8","12"]
 
   	belongs_to :dynamic_form_type
 
-    validates  :field_type, presence: true
+    validates :field_type, presence: true
     validates :name, presence: true, if: :field_name_required?
     validates :field_width, inclusion: { in: @@field_width_choices, message: "%{value} is not a valid choice!" }
     validates :field_type, inclusion: { in: @@field_choices, message: "%{value} field must have a valid field width!" }
-    validate :in_report, :field_name, :is_required, on: :create 
+    validate  :in_report, :field_name, :is_required, on: :create 
     validate  :other_option
     
     before_save :set_field_width
@@ -24,7 +25,7 @@ module DynamicFormsEngine
     end
 
     def field_name_required?
-      req_name_fields = @@field_choices.reject { |string| string == "divider" || string == "spacer" }
+      req_name_fields = @@field_choices.reject { |field| field == "divider" || field == "spacer" || field == "long_description" || field == "short_description" }
       if self.name.empty? && req_name_fields.include?(self.field_type)
         return true
       end

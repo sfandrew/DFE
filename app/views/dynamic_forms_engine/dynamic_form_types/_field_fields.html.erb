@@ -22,7 +22,7 @@
 
 		
 		<div class="col-sm-3">
-			<%= f.select(:field_type, DynamicFormsEngine::DynamicFormType.field_types.map{|x| [x.titleize, x] }, {:include_blank => 'Select a field', disabled: ''}, {:class => "field_type form-control", :data => {:toggle =>'dropdown'}})  %>
+			<%= f.select(:field_type, DynamicFormsEngine::DynamicFormField.field_choices.map{|x| [x.titleize, x] }, {:include_blank => 'Select a field', disabled: ''}, {:class => "field_type form-control", :data => {:toggle =>'dropdown'}})  %>
 		</div>
 
 		<div class="col-sm-2 field-popover">
@@ -72,6 +72,15 @@
 			</div>
 		</div>
 	</div><!-- row options -->
+
+	<div class="row long-description">
+		<div class="form-group">
+			<%= content_tag :div, nil, class: 'dynamic-form-field-number' %>
+			<div class="col-md-11">
+				<%= f.text_area :content_meta, :class => 'form-control' %>
+			</div>
+		</div>
+	</div>
 
 </fieldset>
 
