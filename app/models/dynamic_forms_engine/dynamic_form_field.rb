@@ -14,8 +14,8 @@ module DynamicFormsEngine
     #validates :name, presence: true, if: :field_name_required?
     #validates :field_width, inclusion: { in: @@field_width_choices, message: "%{value} is not a valid choice!" }
     #validates :field_type, inclusion: { in: @@field_choices, message: "%{value} field must have a valid field width!" }
-    validate  :in_report, :field_name, :is_required, on: :create 
-    validate  :other_option
+    #validate  :in_report, :field_name, :is_required, on: :create 
+    #validate  :other_option
     
     before_save :set_field_width
 
