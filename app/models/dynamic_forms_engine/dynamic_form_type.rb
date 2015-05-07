@@ -6,7 +6,8 @@ module DynamicFormsEngine
     accepts_nested_attributes_for :fields, allow_destroy: true
 
     #validates :name, :description, :fields, presence: true
-    
+    #validates :form_type, presence: true, :inclusion => { :in => %w(Default-form Multi-step), 
+                                                      #:message => "%{value} is not a valid choice" }
     #validate :field_group_requirement, :field_group_order, :public_form, :contact_field_limit
  
     def public_form
@@ -19,19 +20,19 @@ module DynamicFormsEngine
       end
     end
 
-    def field_group_order
-      self.ordered_fields.each_with_index do |item, index|
-        if item.field_type == "field_group" 
-          if ordered_fields[index+1].nil?
-            errors.add(item.name,"field group must have at least one field in it!!", { :id => 12 })
-          elsif !ordered_fields[index+1].nil? && ordered_fields[index+1].field_type =="field_group"
-            errors.add item.name, "You cannot have two field groups next to each other"
-          end
-        elsif index == 0 && self.form_type == "Multi-step" && item.field_type != "field_type"
-          errors.add(item.name, "first field must be a field group!")
-        end
-      end
-    end
+    # def field_group_order
+    #   self.ordered_fields.each_with_index do |item, index|
+    #     if item.field_type == "field_group" 
+    #       if ordered_fields[index+1].nil?
+    #         errors.add(item.name,"field group must have at least one field in it!!", { :id => 12 })
+    #       elsif !ordered_fields[index+1].nil? && ordered_fields[index+1].field_type =="field_group"
+    #         errors.add item.name, "You cannot have two field groups next to each other"
+    #       end
+    #     elsif index == 0 && self.form_type == "Multi-step" && item.field_type != "field_type"
+    #       errors.add(item.name, "first field must be a field group!")
+    #     end
+    #   end
+    # end
 
     def contact_field_limit
       contact_fields = 0
