@@ -12,8 +12,8 @@ module DynamicFormsEngine
 
     validates :field_type, presence: true
     validates :name, presence: true, if: :field_name_required?
-    validates :field_width, inclusion: { in: @@field_width_choices, message: "%{value} is not a valid choice!" }
-    validates :field_type, inclusion: { in: @@field_choices, message: "%{value} field must have a valid field width!" }
+    validates :field_width, inclusion: { in: @@field_width_choices, message: "%{value} is not a valid field width!" }
+    validates :field_type, inclusion: { in: @@field_choices, message: "%{value} is not a valid field type!" }
     validate  :in_report, :field_name, :is_required, on: :create 
     validate  :other_option
     
@@ -26,13 +26,13 @@ module DynamicFormsEngine
 
     def field_name_required?
       req_name_fields = @@field_choices.reject { |field| field == "divider" || field == "spacer" || field == "long_description" || field == "short_description" }
-      if self.name.empty? && req_name_fields.include?(self.field_type)
+      if name.empty? && req_name_fields.include?(field_type)
         return true
       end
     end
 
     def in_report
-      field = self.field_type
+      field = field_type
       error_msg = field + ' field cannot be included in report'
       if self.included_in_report && @@default_field_width.include?(field) 
         errors.add field, error_msg

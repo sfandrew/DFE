@@ -1,7 +1,7 @@
 <% field_value ||= nil %>
 
 <div class="col-md-<%= field.field_width %>">
-  <%= f.label field.id, field.name.humanize, :class => "col-md-2 control-label" %>
+  <%= f.label field.id, field.name.humanize, :class => "col-md-3 control-label" %>
   <div class="col-md-7">
     <%= f.text_field field.id, value: field_value, :class => "form-control datepicker", :placeholder => "click to select" %>
     <% if defined?(errors) and errors.present? %>
