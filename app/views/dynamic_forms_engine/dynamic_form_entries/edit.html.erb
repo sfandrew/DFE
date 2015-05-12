@@ -4,11 +4,11 @@
 </div>
 
 <% if @dynamic_form_type.form_type == "Multi-step" %> 
-	<%= render 'multistep_form' %>
-	<%= render 'field_group' %>
+	<%= render partial: 'multistep_form', locals: { dynamic_form_entry: @dynamic_form_entry} %>
+	<%= render partial: 'field_group', locals: { dynamic_form_entry: @dynamic_form_entry} %>
 
 <% else %>
-	<%= render 'default_form' %>
+	<%= render partial: 'default_form', locals: { dynamic_form_entry: @dynamic_form_entry} %>
 <% end %>
 <script type="text/javascript">
 	<%= render 'form_action.js' %>

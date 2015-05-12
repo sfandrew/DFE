@@ -9,7 +9,7 @@
 	<%= render partial: 'default_form', locals: { dynamic_form_entry: @dynamic_form_entry} %>
 <% else %>
 	<%= render partial: 'multistep_form', locals: { dynamic_form_entry: @dynamic_form_entry} %>
-	<%= render partial: 'field_group' %>
+	<%= render 'field_group' %>
 <% end %>
 
 <script type="text/javascript">
