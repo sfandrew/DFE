@@ -20,15 +20,15 @@
 </div>
 
 
-<%= form_for(@dynamic_form_entry, 
+<%= form_for(dynamic_form_entry, 
     :html => {:class => "form-horizontal", :multipart => true}) do |f| %>
 
-    <% if @dynamic_form_entry.errors.any? %>
+    <% if dynamic_form_entry.errors.any? %>
         <div class="row">
             <div class="well" id ="errors">
-                <h2>This form contains <%= pluralize(@dynamic_form_entry.errors.count, "error") %></h2>
+                <h2>This form contains <%= pluralize(dynamic_form_entry.errors.count, "error") %></h2>
                 <ul>
-                    <% @dynamic_form_entry.errors.full_messages.each do |msg| %>
+                    <% dynamic_form_entry.errors.full_messages.each do |msg| %>
                       <li><%= msg %></li>
                     <% end %>
                 </ul>
@@ -38,8 +38,8 @@
     
 
     <%= f.hidden_field  :dynamic_form_type_id, :value => @dynamic_form_type.id %>
-    <%= f.fields_for :properties, OpenStruct.new(Hash[@dynamic_form_entry.properties.map{|k,v| [k.to_s, v]}]) do |builder| %>
-        <%= render_fields(@dynamic_form_entry, builder) %>
+    <%= f.fields_for :properties, OpenStruct.new(Hash[dynamic_form_entry.properties.map{|k,v| [k.to_s, v]}]) do |builder| %>
+        <%= render_fields(dynamic_form_entry, builder) %>
     <% end %>
 
     <div class="row multistep-nav-steps">

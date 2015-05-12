@@ -6,10 +6,10 @@
 <div class="clear spacer"></div>
 
 <% if @dynamic_form_type.form_type != "Multi-step" %>
-	<%= render 'default_form' %>
+	<%= render partial: 'default_form', locals: { dynamic_form_entry: @dynamic_form_entry} %>
 <% else %>
-	<%= render 'multistep_form' %>
-	<%= render 'field_group' %>
+	<%= render partial: 'multistep_form', locals: { dynamic_form_entry: @dynamic_form_entry} %>
+	<%= render partial: 'field_group' %>
 <% end %>
 
 <script type="text/javascript">
