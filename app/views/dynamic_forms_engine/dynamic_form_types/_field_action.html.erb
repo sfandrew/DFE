@@ -167,13 +167,13 @@ window.init = function() {
           case "options_select":
             // $container.children('.options_select').show();
             updatePopover($container,'Here you can create a drop down list with different options. Enter each option seperated by comma such as Option1, Option2, Option3');
-            // $container.find('.checkbox').show();
             $('.options_field').popover({
                       placement: 'top',
                       trigger: 'hover',
                       content: 'Enter each option seperated by comma'
                   });
             $('.field_type').popover('destroy');
+            $container.find('.long-description').detach();
             break;
 
           case "options_select_with_other":
