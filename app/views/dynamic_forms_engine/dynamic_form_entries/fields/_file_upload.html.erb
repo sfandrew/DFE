@@ -1,0 +1,67 @@
+<!-- <div class="col-md-<%= field.field_width %>">
+<%= f.label field.id, field.name.humanize, :class => "col-md-2 control-label" %>
+  <div class="col-md-10">
+    <%= fields_for "dynamic_form_entry[attachments_attributes][#{field.id}]", 
+        @dynamic_form_entry.attachments.build, :multipart => true  do |attachment| %>
+        
+      <%= attachment.hidden_field :content_name, value: field.name %>
+
+      <%= attachment.file_field :filename, :class => "form-control uploader" %>
+      <%= attachment.hidden_field :filename_cache %>
+      
+
+     
+    <% end %>
+    
+  </div>
+</div> -->
+
+
+
+
+<% @attachment_index ||= -1 %>
+
+
+<div class="col-md-<%= field.field_width %>">
+<%= f.label field.id, field.name.humanize, :class => "col-md-2 control-label" %>
+<%= f.hidden_field field.id %>
+
+  <div class="col-md-10">
+  
+  <% if @dynamic_form_entry.attachments.size != 0 %>
+
+    <%= fields_for "dynamic_form_entry[attachments_attributes][#{@attachment_index += 1}]", 
+
+          att = @dynamic_form_entry.attachments.find{|x| x.content_meta == field.id.to_s }, :multipart => true  do |attachment| %>
+        
+        <%= attachment.hidden_field :content_name, value: field.name %>
+        <%= attachment.hidden_field :content_meta, value: field.id %>
+
+        <%= attachment.file_field :filename, :class => "form-control uploader" %>
+        <%= attachment.hidden_field :filename_cache, value: (attachment.object.filename_url_or_cached_url rescue '') %>
+
+        <%# p attachment.object.as_json %>
+
+        <%= image_tag(attachment.object.filename_url_or_cached_url,size: "100" ) if attachment.object.try(:filename) %>
+
+      <% end %>
+    
+
+  <% else  %>
+      <%= fields_for "dynamic_form_entry[attachments_attributes][#{field.id}]", 
+         field.attachments.first, :multipart => true  do |attachment| %>
+          
+        <%= attachment.hidden_field :content_name, value: field.name %>
+
+        <%= attachment.file_field :filename, :class => "form-control uploader" %>
+        <%= attachment.hidden_field :filename_cache %>
+        <%= attachment.hidden_field :content_meta, value: field.id %>
+        <%# p attachment.object.as_json %>
+        <%= image_tag(attachment.object.filename_url,size: "100" ) if attachment.object.filename? %>
+
+      <% end %>
+    <% end %>
+    
+  </div>
+</div>
+ 

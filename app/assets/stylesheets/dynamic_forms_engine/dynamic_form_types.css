@@ -20,7 +20,7 @@ fieldset.dynamic-form-field{
 .include-checkbox, .required-checkbox{
   display: block;
 }
-.options_select{
+.options_select, .long-description{
   display: none;
 }
 
@@ -28,8 +28,15 @@ fieldset[selection="contacts"] .required-checkbox, fieldset[selection="contacts"
     fieldset[selection="contacts"] .field-size{
             display: none
 }
-fieldset[selection="description"] .include-checkbox, fieldset[selection="description"] .required-checkbox{
+fieldset[selection="short_description"] .include-checkbox, fieldset[selection="short_description"] .required-checkbox{
   display:none;
+}
+fieldset[selection="long_description"] .include-checkbox, fieldset[selection="long_description"] .required-checkbox,
+  fieldset[selection="long_description"] .user-input{
+  display:none;
+}
+fieldset[selection="long_description"] .long-description{
+  display:block;
 }
 fieldset[selection="divider"] .required-checkbox, fieldset[selection="divider"] .include-checkbox, 
     fieldset[selection="divider"] .field-size, fieldset[selection="divider"] .user-input{

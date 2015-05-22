@@ -7,9 +7,8 @@
 		<% if defined?(errors) and errors.present? %>
 			<small class="error-msg" style="color:red"><%= errors.join(', ') %></small>
 	  	<% end %>
-	  	<% if field.required? %>
-			<span class="required required-field">*</span>
-		<% end %>
-
 	</div>
+	<% if field.required? %>
+		<span class="required required-field">*</span>
+	<% end %>
 </div>

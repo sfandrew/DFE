@@ -8,11 +8,11 @@ module DynamicFormsEngine
     validates :name, :description, :fields, presence: true
     validates :form_type, presence: true, :inclusion => { :in => %w(Default-form Multi-step), 
                                                       :message => "%{value} is not a valid choice" }
-    validate :field_group_requirement, :field_group_order, :public_form, :contact_field_limit
+    validate :field_group_requirement, :field_group_order, :public_form, :contact_field_limit, :multi_step_requirement
  
     def public_form
-      if self.is_public
-        self.fields.each do |check_field|
+      if is_public
+        fields.each do |check_field|
           if check_field.field_type == "contacts" || check_field.field_type == "file_upload"
             errors.add check_field.name, "A public form cannot have a Contacts or file upload field"
           end
@@ -20,20 +20,28 @@ module DynamicFormsEngine
       end
     end
 
+    #makes sure that a field group has a field
     def field_group_order
-      self.fields.each_with_index do |item, index|
+      ordered_fields.each_with_index do |item, index|
         if item.field_type == "field_group" 
-          if fields[index+1].nil?
-            errors.add(item.name,"field group must have at least one field in it!!", { :id => 12 })
-          elsif !fields[index+1].nil? && fields[index+1].field_type =="field_group"
+          if ordered_fields[index+1].nil?
+            errors.add(item.name,"field group must have at least one field in it!")
+          elsif !ordered_fields[index+1].nil? && ordered_fields[index+1].field_type =="field_group"
             errors.add item.name, "You cannot have two field groups next to each other"
           end
-        elsif index == 0 && self.form_type == "Multi-step" && item.field_type != "field_type"
-          errors.add(item.name, "first field must be a field group!")
         end
       end
     end
 
+    def multi_step_requirement
+      ordered_fields.each_with_index do |field, index|
+        if index == 0 && is_multistep_form && field.field_type != "field_group"
+          errors.add item.name, "Multi step form must contain a field group as the first item"
+        end
+      end
+    end
+
+    #can only include 1 contact field
     def contact_field_limit
       contact_fields = 0
       self.fields.each do |check_field|
@@ -43,18 +51,17 @@ module DynamicFormsEngine
     end
 
     def field_group_requirement
-      multi_step = true if self.form_type == "Multi-step"
       field_group_size = 0
-      self.fields.each do |check_field|
+
+      ordered_fields.each do |check_field|
         field_group_size += 1 if check_field.field_type == "field_group"
       end
-      if multi_step && field_group_size < 2
+      if is_multistep_form && field_group_size < 2
         errors.add(:base, "You must select at least 2 field groups for a Multi-step form")
       end
     end
 
     def ordered_fields
-      #fields.order("field_order ASC")
       fields.sort_by { |x| x.field_order }
     end
 
@@ -77,16 +84,6 @@ module DynamicFormsEngine
       true if form_type === "Default-form"
     end
 
-
-    #
-    # SELF
-    #
-    def self.field_types
-      ['agreement', 'calendar', 'check_box', 'contacts', 'currency', 'description', 
-        'divider', 'email_validation', 'field_group', 'file_upload', 'large_header', 
-        'medium_header', 'options_select', 'options_select_with_other', 'phone_validation', 
-        'signature', 'small_header', 'spacer', 'text_area', 'text_field']
-    end
     
   end
 end
