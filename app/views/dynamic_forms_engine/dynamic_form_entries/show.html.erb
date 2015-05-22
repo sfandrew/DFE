@@ -42,10 +42,10 @@
 				<h5 class="text-uppercase" align="center">Description: <%= field[:name] %></h5>
 			<% elsif field[:type] == "file_upload" %>
 				<label class="col-sm-3 control-label">
-					<%= index[:content_name] %>:
+					<%= field[:name] %>:
 				</label>
 				<div class="col-sm-9">
-					<%= link_to("Download", index.filename.url, class: 'btn btn-success') %>
+					<%= link_to("Download", index.filename.url, class: 'btn btn-success') unless field[:attachment].nil? %>
 				</div>
 			<% elsif field[:type] == "phone_validation" %>
 				<label class="col-sm-3 control-label">

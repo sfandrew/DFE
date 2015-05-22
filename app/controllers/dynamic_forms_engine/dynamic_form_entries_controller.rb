@@ -47,7 +47,7 @@ module DynamicFormsEngine
     end
 
     def new
-      @attachment = Attachment.new
+      # @attachment = Attachment.new
       if current_user
         @dynamic_form_entry = current_user.dynamic_form_entries.new(dynamic_form_type_id: @dynamic_form_type.id)
       else
@@ -57,19 +57,8 @@ module DynamicFormsEngine
 
     def create
 
-      # params["dynamic_form_entry"]["attachments_attributes"]["2"]["field_id"] = 5
-
-
       if current_user
         @dynamic_form_entry = current_user.dynamic_form_entries.new(dynamic_form_entry_params)
-        
-       #  raise
-       #  if params[:attachments].present?
-          
-       #   @dynamic_form_entry.attachments.build(params[:attachments]) 
-
-
-       # end
       else
         @dynamic_form_entry = DynamicFormEntry.new(dynamic_form_entry_params)
       end
@@ -78,35 +67,26 @@ module DynamicFormsEngine
         @dynamic_form_entry.signature = params[:signature]
       end
 
-      if params[:save_draft]
-        @dynamic_form_entry.in_progress = true
-      else 
-        @dynamic_form_entry.in_progress = false
-      end
+      params[:save_draft] ? @dynamic_form_entry.in_progress = true : @dynamic_form_entry.in_progress = false 
 
-      dynamic_form_entry_params[:attachments_attributes].each do |key, value|    
+      #builds attachments 
+      dynamic_form_entry_params[:attachments_attributes].each do |key, value|
+        next if value['filename_cache'].blank?
         attachment = @dynamic_form_entry.attachments.build(value)
+        if value['filename_cache'].present?
 
-        if value['filename_cache'].presence
-          attachment.filename = File.open(File.join(Rails.root, "public", value['filename_cache'])) 
+          attachment.filename = File.open(File.join(Rails.root, "public", value['filename_cache']))
+
         end
-
       end
 
       if params[:submit_entry] && @dynamic_form_entry.save
-    
         redirect_to dynamic_form_entry_path(@dynamic_form_entry) + "?iframe=" + (params[:iframe] == "1" ? "1" : "0"), notice: "<strong>You have submitted your form entry!</strong>".html_safe
       elsif params[:save_draft] && @dynamic_form_entry.save
         redirect_to edit_dynamic_form_entry_path(@dynamic_form_entry) + "?iframe=" + (params[:iframe] == "1" ? "1" : "0"), alert: "<strong> You have temporary saved your draft. Come back to submit it when ready!</strong>".html_safe
       else
-       
-       
-        # @dynamic_form_entry.attachments.assign_attributes(:filename => dynamic_form_entry_params[:attachments_attributes][:filename])
         @dynamic_form_entry.format_properties
-        
-
         render "new"
-
       end
     end
 
@@ -117,7 +97,7 @@ module DynamicFormsEngine
 
     def update
 
-      @file_upload = current_user.dynamic_form_entries.where(:id => params[:id]).first
+      # @file_upload = current_user.dynamic_form_entries.where(:id => params[:id]).first
 
       if params[:signature]
         @dynamic_form_entry.signature = params[:signature]
@@ -128,6 +108,7 @@ module DynamicFormsEngine
         @dynamic_form_entry.assign_attributes(dynamic_form_entry_params)
         @dynamic_form_entry.in_progress = false
       end
+
       
       if params[:submit_entry] && @dynamic_form_entry.save
         redirect_to @dynamic_form_entry, notice: 'Below is your curent Form Entry Submission!'
@@ -187,7 +168,7 @@ module DynamicFormsEngine
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def dynamic_form_entry_params
-      params.require(:dynamic_form_entry).permit(:dynamic_form_type_id,:signature,:in_progress,:attachments_attributes => [:content_name,:filename, :filename_cache],
+      params.require(:dynamic_form_entry).permit(:dynamic_form_type_id,:signature,:in_progress,:attachments_attributes => [:content_name,:filename, :filename_cache, :content_meta],
         :contacts_attributes => [:phone, :contact_type,:user_id, :first_name, :company,:email,:uuid]).tap do |whitelisted|
         whitelisted[:properties] = params[:dynamic_form_entry][:properties]
       end

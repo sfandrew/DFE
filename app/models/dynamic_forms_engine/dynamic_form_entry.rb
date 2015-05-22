@@ -109,11 +109,10 @@ module DynamicFormsEngine
     # end
 
     def each_field_with_value
-      
       properties.each do |index, field|
         if field[:type].to_s == 'file_upload'
-          attachment_id = field[:value]
-          attachment = Attachment.find(attachment_id)
+          attachment_field_id = field[:id]
+          attachment = attachments.find { |attachment| attachment.content_meta == attachment_field_id }
           field[:attachment] = attachment
           yield attachment, field
         else
@@ -240,6 +239,7 @@ module DynamicFormsEngine
     #  This function transmutes the properties to a form that doesn't rely on the original field object
     # Should be run as before_create filter
     def format_properties
+      
       old_properties = self.properties
       p old_properties
       old_entry = DynamicFormEntry.find(self.id) if !self.new_record?
@@ -256,17 +256,18 @@ module DynamicFormsEngine
       end
       # this re-submits the file upload file without the user to re-submit the file again
 
-      if old_entry && self.errors.size == 0 
-        old_entry.each_field_with_value do |index_val, field|
-          if field[:type] == "file_upload" && !old_properties.has_key?(field[:id])
-            last_property = new_properties.size
-            new_properties[last_property] = { name: field[:name], type: field[:type], value: field[:value], id: field[:id] } 
-          end
-        end
-      end
+      # if old_entry && self.errors.size == 0 
+      #   old_entry.each_field_with_value do |index_val, field|
+      #     if field[:type] == "file_upload" && !old_properties.has_key?(field[:id])
+      #       last_property = new_properties.size
+      #       new_properties[last_property] = { name: field[:name], type: field[:type], value: field[:value], id: field[:id] } 
+      #     end
+      #   end
+      # end
       p new_properties
       self.properties = new_properties
     end
+    
 
   end
 end
