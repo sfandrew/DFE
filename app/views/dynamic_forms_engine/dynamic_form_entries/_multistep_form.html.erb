@@ -45,18 +45,12 @@
     <div class="row multistep-nav-steps">
       <ul class="pager next-prev-steps pull-left">
         <li class="previous"><a href="#">&larr; Previous</a></li>
+
       </ul>
       <ul class="pager next-prev-steps pull-right">
         <li class="next"><a href="#">Next &rarr;</a></li>
       </ul>
-    </div>
-
-    <div class="clear spacer"></div>
-
-    
-    <div class="row">
-
-        <div class="col-md-4">
+      <div class="col-md-4">
           <%= submit_tag 'Save as Draft', 
                   :class => "btn btn-danger dfe-tooltip btn-lg btn-block field-group-save",
                   :name => "save_draft",
@@ -68,12 +62,10 @@
                   
                   %>   
         </div>
-        
-        <div class="actions col-md-4 text-center">
-            <span class="required required-tag">* </span>Indicates a required field!
+        <div class="actions col-md-2">
+            <span class="required required-tag">* </span>Indicates required field!
         </div>
-
-        <div class="col-md-4">
+        <div class="col-md-4 pull-right">
           <%= submit_tag 'Submit as Final', 
                   :class => "btn btn-success dfe-tooltip btn-lg btn-block field-group-submit", 
                   :name => "submit_entry",
@@ -84,10 +76,8 @@
                       :confirm => "Are you sure you want to submit this entry?"}  
                       %>
         </div>
+    </div>
 
-
-    </div>   
-
-
+    <div class="clear spacer"></div>
 
 <% end %>

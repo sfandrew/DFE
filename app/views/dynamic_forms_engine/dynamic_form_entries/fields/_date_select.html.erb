@@ -1,0 +1,52 @@
+<% field_value ||= nil %>
+
+<div class="col-md-<%= field.field_width %>">
+	<%= f.label field.id, field.name.humanize, :class => "col-md-3 control-label" %>
+	<div class="col-md-7">
+
+
+    	<%= date_select(f,field.id, field_value) %>
+
+     	<% if defined?(errors) and errors.present? %>
+			<small  class= "error-msg" style="color:red"><%= errors.join(', ') %></small>
+	   	<% end %>
+
+  	</div>
+  	<% if field.required? %>
+	   <span class="col-xs-1 required required-field">*</span>
+  	<% end %>
+</div>
+
+<script type="text/javascript">
+	function bdayValue(){
+
+		var bday_month = '';
+		var bday = '';
+		var bday_year = '';
+
+	  	if($('.field-value').val().length == 0){
+	    console.log('test');
+
+	    $('.date-select').eq(0).change(function(){
+	    	bday_month =  $('.date-select').eq(0).val();
+	    	
+	    });
+	    $('.date-select').eq(1).change(function(){
+	    	bday =  $('.date-select').eq(1).val();
+	    	
+	    });
+	    $('.date-select').eq(2).change(function(){
+	    	bday_year =  $('.date-select').eq(2).val();
+
+	    	if(bday_month.length > 0 && bday.length > 0 && bday_year.length >0){
+	     	$('.field-value').val(bday_year +"-" + bday_month + "-" + bday);
+	     }
+	    	
+	    });
+
+	  }
+	}
+
+	bdayValue();
+
+</script>

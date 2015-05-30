@@ -61,10 +61,8 @@ module DynamicFormsEngine
 		else
 			return "No Address"
 		end
-
 	end
-
-
+	
 	def us_states
 	    [
 	      ['-- Select --',''],

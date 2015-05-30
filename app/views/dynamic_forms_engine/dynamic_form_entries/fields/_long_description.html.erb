@@ -1,4 +1,4 @@
 <div class="col-md-<%= field.field_width %>">
-	<%= f.label field.id, field.content_meta.html_safe %>
-	<%= f.hidden_field field.id, value: 'description' %>
+	<%= f.label field.id, field.content_meta.html_safe, :class => 'description' %>
+	<%= f.hidden_field field.id, value: 'long description' %>
 </div>

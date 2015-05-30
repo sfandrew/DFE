@@ -134,6 +134,10 @@ module DynamicFormsEngine
       end
     end
 
+    def date_select_params
+      params
+    end
+
     private
 
     def public_form
