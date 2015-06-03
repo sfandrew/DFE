@@ -9,6 +9,7 @@ module DynamicFormsEngine
     validate :validate_on_draft, :if => Proc.new { |properties| properties.in_progress == true }
     validate :validate_on_submit, :if => Proc.new { |properties| properties.in_progress != true}
     # after_validation :file_upload_error_msgs, :if => Proc.new { |entry| entry.id.nil? }
+    before_create :generate_uuid
     before_create :format_properties, :if => Proc.new { |properties| !properties.properties.nil? }
     before_update :format_properties, :if => Proc.new { |properties| !properties.properties.nil? }
 
@@ -266,6 +267,10 @@ module DynamicFormsEngine
       # end
       p new_properties
       self.properties = new_properties
+    end
+
+    def generate_uuid
+      self.uuid = Digest::SHA1.hexdigest("--#{self.id}--#{self.dynamic_form_type_id}--#{self.user_id}--#{Time.now}--")
     end
     
 

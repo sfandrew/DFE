@@ -74,9 +74,7 @@ module DynamicFormsEngine
         next if value['filename_cache'].blank?
         attachment = @dynamic_form_entry.attachments.build(value)
         if value['filename_cache'].present?
-
           attachment.filename = File.open(File.join(Rails.root, "public", value['filename_cache']))
-
         end
       end
 
@@ -113,6 +111,7 @@ module DynamicFormsEngine
       if params[:submit_entry] && @dynamic_form_entry.save
         redirect_to @dynamic_form_entry, notice: 'Below is your curent Form Entry Submission!'
       elsif params[:save_draft] && @dynamic_form_entry.update(dynamic_form_entry_params)
+        FormEntryMailer.email_entry(@dynamic_form_entry).deliver!
         redirect_to edit_dynamic_form_entry_path(@dynamic_form_entry), alert: "<strong> You have temporary saved your draft. Come back to submit it when ready!</strong>".html_safe 
 
       else

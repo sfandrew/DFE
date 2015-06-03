@@ -63,7 +63,10 @@
                   %>   
         </div>
         <div class="actions col-md-2">
+            <%= check_box_tag 'email_recipient' %>
+            <%= label_tag 'Email Recipient?' %><br>
             <span class="required required-tag">* </span>Indicates required field!
+
         </div>
         <div class="col-md-4 pull-right">
           <%= submit_tag 'Submit as Final', 
