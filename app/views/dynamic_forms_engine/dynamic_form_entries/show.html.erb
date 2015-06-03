@@ -5,9 +5,7 @@
 		<ol class="breadcrumb header transparent-background">
 			<li><%= link_to "Forms", dynamic_form_types_path %></li>
 			<li><%= link_to @dynamic_form_type.name,  form_entries_path(@dynamic_form_type) %></li>
-			<li class="active">Entry: <%= @dynamic_form_type.entries.index { |entry| entry[:id] == params[:id].to_i } + 1 %></li>
-			
-
+			<li class="active">Entry: <%= @dynamic_form_type.entries.index { |entry| entry[:id] == params[:id].to_i || entry[:id] == @dynamic_form_entry.id } + 1 %></li>
 		</ol>
 
 	</div>

@@ -1,11 +1,15 @@
 module DynamicFormsEngine
 	class FormEntryMailer < ActionMailer::Base
-		default from: 'andrew@sfrent.net'
-
+		default from: 'applications@sfrent.net'
 
 		def email_entry(form_entry)
 	  		@form_entry = form_entry
-	  		mail(to: 'andrew@sfrent.net', subject: 'Is this working?')
+	  		if Rails.env.development?
+	  			@domain_name = "http://localhost:3000"
+	  		else
+	  			@domain_name = "https://tenant-application.herokuapp.com"
+	  		end
+	  		mail(to: "#{form_entry.user.email}", subject: form_entry.in_progress ? 'Your Tenant applicaton has been saved' : 'Your Tenant application has been submitted')
 	  	end
 
 	end

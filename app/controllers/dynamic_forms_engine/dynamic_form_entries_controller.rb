@@ -7,8 +7,6 @@ module DynamicFormsEngine
     before_action :public_form, only: [:new, :create, :show], if: -> { current_user.nil? }
     before_action :set_dynamic_form_type, only: [:new, :create, :show, :form_entries, :edit, :update]
 
-    # GET /dynamic_form_entries
-    # GET /dynamic_form_entries.json
     def index
       if !params[:search].blank?
         @dynamic_form_entries = current_user.dynamic_form_entries.search(params[:search])
@@ -34,7 +32,6 @@ module DynamicFormsEngine
           send_data(stream, :type => "text/xml", :filename => "form_entries.xml")
         }
       end
-      
     end
 
     def show
@@ -47,7 +44,6 @@ module DynamicFormsEngine
     end
 
     def new
-      # @attachment = Attachment.new
       if current_user
         @dynamic_form_entry = current_user.dynamic_form_entries.new(dynamic_form_type_id: @dynamic_form_type.id)
       else
@@ -56,15 +52,10 @@ module DynamicFormsEngine
     end
 
     def create
-
       if current_user
         @dynamic_form_entry = current_user.dynamic_form_entries.new(dynamic_form_entry_params)
       else
         @dynamic_form_entry = DynamicFormEntry.new(dynamic_form_entry_params)
-      end
-
-      if params[:signature]
-        @dynamic_form_entry.signature = params[:signature]
       end
 
       params[:save_draft] ? @dynamic_form_entry.in_progress = true : @dynamic_form_entry.in_progress = false 
@@ -78,28 +69,28 @@ module DynamicFormsEngine
         end
       end
 
-      if params[:submit_entry] && @dynamic_form_entry.save
-        redirect_to dynamic_form_entry_path(@dynamic_form_entry) + "?iframe=" + (params[:iframe] == "1" ? "1" : "0"), notice: "<strong>You have submitted your form entry!</strong>".html_safe
-      elsif params[:save_draft] && @dynamic_form_entry.save
-        redirect_to edit_dynamic_form_entry_path(@dynamic_form_entry) + "?iframe=" + (params[:iframe] == "1" ? "1" : "0"), alert: "<strong> You have temporary saved your draft. Come back to submit it when ready!</strong>".html_safe
+      if @dynamic_form_entry.save
+        if params[:submit_entry]
+          FormEntryMailer.email_entry(@dynamic_form_entry).deliver
+          redirect_to dynamic_form_entry_path(@dynamic_form_entry) + "?iframe=" + (params[:iframe] == "1" ? "1" : "0"), notice: "<strong>You have submitted your form entry!</strong>".html_safe
+        else
+          FormEntryMailer.email_entry(@dynamic_form_entry).deliver if params[:email_recipient]
+          redirect_to edit_dynamic_form_entry_path(@dynamic_form_entry) + "?iframe=" + (params[:iframe] == "1" ? "1" : "0"), alert: "<strong> You have temporary saved your draft. Come back to submit it when ready!</strong>".html_safe
+        end
       else
         @dynamic_form_entry.format_properties
         render "new"
       end
+
     end
 
     def edit
+      redirect_to root_path, alert: 'You cannot edit your application once submitted' unless @dynamic_form_entry.in_progress
       @file_upload = current_user.dynamic_form_entries.where(:id => params[:id]).first
 
     end
 
     def update
-
-      # @file_upload = current_user.dynamic_form_entries.where(:id => params[:id]).first
-
-      if params[:signature]
-        @dynamic_form_entry.signature = params[:signature]
-      end
       if params[:save_draft]
         @dynamic_form_entry.in_progress = true
       else 
@@ -107,24 +98,21 @@ module DynamicFormsEngine
         @dynamic_form_entry.in_progress = false
       end
 
-      
-      if params[:submit_entry] && @dynamic_form_entry.save
-        redirect_to @dynamic_form_entry, notice: 'Below is your curent Form Entry Submission!'
-      elsif params[:save_draft] && @dynamic_form_entry.update(dynamic_form_entry_params)
-        FormEntryMailer.email_entry(@dynamic_form_entry).deliver!
-        redirect_to edit_dynamic_form_entry_path(@dynamic_form_entry), alert: "<strong> You have temporary saved your draft. Come back to submit it when ready!</strong>".html_safe 
-
+      if @dynamic_form_entry.update_attributes(dynamic_form_entry_params)
+        if params[:submit_entry]
+          FormEntryMailer.email_entry(@dynamic_form_entry).deliver
+          redirect_to @dynamic_form_entry, notice: 'Below is your curent Form Entry Submission!'
+        else
+          FormEntryMailer.email_entry(@dynamic_form_entry).deliver if params[:email_recipient]
+          redirect_to edit_dynamic_form_entry_path(@dynamic_form_entry), alert: "<strong> You have temporary saved your draft. Come back to submit it when ready!</strong>".html_safe
+        end
       else
-       
         @dynamic_form_entry.assign_attributes(dynamic_form_entry_params)
         @dynamic_form_entry.format_properties
         render "edit"
       end
-
     end
 
-    # DELETE /dynamic_form_entries/1
-    # DELETE /dynamic_form_entries/1.json
     def destroy
       @dynamic_form_entry.destroy
       respond_to do |format|
@@ -133,9 +121,6 @@ module DynamicFormsEngine
       end
     end
 
-    def date_select_params
-      params
-    end
 
     private
 
@@ -165,8 +150,9 @@ module DynamicFormsEngine
       if current_user.nil?
         @dynamic_form_entry = DynamicFormEntry.where(:id => params[:id]).first
       else
-        @dynamic_form_entry = current_user.dynamic_form_entries.where( :id => params[:id] ).first
+        @dynamic_form_entry = current_user.dynamic_form_entries.where( :id => params[:id] ).first || DynamicFormEntry.find_by_uuid(params[:id])
       end
+    
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

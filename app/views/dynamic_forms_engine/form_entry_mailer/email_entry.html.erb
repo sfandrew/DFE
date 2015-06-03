@@ -1,7 +1,11 @@
-Your current application can accessed thru this url
-
-<%= @form_entry.uuid %>
-
-<p>Is this working?</p>
-
-<%= @form_entry %>
+<% if @form_entry.in_progress %>
+	Your current application is in progress and can accessed thru this url 
+	<br>
+	<br>
+		<%= link_to "#{@domain_name}/dynamic_forms_engine/dynamic_form_entries/#{@form_entry.uuid}", "#{@domain_name}/dynamic_forms_engine/dynamic_form_entries/#{@form_entry.uuid}/edit" %>
+<% else %>
+	Thank you for submitting your application, your application can be viewed here
+	<br>
+	<br> 
+		<%= link_to "#{@domain_name}/dynamic_forms_engine/dynamic_form_entries/#{@form_entry.uuid}", "#{@domain_name}/dynamic_forms_engine/dynamic_form_entries/#{@form_entry.id}" %>
+<% end %>
