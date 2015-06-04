@@ -45,7 +45,8 @@ module DynamicFormsEngine
           end
         end
 
-        errors = dynamic_form_entry.errors.full_messages_for(field.name.to_sym)
+        errors = dynamic_form_entry.errors.full_messages_for(field.name.to_sym) if field.required?
+        #errors are being added based on name, fields with same name will see errors 
         return_html += render_field_with_value(field,errors,builder,dynamic_form_entry)
 
       end

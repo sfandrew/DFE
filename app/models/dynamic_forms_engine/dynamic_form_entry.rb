@@ -79,7 +79,7 @@ module DynamicFormsEngine
             errors.add field.name, 'check box must be checked!' unless self.properties[field.id.to_s] == "1"
           elsif field.field_type == "signature" && field.required? &&  self.signature.size < 25
             errors.add field.name, 'must not be blank'
-          elsif field.field_type != "signature" && field.required? && properties[field.id.to_s].blank?
+          elsif  field.required? && properties[field.id.to_s].blank?
             errors.add field.name, 'must not be blank'
           end
         end
