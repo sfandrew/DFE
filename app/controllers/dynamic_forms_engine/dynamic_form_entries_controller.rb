@@ -98,7 +98,24 @@ module DynamicFormsEngine
         @dynamic_form_entry.in_progress = false
       end
 
+      #  dynamic_form_entry_params[:attachments_attributes].each do |key, value|
+
+      #   next if value[:id].present?
+      
+      #   attachment = @dynamic_form_entry.attachments.build(value)
+      #   if value['filename_cache'].present?
+      #     attachment.filename = File.open(File.join(Rails.root, "public", value['filename_cache']))
+      #   end
+      # end
+
       if @dynamic_form_entry.update_attributes(dynamic_form_entry_params)
+        #deletes saved attachments
+        dynamic_form_entry_params[:attachments_attributes].each do |key, value|
+          if value['remove_filename'] == "1"
+            @dynamic_form_entry.attachments.find(value[:id]).delete
+          end
+        end
+
         if params[:submit_entry]
           FormEntryMailer.email_entry(@dynamic_form_entry).deliver
           redirect_to @dynamic_form_entry, notice: 'Below is your curent Form Entry Submission!'
@@ -157,7 +174,7 @@ module DynamicFormsEngine
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def dynamic_form_entry_params
-      params.require(:dynamic_form_entry).permit(:dynamic_form_type_id,:signature,:in_progress,:attachments_attributes => [:content_name,:filename, :filename_cache, :content_meta],
+      params.require(:dynamic_form_entry).permit(:dynamic_form_type_id,:signature,:in_progress,:attachments_attributes => [:id, :content_name,:filename, :filename_cache, :remove_filename,:content_meta],
         :contacts_attributes => [:phone, :contact_type,:user_id, :first_name, :company,:email,:uuid]).tap do |whitelisted|
         whitelisted[:properties] = params[:dynamic_form_entry][:properties]
       end
