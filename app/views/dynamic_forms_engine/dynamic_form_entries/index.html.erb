@@ -2,17 +2,12 @@
   <div class="col-md-12">
 
     <ol class="breadcrumb header">
-      <li><%= link_to "Forms", dynamic_form_types_path %></li>
+      <li><%= link_to "Forms", '' %></li>
       <li>All Entries</li>
     </ol>
 
   </div>
-  <!-- div class="col-md-6">
-    <div class="btn-group pull-right">
-      <%= link_to "CSV", "#", class: 'btn btn-default' %>
-      <%= link_to "Excel", "#", class: 'btn btn-default' %>
-    </div>
-  </div -->
+
 </div>
 
 <fieldset>
@@ -107,12 +102,6 @@
           </td>
           <td>
             <%= link_to 'View', dynamic_form_entry, :class => 'btn btn-info' %>
-          </td>
-          <td>
-            <%= link_to 'Delete', dynamic_form_entry, 
-                  method: :delete, 
-                  data: { confirm: 'Are you sure?' }, 
-                  class: 'btn btn-danger' %>
           </td>
 
         </tr>

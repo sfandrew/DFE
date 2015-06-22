@@ -8,16 +8,19 @@ $(function(){
 	//adding badges to breadcrumbs when form errors
 	$(window).on('load', function(){
 		DFE.formErrorBadges();
+		$('.submit-entry-button').hide();
 	});
 
 	//next step
 	$('.next').on('click', function(){
 		DFE.nextStep( $('.field-group') );
+		DFE.toggleSubmit();
 	});
 
 	//prev
 	$('.previous').on('click', function(){
 		DFE.prevStep( $('.field-group') );
+		DFE.toggleSubmit();
 	});
 
 	//breadcrumbs
@@ -26,6 +29,7 @@ $(function(){
 		DFE.resetBreadcrumb();
 		DFE.toggleBreadcrumb( $this );
 		DFE.gotoStep( $this.data('step-id') );
+		DFE.toggleSubmit();
 	});
 
 	//tooltips
@@ -86,7 +90,6 @@ DFE.nextStep = function($field_group){
 	$.each( $field_group, function(i, field){
 		
 		var $field = $(field);
-
 		//if last
 		if(i+1 === $field_group.length){
 			DFE.resetBreadcrumb();
@@ -94,6 +97,7 @@ DFE.nextStep = function($field_group){
 			DFE.gotoStep( $('.field-group:eq(0)').attr('id') );
 		}
 
+		
 		if($field.hasClass('active')){
 			$field.removeClass('active');
 			$field_group.eq(i+1).addClass('active');
@@ -102,6 +106,23 @@ DFE.nextStep = function($field_group){
 			return false;
 		}
 
+	});
+}
+
+DFE.toggleSubmit = function(){
+	$breadcrumbs = $('.btn-breadcrumb > a');
+	
+	$.each($breadcrumbs, function(index,value){
+
+		if($(value).data("field-group-name") == "Agreement" && $(value).hasClass("btn-primary")){
+			$('.save-draft-button').hide();
+			$('.save-draft-email').hide();
+			$('.submit-entry-button').show();
+		}else{
+			$('.save-draft-button').show();
+			$('.save-draft-email').show();
+			$('.submit-entry-button').hide();
+		}	
 	});
 }
 

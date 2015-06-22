@@ -40,9 +40,17 @@ module DynamicFormsEngine
     def valid_phone?(field_value)
       !(field_value =~ /(?:(?:\+?1\s*(?:[.-]\s*)?)?(?:(\s*([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]‌​)\s*)|([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]))\s*(?:[.-]\s*)?)([2-9]1[02-9]‌​|[2-9][02-9]1|[2-9][02-9]{2})\s*(?:[.-]\s*)?([0-9]{4})\s*(?:\s*(?:#|x\.?|ext\.?|extension)\s*(\d+)\s*)?$/).nil?
     end
-
     def valid_currency?(field_value)
       !(field_value =~ /\A\d+(?:\.\d{0,2})?\z/).nil?
+    end
+
+    def valid_social_security?(field_value)
+      ss = field_value.to_i
+      if ss == 0
+        return false
+      else 
+        Math.log10(ss).to_i + 1 == 9
+      end
     end
 
     def valid_agreement?(field_value)
@@ -59,6 +67,8 @@ module DynamicFormsEngine
             errors.add(field.name,'Enter a valid phone number including area code!') unless valid_phone?(self.properties[field.id.to_s])
           elsif field.field_type == "currency"
             errors.add(field.name, 'Enter a valid amount!') unless valid_currency?(self.properties[field.id.to_s])
+          elsif field.field_type == "password"
+            errors.add(field.name, 'Please enter social security with only numbers') unless valid_social_security?(self.properties[field.id.to_s])
           end
         end
       end
@@ -75,6 +85,8 @@ module DynamicFormsEngine
             errors.add(field.name, 'Enter a valid amount!') unless valid_currency?(self.properties[field.id.to_s])
           elsif field.field_type == "agreement"
             errors.add(field.name, 'You must agree to the form before you can submit!') unless valid_agreement?(self.properties[field.id.to_s])
+          elsif field.field_type == "password"
+            errors.add(field.name, 'Please enter social security with only numbers') unless valid_social_security?(self.properties[field.id.to_s])
           elsif field.field_type == "check_box" && field.required? || field.field_type =="agreement" && field.required?
             errors.add field.name, 'check box must be checked!' unless self.properties[field.id.to_s] == "1"
           elsif field.field_type == "signature" && field.required? &&  self.signature.size < 25
