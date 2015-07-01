@@ -29,7 +29,7 @@
 
       <% if params[:search]
         print_url = request.original_url.sub!('dynamic_form_entries?','dynamic_form_entries.print?')
-      else 
+      else
         print_url = dynamic_form_entries_path(format: :print)
       end %>
 
@@ -63,7 +63,7 @@
 
 
   <tbody>
-    <% if @dynamic_form_entries %>
+    <% if @dynamic_form_entries.size > 0 %>
       <% @dynamic_form_entries.each do |dynamic_form_entry| %>
         <tr>
           <td><strong><%= dynamic_form_entry.dynamic_form_type.name %></strong></td>
@@ -88,7 +88,7 @@
                 <i class="fa fa-check"></i> SUBMITTED
               <% end %>
             <% end %>
-          </td>  
+          </td>
 
           <td>
             <%= dynamic_form_entry.created_at.strftime(" %l:%M %p %b. %d, %Y") %>
@@ -113,7 +113,7 @@
     <% end %>
   </tbody>
 </table>
-  
+
   <% if request.original_url =~ /(.print)/ %>
     <%= javascript_tag "window.print()" %>
   <% end %>
@@ -125,5 +125,3 @@
     });
   });
 </script>
-
-
