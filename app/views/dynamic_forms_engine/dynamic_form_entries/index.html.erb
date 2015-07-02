@@ -63,7 +63,7 @@
 
 
   <tbody>
-    <% if @dynamic_form_entries.size > 0 %>
+    <% if !@dynamic_form_entries.blank? %>
       <% @dynamic_form_entries.each do |dynamic_form_entry| %>
         <tr>
           <td><strong><%= dynamic_form_entry.dynamic_form_type.name %></strong></td>
