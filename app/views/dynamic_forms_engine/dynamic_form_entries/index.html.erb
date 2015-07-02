@@ -66,7 +66,7 @@
     <% if !@dynamic_form_entries.blank? %>
       <% @dynamic_form_entries.each do |dynamic_form_entry| %>
         <tr>
-          <td><strong><%= dynamic_form_entry.dynamic_form_type.name %></strong></td>
+          <td><strong><%= dynamic_form_entry.dynamic_form_type.try(:name) %></strong></td>
 
           <td class="form-properties">
               <% dynamic_form_entry.properties.first(5).each do |key,value| %>
