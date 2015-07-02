@@ -69,13 +69,9 @@
           <td><strong><%= dynamic_form_entry.dynamic_form_type.name %></strong></td>
 
           <td class="form-properties">
-            <% if !dynamic_form_entry.properties.empty? %>
               <% dynamic_form_entry.properties.first(5).each do |key,value| %>
                 <li><%= value[:type] %> field</li>
               <% end %>
-            <% else %>
-              No Properties
-            <% end %>
           </td>
 
           <td>
