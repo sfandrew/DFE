@@ -13,20 +13,20 @@ module DynamicFormsEngine
       else
         @dynamic_form_entries = current_user.dynamic_form_entries.all #DynamicFormEntry.all
       end
-      @entries_name = @dynamic_form_entries.map { |form_entry| [form_entry.dynamic_form_type.name, form_entry.dynamic_form_type.id] }.uniq
+      @entries_name = @dynamic_form_entries.map { |form_entry| [form_entry.dynamic_form_type.name, form_entry.dynamic_form_type.id] }.uniq unless @Dynamic_form_entries.blank?
       respond_to do |format|
         format.print { render "index.html.erb" }
       end
     end
 
-    def form_entries      
+    def form_entries
       @dynamic_form_entries   = current_user.dynamic_form_entries.where(:dynamic_form_type_id =>  @dynamic_form_type.id).all
       @entries_name = @dynamic_form_entries.map { |form_entry| [form_entry.dynamic_form_type.name, form_entry.dynamic_form_type.id] }.uniq
       respond_to do |format|
         format.html
         format.print { render "form_entries.html.erb" }
         format.csv { render text: DynamicFormEntry.entries_to_csv(@dynamic_form_entries, @dynamic_form_type)}
-        format.xml { 
+        format.xml {
           @array_for_xml = DynamicFormEntry.entries_to_array(@dynamic_form_entries, @dynamic_form_type)
           stream = render_to_string(:template => "dynamic_forms_engine/dynamic_form_entries/show.xml.erb")
           send_data(stream, :type => "text/xml", :filename => "form_entries.xml")
@@ -58,9 +58,9 @@ module DynamicFormsEngine
         @dynamic_form_entry = DynamicFormEntry.new(dynamic_form_entry_params)
       end
 
-      params[:save_draft] ? @dynamic_form_entry.in_progress = true : @dynamic_form_entry.in_progress = false 
+      params[:save_draft] ? @dynamic_form_entry.in_progress = true : @dynamic_form_entry.in_progress = false
 
-      #builds attachments 
+      #builds attachments
       dynamic_form_entry_params[:attachments_attributes].each do |key, value|
         next if value['filename_cache'].blank?
         attachment = @dynamic_form_entry.attachments.build(value)
@@ -93,7 +93,7 @@ module DynamicFormsEngine
     def update
       if params[:save_draft]
         @dynamic_form_entry.in_progress = true
-      else 
+      else
         @dynamic_form_entry.assign_attributes(dynamic_form_entry_params)
         @dynamic_form_entry.in_progress = false
       end
@@ -101,7 +101,7 @@ module DynamicFormsEngine
       #  dynamic_form_entry_params[:attachments_attributes].each do |key, value|
 
       #   next if value[:id].present?
-      
+
       #   attachment = @dynamic_form_entry.attachments.build(value)
       #   if value['filename_cache'].present?
       #     attachment.filename = File.open(File.join(Rails.root, "public", value['filename_cache']))
@@ -169,7 +169,7 @@ module DynamicFormsEngine
       else
         @dynamic_form_entry = current_user.dynamic_form_entries.where( :id => params[:id] ).first || DynamicFormEntry.find_by_uuid(params[:id])
       end
-    
+
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
