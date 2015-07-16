@@ -15,22 +15,22 @@ module DynamicFormsEngine
 
 
 
-    def get_property_value(field_id)
-      if !properties.blank?
-        temp = properties.find { |key, value|  value[:id].to_i == field_id }
-        temp[1][:value] if temp && temp[1]
-      end
-    end
+    # def get_property_value(field_id)
+    #   if !properties.blank?
+    #     temp = properties.find { |key, value|  value[:id].to_i == field_id }
+    #     temp[1][:value] if temp && temp[1]
+    #   end
+    # end
 
-    def file_upload_preview(field_id)
-      self.properties.each do |index, field|
-        if field[:type] == 'file_upload' && field[:id].to_i == field_id && !field[:value].to_s.empty?
-          attachment = Attachment.find(field[:value])
-          return attachment
-        end
-      end    
-      return nil
-    end
+    # def file_upload_preview(field_id)
+    #   self.properties.each do |index, field|
+    #     if field[:type] == 'file_upload' && field[:id].to_i == field_id && !field[:value].to_s.empty?
+    #       attachment = Attachment.find(field[:value])
+    #       return attachment
+    #     end
+    #   end    
+    #   return nil
+    # end
 
     def valid_email?(field_value)
       !(field_value =~ /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/).nil?
@@ -40,6 +40,7 @@ module DynamicFormsEngine
     def valid_phone?(field_value)
       !(field_value =~ /(?:(?:\+?1\s*(?:[.-]\s*)?)?(?:(\s*([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]‌​)\s*)|([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]))\s*(?:[.-]\s*)?)([2-9]1[02-9]‌​|[2-9][02-9]1|[2-9][02-9]{2})\s*(?:[.-]\s*)?([0-9]{4})\s*(?:\s*(?:#|x\.?|ext\.?|extension)\s*(\d+)\s*)?$/).nil?
     end
+
     def valid_currency?(field_value)
       !(field_value =~ /\A\d+(?:\.\d{0,2})?\z/).nil?
     end
@@ -55,6 +56,10 @@ module DynamicFormsEngine
 
     def valid_agreement?(field_value)
       field_value == "1"
+    end
+
+    def attachments_uploaded
+      attachments.map(&:content_meta)
     end
 
 
@@ -74,9 +79,12 @@ module DynamicFormsEngine
       end
     end
 
+
     def validate_on_submit
-      dynamic_form_type.fields.each do |field|   
-        if !self.properties[field.id.to_s].blank? || field.required? && !DynamicFormsEngine::DynamicFormField.default_width.include?(field.field_type)
+      dynamic_form_type.fields.each do |field|
+        if field.field_type == "file_upload" && field.required? && !attachments_uploaded.include?(properties[field.id.to_s])
+            errors.add(field.name, 'Please upload file')
+        elsif properties[field.id.to_s].blank? && field.required? #|| (properties[field.id.to_s].blank? && field.required?) || (!properties[field.id.to_s].blank? && !field.required?)
           if field.field_type == "email_validation"
             errors.add(field.name,'Not a valid email!') unless valid_email?(self.properties[field.id.to_s])
           elsif field.field_type == "phone_validation"
@@ -87,16 +95,36 @@ module DynamicFormsEngine
             errors.add(field.name, 'You must agree to the form before you can submit!') unless valid_agreement?(self.properties[field.id.to_s])
           elsif field.field_type == "password"
             errors.add(field.name, 'Please enter social security with only numbers') unless valid_social_security?(self.properties[field.id.to_s])
-          elsif field.field_type == "check_box" && field.required? || field.field_type =="agreement" && field.required?
-            errors.add field.name, 'check box must be checked!' unless self.properties[field.id.to_s] == "1"
-          elsif field.field_type == "signature" && field.required? &&  self.signature.size < 25
-            errors.add field.name, 'must not be blank'
-          elsif  field.required? && properties[field.id.to_s].blank?
+          else
             errors.add field.name, 'must not be blank'
           end
         end
       end
     end
+
+    # def validate_on_submit
+    #   dynamic_form_type.fields.each do |field|
+    #     if !self.properties[field.id.to_s].blank? || field.required? && !DynamicFormsEngine::DynamicFormField.default_width.include?(field.field_type)
+    #       if field.field_type == "email_validation"
+    #         errors.add(field.name,'Not a valid email!') unless valid_email?(self.properties[field.id.to_s])
+    #       elsif field.field_type == "phone_validation"
+    #         errors.add(field.name,'Enter a valid phone number including area code!') unless valid_phone?(self.properties[field.id.to_s])
+    #       elsif field.field_type == "currency"
+    #         errors.add(field.name, 'Enter a valid amount!') unless valid_currency?(self.properties[field.id.to_s])
+    #       elsif field.field_type == "agreement"
+    #         errors.add(field.name, 'You must agree to the form before you can submit!') unless valid_agreement?(self.properties[field.id.to_s])
+    #       elsif field.field_type == "password"
+    #         errors.add(field.name, 'Please enter social security with only numbers') unless valid_social_security?(self.properties[field.id.to_s])
+    #       elsif field.field_type == "check_box" && field.required? || field.field_type =="agreement" && field.required?
+    #         errors.add field.name, 'check box must be checked!' unless self.properties[field.id.to_s] == "1"
+    #       elsif field.field_type == "signature" && field.required? &&  self.signature.size < 25
+    #         errors.add field.name, 'must not be blank'
+    #       elsif  field.required? && properties[field.id.to_s].blank?
+    #         errors.add field.name, 'must not be blank'
+    #       end
+    #     end
+    #   end
+    # end
 
     def file_upload_error_msgs
       if self.errors.size >= 1
