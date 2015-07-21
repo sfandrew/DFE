@@ -26,7 +26,7 @@ module DynamicFormsEngine
             return_html += "</div></fieldset>"    # Close field set
             cols = 0
           end
-          return_html += "<fieldset id='step_#{field.id}' class='field-group'><legend class='legend-title'>#{field.name.humanize}</legend><div id='input-box'>"
+          return_html += "<fieldset id='step_#{field.id}' data-field-group-name='#{field.name}' class='field-group'><legend class='legend-title'>#{field.name}</legend><div class='input-box'>"
           form_group_exists = true
         
         elsif field.field_type != "field_group"

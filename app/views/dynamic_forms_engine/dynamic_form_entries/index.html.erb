@@ -51,7 +51,7 @@
   <thead>
     <tr class="well">
       <th>Type</th>
-      <th>Properties</th>
+      <!-- <th>Properties</th> WAS USED TO SHOW WHAT FIELDS WERE INCLUDED -->
       <th>Status</th>
       <th>Submitted</th>
       <th width="1%"></th>
@@ -68,11 +68,11 @@
         <tr>
           <td><strong><%= dynamic_form_entry.dynamic_form_type.try(:name) %></strong></td>
 
-          <td class="form-properties">
+          <!-- <td class="form-properties">
               <% dynamic_form_entry.properties.first(5).each do |key,value| %>
                 <li><%= value[:type] %> field</li>
               <% end %>
-          </td>
+          </td> -->
 
           <td>
             <% if dynamic_form_entry.in_progress %>
