@@ -46,7 +46,7 @@ module DynamicFormsEngine
     end
 
     def valid_social_security?(field_value)
-      ss = field_value.to_i
+      ss = field_value.delete('-').to_i
       if ss == 0
         return false
       else 
