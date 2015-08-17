@@ -5,10 +5,11 @@ var DFE = DFE || {};
 $(function(){
 	DFE.initStepForm();
 
-	//adding badges to breadcrumbs when form errors
+	//adding badges to breadcrumbs when form errors && points to last section clicked
 	$(window).on('load', function(){
 		DFE.formErrorBadges();
 		$('.submit-entry-button').hide();
+		DFE.lastSavedSection(); 
 	});
 
 	//next step
@@ -25,13 +26,17 @@ $(function(){
 
 	//breadcrumbs
 	$('.btn-breadcrumb a').on('click', function(){
+		var record_id = <%=  params[:id] || false  %>;
 		var $this = $(this);
 		DFE.resetBreadcrumb();
-		DFE.toggleBreadcrumb( $this );
+		DFE.toggleBreadcrumb($this);
 		DFE.gotoStep( $this.data('step-id') );
 		DFE.toggleSubmit();
+		// trigger ajax on edit action
+		if(record_id != false){
+			DFE.savedSection($this,record_id);
+		}
 	});
-
 	//tooltips
 	$('.dfe-tooltip').tooltip();
 
@@ -50,6 +55,24 @@ $(function(){
 DFE.initStepForm = function(){
 	$('.field-group:eq(0)').addClass('active');
 	DFE.toggleBreadcrumb( $('.btn-breadcrumb a:eq(0)') ) ;
+}
+
+DFE.lastSavedSection = function(){
+	var section = <%= @dynamic_form_entry.signature ? "'#{@dynamic_form_entry.signature}'".html_safe : false %>;
+	
+	if(section != false){
+		$(".btn-breadcrumb > [data-field-group-name='"+section+"']").click();
+	}
+}
+
+DFE.savedSection = function($section,record){
+	var clicked_section = $section.attr('data-field-group-name');
+	$.ajax({
+		method: "PUT",
+		url: "/dynamic_forms_engine/dynamic_form_entries/" + record,
+		dataType: "json",
+		data: {'dynamic_form_entry[signature]': clicked_section}
+	});
 }	
 
 DFE.formErrorBadges = function(){

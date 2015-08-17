@@ -6,12 +6,12 @@ module DynamicFormsEngine
     serialize :properties, Hash
     
 
-    validate :validate_on_draft, :if => Proc.new { |properties| properties.in_progress == true }
-    validate :validate_on_submit, :if => Proc.new { |properties| properties.in_progress != true}
+    validate :validate_on_draft, :if => Proc.new { |entry| entry.in_progress == true }
+    validate :validate_on_submit, :if => Proc.new { |entry| entry.in_progress != true}
     # after_validation :file_upload_error_msgs, :if => Proc.new { |entry| entry.id.nil? }
     before_create :generate_uuid
-    before_create :format_properties, :if => Proc.new { |properties| !properties.properties.nil? }
-    before_update :format_properties, :if => Proc.new { |properties| !properties.properties.nil? }
+    before_create :format_properties, :if => Proc.new { |entry| !entry.properties.nil? }
+    before_update :format_properties, :if => Proc.new { |entry| !entry.properties.nil? && !entry.signature_changed? }
 
 
 
@@ -64,19 +64,19 @@ module DynamicFormsEngine
 
 
     def validate_on_draft
-      dynamic_form_type.fields.each do |field|
-        if !self.properties[field.id.to_s].blank?
-          if field.field_type == "email_validation"
-            errors.add(field.name,'Not a valid email!') unless valid_email?(self.properties[field.id.to_s])
-          elsif field.field_type == "phone_validation"
-            errors.add(field.name,'Enter a valid phone number including area code!') unless valid_phone?(self.properties[field.id.to_s])
-          elsif field.field_type == "currency"
-            errors.add(field.name, 'Enter a valid amount!') unless valid_currency?(self.properties[field.id.to_s])
-          elsif field.field_type == "password"
-            errors.add(field.name, 'Please enter social security with only numbers') unless valid_social_security?(self.properties[field.id.to_s])
-          end
-        end
-      end
+      # dynamic_form_type.fields.each do |field|
+      #   if !self.properties[field.id.to_s].blank?
+      #     if field.field_type == "email_validation"
+      #       errors.add(field.name,'Not a valid email!') unless valid_email?(self.properties[field.id.to_s])
+      #     elsif field.field_type == "phone_validation"
+      #       errors.add(field.name,'Enter a valid phone number including area code!') unless valid_phone?(self.properties[field.id.to_s])
+      #     elsif field.field_type == "currency"
+      #       errors.add(field.name, 'Enter a valid amount!') unless valid_currency?(self.properties[field.id.to_s])
+      #     elsif field.field_type == "password"
+      #       errors.add(field.name, 'Please enter social security with only numbers') unless valid_social_security?(self.properties[field.id.to_s])
+      #     end
+      #   end
+      # end
     end
 
 
@@ -280,7 +280,6 @@ module DynamicFormsEngine
     #  This function transmutes the properties to a form that doesn't rely on the original field object
     # Should be run as before_create filter
     def format_properties
-      
       old_properties = self.properties
       old_entry = DynamicFormEntry.find(self.id) if !self.new_record?
       new_properties = {}
