@@ -11,7 +11,7 @@ module DynamicFormsEngine
     # after_validation :file_upload_error_msgs, :if => Proc.new { |entry| entry.id.nil? }
     before_create :generate_uuid
     before_create :format_properties, :if => Proc.new { |entry| !entry.properties.nil? }
-    before_update :format_properties, :if => Proc.new { |entry| !entry.properties.nil? && !entry.signature_changed? }
+    before_update :format_properties, :if => Proc.new { |entry| !entry.properties.nil? && !entry.last_section_saved_changed? }
 
 
 

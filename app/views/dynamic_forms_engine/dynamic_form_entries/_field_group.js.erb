@@ -58,7 +58,7 @@ DFE.initStepForm = function(){
 }
 
 DFE.lastSavedSection = function(){
-	var section = <%= @dynamic_form_entry.signature ? "'#{@dynamic_form_entry.signature}'".html_safe : false %>;
+	var section = <%= @dynamic_form_entry.last_section_saved ? "'#{@dynamic_form_entry.last_section_saved}'".html_safe : false %>;
 	
 	if(section != false){
 		$(".btn-breadcrumb > [data-field-group-name='"+section+"']").click();
@@ -71,7 +71,7 @@ DFE.savedSection = function($section,record){
 		method: "PUT",
 		url: "/dynamic_forms_engine/dynamic_form_entries/" + record,
 		dataType: "json",
-		data: {'dynamic_form_entry[signature]': clicked_section}
+		data: {'dynamic_form_entry[last_section_saved]': clicked_section}
 	});
 }	
 

@@ -138,7 +138,7 @@ module DynamicFormsEngine
     private
 
     def update_section_tab_via_ajax
-       @dynamic_form_entry.signature =  dynamic_form_entry_params[:signature]
+       @dynamic_form_entry.last_section_saved =  dynamic_form_entry_params[:last_section_saved]
        @dynamic_form_entry.save(:validate => false)
     end
 
@@ -175,7 +175,7 @@ module DynamicFormsEngine
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def dynamic_form_entry_params
-      params.require(:dynamic_form_entry).permit(:dynamic_form_type_id,:signature,:in_progress,:attachments_attributes => [:id, :content_name,:filename, :filename_cache, :remove_filename,:content_meta],
+      params.require(:dynamic_form_entry).permit(:dynamic_form_type_id,:signature,:last_section_saved, :in_progress,:attachments_attributes => [:id, :content_name,:filename, :filename_cache, :remove_filename,:content_meta],
         :contacts_attributes => [:phone, :contact_type,:user_id, :first_name, :company,:email,:uuid]).tap do |whitelisted|
         whitelisted[:properties] = params[:dynamic_form_entry][:properties]
       end
