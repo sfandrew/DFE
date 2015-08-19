@@ -70,17 +70,13 @@ DEPRECATED???
 
 <script type="text/javascript">
 $(document).ready(function(){
-
     $('.option-other').on('change', function(){
       if($(this).val() == "Other"){
-        //console.log($(this));
        $(this).closest('.options_select_container')
           .find('.option-field').show()
           .find('.other-select').removeAttr('disabled');
-        //console.log("The other options was selected!");
       }
       else if($(this).val() != "Other"){
-        //console.log("The other option was not selected");
         $(this).closest('.options_select_container')
             .find('.option-field').hide()
             .find(".other-select").attr('disabled','disabled');

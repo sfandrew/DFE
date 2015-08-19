@@ -5,11 +5,16 @@
 
 <div class="clear spacer"></div>
 
-<% if @dynamic_form_type.form_type != "Multi-step" %>
-	<%= render partial: 'default_form', locals: { dynamic_form_entry: @dynamic_form_entry} %>
-<% else %>
+<% if @dynamic_form_type.is_multi_step? %> 
 	<%= render partial: 'multistep_form', locals: { dynamic_form_entry: @dynamic_form_entry} %>
-	<%= render 'field_group' %>
+	<%= render partial: 'field_group', locals: { dynamic_form_entry: @dynamic_form_entry} %>
+	<% if @dynamic_form_entry.is_tenant_app? %>
+		<%= render partial: 'building_apartments.js', locals: { dynamic_form_entry: @dynamic_form_entry,  tenant_app: true} %>
+	<% else %>
+		<%= render partial: 'building_apartments.js', locals: { dynamic_form_entry: @dynamic_form_entry, tenant_app: false} %>
+	<% end %>
+<% else %>
+	<%= render partial: 'default_form', locals: { dynamic_form_entry: @dynamic_form_entry} %>
 <% end %>
 
 <script type="text/javascript">

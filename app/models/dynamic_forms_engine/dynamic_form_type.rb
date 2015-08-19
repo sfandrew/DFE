@@ -9,6 +9,10 @@ module DynamicFormsEngine
     validates :form_type, presence: true, :inclusion => { :in => %w(Default-form Multi-step), 
                                                       :message => "%{value} is not a valid choice" }
     validate :field_group_requirement, :field_group_order, :public_form, :contact_field_limit, :multi_step_requirement
+
+    def is_multi_step?
+      form_type == 'Multi-step'
+    end
  
     def public_form
       if is_public

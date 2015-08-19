@@ -32,6 +32,10 @@ module DynamicFormsEngine
     #   return nil
     # end
 
+    def is_tenant_app?
+      dynamic_form_type.name == "Tenant Application"
+    end
+
     def valid_email?(field_value)
       !(field_value =~ /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/).nil?
     end

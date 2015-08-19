@@ -3,10 +3,14 @@
 	<h4><%= @dynamic_form_entry.dynamic_form_type.description %></h4>
 </div>
 
-<% if @dynamic_form_type.form_type == "Multi-step" %> 
+<% if @dynamic_form_type.is_multi_step? %> 
 	<%= render partial: 'multistep_form', locals: { dynamic_form_entry: @dynamic_form_entry} %>
 	<%= render partial: 'field_group', locals: { dynamic_form_entry: @dynamic_form_entry} %>
-
+	<% if @dynamic_form_entry.is_tenant_app? %>
+		<%= render partial: 'building_apartments.js', locals: { dynamic_form_entry: @dynamic_form_entry,  tenant_app: true} %>
+	<% else %>
+		<%= render partial: 'building_apartments.js', locals: { dynamic_form_entry: @dynamic_form_entry, tenant_app: false} %>
+	<% end %>
 <% else %>
 	<%= render partial: 'default_form', locals: { dynamic_form_entry: @dynamic_form_entry} %>
 <% end %>

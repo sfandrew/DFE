@@ -1,0 +1,81 @@
+<script type="text/javascript">
+$(document).ready(function(){
+
+	var BUILDING_DROPDOWN = BUILDING_DROPDOWN || {};
+
+	var tenant_app = <%= tenant_app %>
+	// buildings API
+	var buildings = <%= @building_apartments.html_safe %>;
+	// apartment fieldset
+	var $apartment_fieldset = $( tenant_app == true ? "fieldset[data-field-group-name='Apartment']" : "fieldset[data-field-group-name='Personal Info']" );
+	// building and apartment row 
+	var $apartment_row = $apartment_fieldset.children('.input-box').children(tenant_app == true ? "div:first" : "div:nth-child(6)");
+
+	// building drowdown
+	var $building_dropdown = $apartment_row.children("div:first").find("select");
+	// apartment dropdown
+	var $apartment_dropdown = $apartment_row.children("div:last").find("select");
+
+	// Initialization functions
+	BUILDING_DROPDOWN.initialPageSetup = function() {
+
+		// Build out the buidling select menu
+		$.each(buildings["buildings"], function(key,value){
+			$building_dropdown.append($("<option></option>").attr("value",value["id"]).text(value["name"]));
+		});
+		// Set the active option of the building select if one was specified by data-id
+		if($building_dropdown.attr("data-id")){
+			var building_id = $building_dropdown.data("id");
+			$building_dropdown.val(building_id);	
+		}
+
+		// Build out the apartment select menu
+		if(building_id == undefined){
+			BUILDING_DROPDOWN.buildApartmentSizeSelectFromBuildingId($building_dropdown.val());
+		}else{
+			BUILDING_DROPDOWN.buildApartmentSizeSelectFromBuildingId(building_id);
+		}
+
+		// Set the active option of the apartment select if one was specified by data-id
+		if($apartment_dropdown.attr("data-id")){
+			var apartment_size = $apartment_dropdown.data("id");
+			$apartment_dropdown.val(apartment_size);
+		}
+	};
+
+	BUILDING_DROPDOWN.initializeEventListeners = function() {
+		$building_dropdown
+			.off( 'change' )
+			.on(  'change', BUILDING_DROPDOWN.onBuildingSelectMenuChange );
+	};
+
+	// Event Handlers
+	BUILDING_DROPDOWN.onBuildingSelectMenuChange = function( e ) {
+
+		BUILDING_DROPDOWN.buildApartmentSizeSelectFromBuildingId(
+			$(this).val()
+		);
+	};
+
+	// @start: shared functions
+	BUILDING_DROPDOWN.buildApartmentSizeSelectFromBuildingId = function( buildingId ) {
+		buildingId = buildingId.toString();
+
+		$apartment_dropdown.empty();
+		$.each(buildings["buildings"],function(key, value){
+			if(value.id == buildingId ){
+				$.each(value.building_apartments,function(key,size){
+					$apartment_dropdown.append(
+						$("<option></option>")
+							.attr("value",size["name"])
+							.text(size["name"])
+					);
+				});
+			}
+		});
+	};
+	// @end: shared functions
+	BUILDING_DROPDOWN.initialPageSetup();
+	BUILDING_DROPDOWN.initializeEventListeners();	
+});
+</script>
