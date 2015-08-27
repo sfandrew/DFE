@@ -97,7 +97,7 @@ module DynamicFormsEngine
             errors.add(field.name, 'Enter a valid amount!') unless valid_currency?(self.properties[field.id.to_s])
           elsif field.field_type == "agreement"
             errors.add(field.name, 'You must agree to the form before you can submit!') unless valid_agreement?(self.properties[field.id.to_s])
-          elsif field.field_type == "password"
+          elsif field.field_type == "social-security"
             errors.add(field.name, 'Please enter social security with only numbers') unless valid_social_security?(self.properties[field.id.to_s])
           else
             errors.add field.name, 'must not be blank'

@@ -5,7 +5,7 @@ module DynamicFormsEngine
 
     @@field_choices = ["agreement", "calendar", "check_box", "contacts", "currency", "short_description", "date_select", "divider", "email_validation", "field_group", 
                       "file_upload", "large_header","long_description", "medium_header", "options_select", "options_select_with_other","options_select_with_us_states", 
-                      "password", "phone_validation", "signature","small_header", "spacer", "text_area", "text_field"]
+                       "phone_validation", "signature","small_header", "social_security", "spacer", "text_area", "text_field"]
     @@default_field_width = ["contacts","divider","field_group","large_header","medium_header","small_header","signature","spacer"]
     @@field_width_choices = ["false","3","4","5","6","8","12"]
     @@field_with_null_value = ["short_description","divider","field_group","large_header","long_description","medium_header","spacer"]
@@ -30,7 +30,7 @@ module DynamicFormsEngine
 
     def field_name_required?
       req_name_fields = @@field_choices.reject { |field| field == "divider" || field == "spacer" || field == "long_description" || field == "short_description" }
-      if name.empty? && req_name_fields.include?(field_type)
+      if name.blank? && req_name_fields.include?(field_type)
         return true
       end
     end

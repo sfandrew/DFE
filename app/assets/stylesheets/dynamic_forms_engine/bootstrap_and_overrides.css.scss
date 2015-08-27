@@ -60,6 +60,7 @@ h1, h2, h3, h4, h5, h6{
 	font-weight: normal;
 	margin-top: 0px;
 }
+/*nav bar*/
 .navbar-collapse, .navbar-default .navbar-form {
 	border-color: #e7e7e7;
 	font-size: 13px;
@@ -69,7 +70,42 @@ h1, h2, h3, h4, h5, h6{
 	box-shadow: 0 0 20px #999;
 }
 
+.navbar-new-primary{
+	background-color: #3097d1;
+	border-color: #1c73a5;
+}
+a.navbar-brand {
+    color: rgba(251, 249, 249, 0.81);
+    font-weight: bold;
+}
 
+a.navbar-brand:hover {
+    color: white;
+    font-weight: bold;
+}
+ul.nav a {
+	color: rgba(251, 249, 249, 0.81);
+}
+ul.nav a:hover{
+	color: white;
+}
+ul.nav a:hover{
+	background-color: #3097d1;
+	border-color: #1c73a5;
+
+}
+ul.nav a:visited{
+	background-color: #3097d1;
+	border-color: #1c73a5;
+
+}
+
+.navbar-nav li > .form-link{
+    padding-left: 40px;
+    padding-right: 40px;
+}
+
+/*nav bar*/
 
 
 

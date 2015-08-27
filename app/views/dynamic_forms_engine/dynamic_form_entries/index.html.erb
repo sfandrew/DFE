@@ -53,6 +53,8 @@
       <th>Type</th>
       <!-- <th>Properties</th> WAS USED TO SHOW WHAT FIELDS WERE INCLUDED -->
       <th>Status</th>
+      <th>Building</th>
+      <th>Unit</th>
       <th>Submitted</th>
       <th width="1%"></th>
       <th width="1%"></th>
@@ -85,7 +87,8 @@
               <% end %>
             <% end %>
           </td>
-
+          <td><%= dynamic_form_entry.get_building_name(@building_apartments) %></td>
+          <td><%= dynamic_form_entry.get_building_size %></td>
           <td>
             <%= dynamic_form_entry.created_at.strftime(" %l:%M %p %b. %d, %Y") %>
           </td>
