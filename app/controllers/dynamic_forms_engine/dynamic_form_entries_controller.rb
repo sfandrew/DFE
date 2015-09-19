@@ -52,6 +52,7 @@ module DynamicFormsEngine
     end
 
     def create
+      #non public form
       if current_user
         @dynamic_form_entry = current_user.dynamic_form_entries.new(dynamic_form_entry_params)
       else
@@ -110,10 +111,12 @@ module DynamicFormsEngine
                 @dynamic_form_entry.attachments.find(value[:id]).delete
               end
             end
+
             if params[:submit_entry]
               FormEntryMailer.email_entry(@dynamic_form_entry).deliver
               redirect_to @dynamic_form_entry, notice: 'Below is your curent Form Entry Submission!'
             else
+              @dynamic_form_entry.create_pdf(@dynamic_form_entry, @building_apartments)
               FormEntryMailer.email_entry(@dynamic_form_entry).deliver if params[:email_recipient]
               redirect_to edit_dynamic_form_entry_path(@dynamic_form_entry), alert: "<strong> You have temporary saved your draft. Come back to submit it when ready!</strong>".html_safe
             end
@@ -175,7 +178,7 @@ module DynamicFormsEngine
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def dynamic_form_entry_params
-      params.require(:dynamic_form_entry).permit(:dynamic_form_type_id,:signature,:last_section_saved, :in_progress,:attachments_attributes => [:id, :content_name,:filename, :filename_cache, :remove_filename,:content_meta],
+      params.require(:dynamic_form_entry).permit(:dynamic_form_type_id,:signature,:last_section_saved, :in_progress, :application_pdf, :attachments_attributes => [:id, :content_name,:filename, :filename_cache, :remove_filename,:content_meta],
         :contacts_attributes => [:phone, :contact_type,:user_id, :first_name, :company,:email,:uuid]).tap do |whitelisted|
         whitelisted[:properties] = params[:dynamic_form_entry][:properties]
       end

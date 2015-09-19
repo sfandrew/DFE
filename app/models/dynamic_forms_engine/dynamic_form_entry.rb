@@ -11,9 +11,9 @@ module DynamicFormsEngine
     # after_validation :file_upload_error_msgs, :if => Proc.new { |entry| entry.id.nil? }
     before_create :generate_uuid
     before_create :format_properties, :if => Proc.new { |entry| !entry.properties.nil? }
-    before_update :format_properties, :if => Proc.new { |entry| !entry.properties.nil? && !entry.last_section_saved_changed? }
+    before_update :format_properties, :if => Proc.new { |entry| !entry.properties.nil? && !entry.last_section_saved_changed? && !entry.application_pdf_changed?   }
 
-
+    mount_uploader :application_pdf, ApplicationAttachmentUploader
 
     # def get_property_value(field_id)
     #   if !properties.blank?
@@ -64,6 +64,43 @@ module DynamicFormsEngine
 
     def attachments_uploaded
       attachments.map(&:content_meta)
+    end
+
+    def create_pdf(dynamic_form_entry, building_apartments)
+      wicked = WickedPdf.new
+      # Make a PDF in memory
+      pdf_file = wicked.pdf_from_string( 
+          ActionController::Base.new().render_to_string(
+              :template   => 'dynamic_forms_engine/dynamic_form_entries/show_application.pdf.erb', 
+              :locals     => { 
+                  :aggregation => self,
+                  :dynamic_form_entry => dynamic_form_entry,
+                  :building_apartments => building_apartments
+              } 
+          ),
+          :pdf => "show_application_pdf_#{self.id}",
+          :layout => 'pdf.html',
+          :page_size => 'Letter',
+          :wkhtmltopdf => '/usr/local/bin/wkhtmltopdf',
+          :margin => {
+              :top      => '0.5in',
+              :bottom   => '1in',
+              :left     => '0in',
+              :right    => '0in'
+          }
+      )
+
+      # Write it to tempfile
+      tempfile = Tempfile.new(['show_application', '.pdf'], Rails.root.join('tmp'))
+      tempfile.binmode
+      tempfile.write pdf_file
+      tempfile.close
+
+      # # Attach that tempfile to dynamic form entry
+      unless pdf_file.blank?
+        self.application_pdf = tempfile
+        self.save!
+      end
     end
 
 
@@ -284,30 +321,34 @@ module DynamicFormsEngine
     #  This function transmutes the properties to a form that doesn't rely on the original field object
     # Should be run as before_create filter
     def format_properties
-      old_properties = self.properties
-      old_entry = DynamicFormEntry.find(self.id) if !self.new_record?
-      new_properties = {}
-      old_properties.each_with_index do |(field_id, field_value), index|
-        
-        field = DynamicFormField.find(field_id.to_i)
-        
-        # Prepend "Other: " to options_select_with_other field types
-        if field.field_type == "options_select_with_other" && !field.content_meta.include?(field_value)
-          field_value = "Other: " + field_value
-        end
-        new_properties[index] = {name: field.name, type: field.field_type, value: field_value, id: field_id}
-      end
-      # this re-submits the file upload file without the user to re-submit the file again
+      
+        old_properties = self.properties
+        old_entry = DynamicFormEntry.find(self.id) if !self.new_record?
+        new_properties = {}
+        old_properties.each_with_index do |(field_id, field_value), index|
+          
+          field = DynamicFormField.find(field_id.to_i)
+          # field = DynamicFormField.find(field_value[:id].to_i)
 
-      # if old_entry && self.errors.size == 0 
-      #   old_entry.each_field_with_value do |index_val, field|
-      #     if field[:type] == "file_upload" && !old_properties.has_key?(field[:id])
-      #       last_property = new_properties.size
-      #       new_properties[last_property] = { name: field[:name], type: field[:type], value: field[:value], id: field[:id] } 
-      #     end
-      #   end
-      # end
-      self.properties = new_properties
+          
+          # Prepend "Other: " to options_select_with_other field types
+          if field.field_type == "options_select_with_other" && !field.content_meta.include?(field_value)
+            field_value = "Other: " + field_value
+          end
+          new_properties[index] = {name: field.name, type: field.field_type, value: field_value, id: field_id}
+        end
+        # this re-submits the file upload file without the user to re-submit the file again
+
+        # if old_entry && self.errors.size == 0 
+        #   old_entry.each_field_with_value do |index_val, field|
+        #     if field[:type] == "file_upload" && !old_properties.has_key?(field[:id])
+        #       last_property = new_properties.size
+        #       new_properties[last_property] = { name: field[:name], type: field[:type], value: field[:value], id: field[:id] } 
+        #     end
+        #   end
+        # end
+        self.properties = new_properties
+    
     end
 
     def generate_uuid
