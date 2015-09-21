@@ -4,8 +4,8 @@
 	<br>
 		<%= link_to "#{@domain_name}/dynamic_forms_engine/dynamic_form_entries/#{@form_entry.uuid}", "#{@domain_name}/dynamic_forms_engine/dynamic_form_entries/#{@form_entry.uuid}/edit" %>
 <% else %>
-	Thank you for submitting your application, your application can be viewed here
+	Thank you for submitting your application, your application can be downloaded below,
 	<br>
 	<br> 
-		<%= link_to "#{@domain_name}/dynamic_forms_engine/dynamic_form_entries/#{@form_entry.uuid}", "#{@domain_name}/dynamic_forms_engine/dynamic_form_entries/#{@form_entry.id}" %>
+		<%= link_to @form_entry.dynamic_form_type.name, @form_entry.application_pdf.url %>
 <% end %>

@@ -98,8 +98,7 @@ module DynamicFormsEngine
 
       # # Attach that tempfile to dynamic form entry
       unless pdf_file.blank?
-        self.application_pdf = tempfile
-        self.save!
+        self.update_attribute(:application_pdf, tempfile)
       end
     end
 

@@ -72,6 +72,7 @@ module DynamicFormsEngine
 
       if @dynamic_form_entry.save
         if params[:submit_entry]
+          @dynamic_form_entry.create_pdf(@dynamic_form_entry, @building_apartments)
           FormEntryMailer.email_entry(@dynamic_form_entry).deliver
           redirect_to dynamic_form_entry_path(@dynamic_form_entry) + "?iframe=" + (params[:iframe] == "1" ? "1" : "0"), notice: "<strong>You have submitted your form entry!</strong>".html_safe
         else
@@ -113,10 +114,10 @@ module DynamicFormsEngine
             end
 
             if params[:submit_entry]
+              @dynamic_form_entry.create_pdf(@dynamic_form_entry, @building_apartments)
               FormEntryMailer.email_entry(@dynamic_form_entry).deliver
               redirect_to @dynamic_form_entry, notice: 'Below is your curent Form Entry Submission!'
             else
-              @dynamic_form_entry.create_pdf(@dynamic_form_entry, @building_apartments)
               FormEntryMailer.email_entry(@dynamic_form_entry).deliver if params[:email_recipient]
               redirect_to edit_dynamic_form_entry_path(@dynamic_form_entry), alert: "<strong> You have temporary saved your draft. Come back to submit it when ready!</strong>".html_safe
             end

@@ -30,7 +30,7 @@
 
 </div>
 
-<%= render partial: 'show_application', locals: { dynamic_form_entry: dynamic_form_entry, building_apartments: building_apartments } %>
+<%= render partial: 'show_application', locals: { dynamic_form_entry: @dynamic_form_entry, building_apartments: @building_apartments } %>
 
 <% if request.original_url =~ /(.print)/ %>
     <%= javascript_tag "window.print()" %>
