@@ -50,6 +50,7 @@
     }
 }
 */
+
 body { padding-top: 70px; }
 
 //@import "bootstrap-responsive";
@@ -92,12 +93,10 @@ ul.nav a:hover{
 ul.nav a:hover{
 	background-color: #3097d1;
 	border-color: #1c73a5;
-
 }
 ul.nav a:visited{
 	background-color: #3097d1;
 	border-color: #1c73a5;
-
 }
 
 .navbar-nav li > .form-link{
@@ -105,9 +104,27 @@ ul.nav a:visited{
     padding-right: 40px;
 }
 
+.navbar-toggle .icon-bar{
+	background-color: white;
+}
+
+button.navbar-toggle{
+	background-color: #3097d1;
+	border-color: white;
+}
 /*nav bar*/
 
 
+/*nav bar links size*/
+.navbar-collapse, .navbar-default .navbar-form{
+	font-size: 15px;
+}
+
+/*next and previous pager*/
+
+.pager li > a:visited{
+	background-color: #428BC9;
+}
 
 fieldset {
 	border: 1px solid #c0c0c0;

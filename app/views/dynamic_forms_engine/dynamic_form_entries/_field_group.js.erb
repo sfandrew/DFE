@@ -4,12 +4,12 @@ var DFE = DFE || {};
 //doc rdy
 $(function(){
 	DFE.initStepForm();
-
+	record_id = '<%=  params[:id] || false  %>';
 	//adding badges to breadcrumbs when form errors && points to last section clicked
 	$(window).on('load', function(){
 		DFE.formErrorBadges();
 		$('.submit-entry-button').hide();
-		DFE.lastSavedSection(); 
+		DFE.lastSavedSection();
 	});
 
 	//next step
@@ -26,16 +26,12 @@ $(function(){
 
 	//breadcrumbs
 	$('.btn-breadcrumb a').on('click', function(){
-		var record_id = '<%=  params[:id] || false  %>';
 		var $this = $(this);
 		DFE.resetBreadcrumb();
 		DFE.toggleBreadcrumb($this);
 		DFE.gotoStep( $this.data('step-id') );
 		DFE.toggleSubmit();
-		// trigger ajax on edit action
-		if(record_id != false){
-			DFE.savedSection($this,record_id);
-		}
+		DFE.savedSection($this,record_id);
 	});
 	//tooltips
 	$('.dfe-tooltip').tooltip();
@@ -66,13 +62,17 @@ DFE.lastSavedSection = function(){
 }
 
 DFE.savedSection = function($section,record){
-	var clicked_section = $section.attr('data-field-group-name');
-	$.ajax({
-		method: "PUT",
-		url: "/dynamic_forms_engine/dynamic_form_entries/" + record,
-		dataType: "json",
-		data: {'dynamic_form_entry[last_section_saved]': clicked_section}
-	});
+	if(record == false){
+		return;
+	}else{
+		var clicked_section = $section.attr('data-field-group-name');
+		$.ajax({
+			method: "PUT",
+			url: "/dynamic_forms_engine/dynamic_form_entries/" + record,
+			dataType: "json",
+			data: {'dynamic_form_entry[last_section_saved]': clicked_section}
+		});
+	}	
 }	
 
 DFE.formErrorBadges = function(){
@@ -111,7 +111,6 @@ DFE.resetBreadcrumb = function(){
 
 DFE.nextStep = function($field_group){
 	$.each( $field_group, function(i, field){
-		
 		var $field = $(field);
 		//if last
 		if(i+1 === $field_group.length){
@@ -122,6 +121,7 @@ DFE.nextStep = function($field_group){
 
 		
 		if($field.hasClass('active')){
+			DFE.savedSection($field_group.eq(i+1),record_id);
 			$field.removeClass('active');
 			$field_group.eq(i+1).addClass('active');
 			DFE.resetBreadcrumb();
@@ -134,7 +134,7 @@ DFE.nextStep = function($field_group){
 
 DFE.toggleSubmit = function(){
 	$breadcrumbs = $('.btn-breadcrumb > a');
-	
+
 	$.each($breadcrumbs, function(index,value){
 
 		if($(value).data("field-group-name") == "Agreement" && $(value).hasClass("btn-primary")){
@@ -151,10 +151,10 @@ DFE.toggleSubmit = function(){
 
 DFE.prevStep = function($field_group){
 	$.each( $field_group, function(i, field){
-		
 		var $field = $(field);
 
 		if($field.hasClass('active')){
+			DFE.savedSection($field_group.eq(i-1),record_id);
 			$field.removeClass('active');
 			$field_group.eq(i-1).addClass('active');
 			DFE.resetBreadcrumb();
@@ -167,7 +167,6 @@ DFE.prevStep = function($field_group){
 
 DFE.gotoStep = function(step_id){
 	var $step = $('#'+step_id);
-
 	$('.field-group').removeClass('active');
 	$step.addClass('active');
 
