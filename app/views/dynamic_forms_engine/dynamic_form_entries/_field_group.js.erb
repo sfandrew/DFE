@@ -5,6 +5,8 @@ var DFE = DFE || {};
 $(function(){
 	DFE.initStepForm();
 	record_id = '<%=  params[:id] || false  %>';
+	$next_button = $('.pager > .next');
+	$previous_button = $('.pager > .previous');
 	//adding badges to breadcrumbs when form errors && points to last section clicked
 	$(window).on('load', function(){
 		DFE.formErrorBadges();
@@ -27,11 +29,13 @@ $(function(){
 	//breadcrumbs
 	$('.btn-breadcrumb a').on('click', function(){
 		var $this = $(this);
+
 		DFE.resetBreadcrumb();
 		DFE.toggleBreadcrumb($this);
 		DFE.gotoStep( $this.data('step-id') );
 		DFE.toggleSubmit();
 		DFE.savedSection($this,record_id);
+		DFE.toggleNextPrev($this);
 	});
 	//tooltips
 	$('.dfe-tooltip').tooltip();
@@ -58,6 +62,9 @@ DFE.lastSavedSection = function(){
 	
 	if(section != false){
 		$(".btn-breadcrumb > [data-field-group-name='"+section+"']").click();
+		DFE.toggleNextPrev(section);
+	}else{
+		$previous_button.hide();
 	}
 }
 
@@ -117,6 +124,7 @@ DFE.nextStep = function($field_group){
 			DFE.resetBreadcrumb();
 			DFE.toggleBreadcrumb( $('.btn-breadcrumb a:eq(0)') );
 			DFE.gotoStep( $('.field-group:eq(0)').attr('id') );
+
 		}
 
 		
@@ -125,7 +133,8 @@ DFE.nextStep = function($field_group){
 			$field.removeClass('active');
 			$field_group.eq(i+1).addClass('active');
 			DFE.resetBreadcrumb();
-			DFE.toggleBreadcrumb( $('.btn-breadcrumb a').eq(i+1) );		
+			DFE.toggleBreadcrumb( $('.btn-breadcrumb a').eq(i+1) );
+			DFE.toggleNextPrev($field_group.eq(i+1));		
 			return false;
 		}
 
@@ -159,6 +168,7 @@ DFE.prevStep = function($field_group){
 			$field_group.eq(i-1).addClass('active');
 			DFE.resetBreadcrumb();
 			DFE.toggleBreadcrumb( $('.btn-breadcrumb a').eq(i-1) );
+			DFE.toggleNextPrev($field_group.eq(i-1));
 			return false;
 		}
 
@@ -169,5 +179,20 @@ DFE.gotoStep = function(step_id){
 	var $step = $('#'+step_id);
 	$('.field-group').removeClass('active');
 	$step.addClass('active');
+
+}
+
+DFE.toggleNextPrev = function(field_group){
+	var field_name;
+	field_group instanceof jQuery ? field_name = $(field_group).data('field-group-name') : field_name = field_group;
+	
+	if(field_name == 'Agreement'){
+		$next_button.hide();
+	}else if(field_name == 'Personal Info'){
+		$previous_button.hide();
+	}else{
+		$next_button.show();
+		$previous_button.show();
+	}
 
 }

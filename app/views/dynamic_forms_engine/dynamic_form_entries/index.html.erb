@@ -88,7 +88,7 @@
             <% end %>
           </td>
           <td><%= dynamic_form_entry.get_building_name(@building_apartments) %></td>
-          <td><%= dynamic_form_entry.get_building_size %></td>
+          <td><%= dynamic_form_entry.try(:get_building_size) %></td>
           <td>
             <%= dynamic_form_entry.created_at.strftime(" %l:%M %p %b. %d, %Y") %>
           </td>
