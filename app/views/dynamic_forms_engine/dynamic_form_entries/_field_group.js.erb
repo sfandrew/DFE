@@ -183,13 +183,15 @@ DFE.gotoStep = function(step_id){
 }
 
 DFE.toggleNextPrev = function(field_group){
+
 	var field_name;
 	field_group instanceof jQuery ? field_name = $(field_group).data('field-group-name') : field_name = field_group;
-	
 	if(field_name == 'Agreement'){
 		$next_button.hide();
+		$previous_button.show();
 	}else if(field_name == 'Personal Info'){
 		$previous_button.hide();
+		$next_button.show();
 	}else{
 		$next_button.show();
 		$previous_button.show();

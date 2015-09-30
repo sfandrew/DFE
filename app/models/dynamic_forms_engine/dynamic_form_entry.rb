@@ -104,19 +104,19 @@ module DynamicFormsEngine
 
 
     def validate_on_draft
-      # dynamic_form_type.fields.each do |field|
-      #   if !self.properties[field.id.to_s].blank?
-      #     if field.field_type == "email_validation"
-      #       errors.add(field.name,'Not a valid email!') unless valid_email?(self.properties[field.id.to_s])
-      #     elsif field.field_type == "phone_validation"
-      #       errors.add(field.name,'Enter a valid phone number including area code!') unless valid_phone?(self.properties[field.id.to_s])
-      #     elsif field.field_type == "currency"
-      #       errors.add(field.name, 'Enter a valid amount!') unless valid_currency?(self.properties[field.id.to_s])
-      #     elsif field.field_type == "password"
-      #       errors.add(field.name, 'Please enter social security with only numbers') unless valid_social_security?(self.properties[field.id.to_s])
-      #     end
-      #   end
-      # end
+      dynamic_form_type.fields.each do |field|
+        if !self.properties[field.id.to_s].blank?
+          if field.field_type == "email_validation"
+            errors.add(field.name,'Not a valid email!') unless valid_email?(self.properties[field.id.to_s])
+          elsif field.field_type == "phone_validation"
+            errors.add(field.name,'Enter a valid phone number including area code!') unless valid_phone?(self.properties[field.id.to_s])
+          elsif field.field_type == "currency"
+            errors.add(field.name, 'Enter a valid amount!') unless valid_currency?(self.properties[field.id.to_s])
+          elsif field.field_type == "social-security"
+            errors.add(field.name, 'Please enter social security with only numbers') unless valid_social_security?(self.properties[field.id.to_s])
+          end
+        end
+      end
     end
 
 
@@ -327,12 +327,11 @@ module DynamicFormsEngine
         old_properties.each_with_index do |(field_id, field_value), index|
           
           field = DynamicFormField.find(field_id.to_i)
-          # field = DynamicFormField.find(field_value[:id].to_i)
 
           
-          # Prepend "Other: " to options_select_with_other field types
+          # Store other field choices in a hash
           if field.field_type == "options_select_with_other" && !field.content_meta.include?(field_value)
-            field_value = "Other: " + field_value
+            field_value = { "Other" => field_value }
           end
           new_properties[index] = {name: field.name, type: field.field_type, value: field_value, id: field_id}
         end

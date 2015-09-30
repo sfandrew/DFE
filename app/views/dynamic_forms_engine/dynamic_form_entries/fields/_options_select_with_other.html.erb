@@ -1,18 +1,19 @@
 <% field_value ||= nil %>
+
 <div class="options_select_container col-md-<%= field.field_width %>">
 		<%= f.label field.id, field.name.humanize, :class => "col-md-3 control-label" %>
 	<div class="col-md-2">
-	  <%= f.select field.id, options_for_select(field.content_meta.split(","),selected: field_value),{},{:class => "option-other form-control", :style => "width: 154px;"} %>
+	  <%= f.select field.id, options_for_select(field.content_meta.split(","), selected: field_value.is_a?(Hash) ? field_value.keys[0] : field_value),{:include_blank => true},{:class => "option-other form-control", :style => "width: 154px;"} %>
 	 </div>
-	<div class="col-md-4 option-field" style="display:none;">
-		<%= f.text_field field.id, :class => "form-control other-select", :disabled => "disabled", :placeholder => "Enter other option" %>
-	</div>	
+
+	 <% if field_value.is_a?(Hash) %>
+	 	<div class="col-md-3 option-field">
+	 		<%= f.text_field field.id, value: field_value.values[0], :class => "form-control other-select", :placeholder => "Enter other option" %>
+	 	</div>
+	<% else %>
+	 	<div class="col-md-3 option-field" style="display:none;">
+			<%= f.text_field field.id, value: '',:class => "form-control other-select", :disabled => "disabled", :placeholder => "Enter other option" %>
+		</div>	
+	 <% end %>
+
 </div>
-<style type="text/css">
-@media screen and (min-width: 1092px){
-	.option-field{
-		margin-top: 35px;
-		margin-left: -87px;
-	}
-}
-</style>

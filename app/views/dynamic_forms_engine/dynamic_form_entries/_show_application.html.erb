@@ -1,9 +1,10 @@
 <div class="well col-md-12 col-lg-10">
 
 	<% dynamic_form_entry.each_field_with_value do |index, field| %>
+		<% next if field[:type] == "long_description" %>
 		<div class="row row-table print-table">
 			<% if field[:type] == "field_group" %>
-				<h3 align="center">Field Group: <%= field[:name] %></h3>
+				<h3 align="center"><%= field[:name] %></h3>
 			<% elsif field[:type] == "description" %>
 				<h5 class="text-uppercase" align="center">Description: <%= field[:name] %></h5>
 			<% elsif field[:type] == "file_upload" %>
@@ -54,6 +55,13 @@
 				</label>
 				<div class="col-sm-9">
 					<p>Checked</p>
+				</div>
+			<% elsif field[:type] == "options_select_with_other" %>
+				<label class="col-sm-3 control-label">
+					<%= field[:name] %>
+				</label>
+				<div class="col-sm-9">
+					<%= field[:value].is_a?(Hash) ? field[:value].keys[0] + ': ' + field[:value].values[0] : field[:value] %>
 				</div>
 			<% else %>
 				<label class="col-sm-3 control-label">

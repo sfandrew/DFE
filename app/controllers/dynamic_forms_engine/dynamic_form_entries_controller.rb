@@ -87,7 +87,7 @@ module DynamicFormsEngine
     end
 
     def edit
-      redirect_to root_path, alert: 'You cannot edit your application once submitted' unless @dynamic_form_entry.in_progress
+      redirect_to dynamic_form_entries_path, alert: 'You cannot edit your application once submitted' unless @dynamic_form_entry.in_progress
       @file_upload = current_user.dynamic_form_entries.where(:id => params[:id]).first
     end
 
@@ -163,7 +163,7 @@ module DynamicFormsEngine
       elsif @dynamic_form_entry
         @dynamic_form_type = @dynamic_form_entry.dynamic_form_type
       else
-        redirect_to(root_path, alert: "Could not find Dynamic Form Type.")
+        redirect_to(dynamic_form_entry_path, alert: "Could not find Dynamic Form Type.")
       end
     end
 
