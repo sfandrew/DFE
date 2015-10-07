@@ -1,7 +1,6 @@
 <div class="well col-md-12 col-lg-10">
 
 	<% dynamic_form_entry.each_field_with_value do |index, field| %>
-		<% next if field[:type] == "long_description" %>
 		<div class="row row-table print-table">
 			<% if field[:type] == "field_group" %>
 				<h3 align="center"><%= field[:name] %></h3>

@@ -190,6 +190,8 @@ module DynamicFormsEngine
     # end
 
     def each_field_with_value
+      non_value_fields = DynamicFormField.class_variable_get(:@@field_with_null_value).delete_if{ |field| field == "field_group"}
+      
       properties.each do |index, field|
         if field[:type].to_s == 'file_upload'
           attachment_field_id = field[:id]
@@ -197,11 +199,11 @@ module DynamicFormsEngine
           field[:attachment] = attachment
           yield attachment, field
         else
+          next if non_value_fields.include?(field[:type])
           yield index, field
         end
       end
     end
-
     
 
     def self.search(terms)

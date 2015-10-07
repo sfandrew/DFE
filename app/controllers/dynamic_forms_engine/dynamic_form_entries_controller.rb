@@ -163,7 +163,7 @@ module DynamicFormsEngine
       elsif @dynamic_form_entry
         @dynamic_form_type = @dynamic_form_entry.dynamic_form_type
       else
-        redirect_to(dynamic_form_entry_path, alert: "Could not find Dynamic Form Type.")
+        redirect_to(root_path, alert: "Could not find Dynamic Form Type.")
       end
     end
 
