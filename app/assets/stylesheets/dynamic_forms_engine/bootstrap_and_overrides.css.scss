@@ -1,5 +1,6 @@
 // following this guide: http://railsapps.github.io/twitter-bootstrap-rails.html
 // This separates any bootstrap style changes to this file
+// Host app style-sheet can also overide
 // @import "bootstrap";
 
 .breadcrumb.header{
@@ -60,64 +61,6 @@ body { padding-top: 70px; }
 h1, h2, h3, h4, h5, h6{
 	font-weight: normal;
 	margin-top: 0px;
-}
-/*nav bar*/
-.navbar-collapse, .navbar-default .navbar-form {
-	border-color: #e7e7e7;
-	font-size: 13px;
-}
-
-.navbar-default{
-	box-shadow: 0 0 20px #999;
-}
-
-.navbar-new-primary{
-	background-color: #3097d1;
-	border-color: #1c73a5;
-}
-a.navbar-brand {
-    color: rgba(251, 249, 249, 0.81);
-    font-weight: bold;
-}
-
-a.navbar-brand:hover {
-    color: white;
-    font-weight: bold;
-}
-ul.nav a {
-	color: rgba(251, 249, 249, 0.81);
-}
-ul.nav a:hover{
-	color: white;
-}
-ul.nav a:hover{
-	background-color: #3097d1;
-	border-color: #1c73a5;
-}
-ul.nav a:visited{
-	background-color: #3097d1;
-	border-color: #1c73a5;
-}
-
-.navbar-nav li > .form-link{
-    padding-left: 40px;
-    padding-right: 40px;
-}
-
-.navbar-toggle .icon-bar{
-	background-color: white;
-}
-
-button.navbar-toggle{
-	background-color: #3097d1;
-	border-color: white;
-}
-/*nav bar*/
-
-
-/*nav bar links size*/
-.navbar-collapse, .navbar-default .navbar-form{
-	font-size: 15px;
 }
 
 /*next and previous pager*/
@@ -201,16 +144,6 @@ legend {
 
 /* auth icons */
 .btn-fb-auth i, .btn-google-auth i{ padding-top: 0.2em; padding-left: 0.6em; }
-
-
-
-
-/* home */
-.home-icon{
-	font-size: 150px;
-	display: block;
-	margin: 0 auto;
-}
 
 /* table */
 .table-hover tbody tr:hover > td, .table-hover tbody tr:hover > th{
