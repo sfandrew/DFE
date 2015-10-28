@@ -143,29 +143,10 @@ module DynamicFormsEngine
       end
     end
 
-    # def validate_on_submit
-    #   dynamic_form_type.fields.each do |field|
-    #     if !self.properties[field.id.to_s].blank? || field.required? && !DynamicFormsEngine::DynamicFormField.default_width.include?(field.field_type)
-    #       if field.field_type == "email_validation"
-    #         errors.add(field.name,'Not a valid email!') unless valid_email?(self.properties[field.id.to_s])
-    #       elsif field.field_type == "phone_validation"
-    #         errors.add(field.name,'Enter a valid phone number including area code!') unless valid_phone?(self.properties[field.id.to_s])
-    #       elsif field.field_type == "currency"
-    #         errors.add(field.name, 'Enter a valid amount!') unless valid_currency?(self.properties[field.id.to_s])
-    #       elsif field.field_type == "agreement"
-    #         errors.add(field.name, 'You must agree to the form before you can submit!') unless valid_agreement?(self.properties[field.id.to_s])
-    #       elsif field.field_type == "password"
-    #         errors.add(field.name, 'Please enter social security with only numbers') unless valid_social_security?(self.properties[field.id.to_s])
-    #       elsif field.field_type == "check_box" && field.required? || field.field_type =="agreement" && field.required?
-    #         errors.add field.name, 'check box must be checked!' unless self.properties[field.id.to_s] == "1"
-    #       elsif field.field_type == "signature" && field.required? &&  self.signature.size < 25
-    #         errors.add field.name, 'must not be blank'
-    #       elsif  field.required? && properties[field.id.to_s].blank?
-    #         errors.add field.name, 'must not be blank'
-    #       end
-    #     end
-    #   end
-    # end
+    def decrypt_ss
+      social_security.decrypt 'cashrules'
+    end
+
 
     def file_upload_error_msgs
       if self.errors.size >= 1
@@ -335,6 +316,11 @@ module DynamicFormsEngine
           # Store other field choices in a hash
           if field.field_type == "options_select_with_other" && !field.content_meta.include?(field_value)
             field_value = { "Other" => field_value }
+            # encrypts social security field
+          elsif field.field_type == "social_security"
+            self.social_security = field_value
+            field_value = ''
+            # new_properties[index] = {name: field.name, type: field.field_type,  id: field_id}
           end
           new_properties[index] = {name: field.name, type: field.field_type, value: field_value, id: field_id}
         end

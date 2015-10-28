@@ -34,6 +34,13 @@
 				<div class="col-sm-9">
 					<%= number_to_currency(field[:value]) %>
 				</div>
+			<% elsif field[:type] == "social_security" %>
+				<label class="col-sm-3 control-label">
+					<%= field[:name] %>
+				</label>
+				<div class="col-sm-9">
+					<%= dynamic_form_entry.decrypt_ss %>
+				</div>
 			<% elsif field[:type] == "phone_validation" %>
 				<label class="col-sm-3 control-label">
 					<%= field[:name] %>
