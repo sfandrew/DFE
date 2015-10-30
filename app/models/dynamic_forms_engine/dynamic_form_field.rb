@@ -3,7 +3,7 @@ module DynamicFormsEngine
     cattr_accessor :field_choices, instance_writer: false
     cattr_accessor :field_with_null_value, instance_writer: false
 
-    @@field_choices = ["agreement", "calendar", "check_box", "contacts", "currency", "short_description", "date_select", "divider", "email_validation", "field_group", 
+    @@field_choices = ["agreement", "calendar", "check_box", "contacts", "currency", "short_description", "divider", "email_validation", "field_group", 
                       "file_upload", "large_header","long_description", "medium_header", "options_select", "options_select_with_other","options_select_with_us_states", 
                        "phone_validation", "signature","small_header", "social_security", "spacer", "text_area", "text_field"]
     @@default_field_width = ["contacts","divider","field_group","large_header","medium_header","small_header","signature","spacer"]
