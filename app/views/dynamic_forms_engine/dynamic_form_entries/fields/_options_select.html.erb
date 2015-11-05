@@ -1,7 +1,7 @@
 <% field_value ||= nil %>
 <div class="options_select_container col-md-<%= field.field_width %>">
- 	<%= f.label field.id, field.name.humanize, :class => "col-md-5 control-label" %>
-	<div class="col-md-5">
+ 	<%= f.label field.id, field.name.humanize, :class => "col-md-3 control-label" %>
+	<div class="col-md-3">
 	  	<%= f.select field.id,
 	  					options_for_select(field.content_meta.split(","),selected: field_value),{:include_blank => true},
 	  					{:class => "form-select form-control",:style => "width: 200px;", 'data-id' => field_value } %>

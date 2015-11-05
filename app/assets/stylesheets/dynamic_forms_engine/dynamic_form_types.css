@@ -23,6 +23,9 @@ fieldset.dynamic-form-field{
 .options_select, .long-description{
   display: none;
 }
+textarea.expand-input{
+  height: 100px;
+}
 
 fieldset[selection="contacts"] .required-checkbox, fieldset[selection="contacts"] .include-checkbox, 
     fieldset[selection="contacts"] .field-size{
