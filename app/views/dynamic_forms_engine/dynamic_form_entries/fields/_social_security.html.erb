@@ -1,0 +1,18 @@
+<% field_value ||= nil %>
+<div class="col-md-<%= field.field_width %>">
+	<%= f.label field.name, field.name.humanize, :class => "col-md-3 control-label" %>
+	<div class="col-md-7">
+		<%= f.text_field field.id, value: @dynamic_form_entry.decrypt_ss, :class => "form-control upass" %>
+		<%# button_tag "Show Characters", type: 'button',  :class => 'togglePassword btn btn-success' %>
+
+		<% if defined?(errors) and errors.present? %>
+			<small class="error-msg"style="color:red"><%= errors.join(', ') %></small>
+		<% end %>
+	</div>
+	<% if field.required? %>
+		<span class="required required-field">*</span>
+	<% end %>
+</div>
+<script type="text/javascript">
+	$(".upass").mask("999-99-9999");
+</script>
