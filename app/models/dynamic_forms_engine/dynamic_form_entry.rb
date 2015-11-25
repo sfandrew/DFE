@@ -11,9 +11,9 @@ module DynamicFormsEngine
     # after_validation :file_upload_error_msgs, :if => Proc.new { |entry| entry.id.nil? }
     before_create :generate_uuid
     before_create :format_properties, :if => Proc.new { |entry| !entry.properties.nil? }
-    before_update :format_properties, :if => Proc.new { |entry| !entry.properties.nil? && !entry.last_section_saved_changed? }
+    before_update :format_properties, :if => Proc.new { |entry| !entry.properties.nil? && !entry.last_section_saved_changed? && !entry.application_pdf_changed?   }
 
-
+    mount_uploader :application_pdf, ApplicationAttachmentUploader
 
     # def get_property_value(field_id)
     #   if !properties.blank?
@@ -42,6 +42,7 @@ module DynamicFormsEngine
 
     # http://stackoverflow.com/questions/8634139/phone-validation-regex
     def valid_phone?(field_value)
+      field_value.gsub!(/[^0-9]/, '')
       !(field_value =~ /(?:(?:\+?1\s*(?:[.-]\s*)?)?(?:(\s*([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]‌​)\s*)|([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]))\s*(?:[.-]\s*)?)([2-9]1[02-9]‌​|[2-9][02-9]1|[2-9][02-9]{2})\s*(?:[.-]\s*)?([0-9]{4})\s*(?:\s*(?:#|x\.?|ext\.?|extension)\s*(\d+)\s*)?$/).nil?
     end
 
@@ -66,21 +67,57 @@ module DynamicFormsEngine
       attachments.map(&:content_meta)
     end
 
+    def create_pdf(dynamic_form_entry, building_apartments)
+      wicked = WickedPdf.new
+      # Make a PDF in memory
+      pdf_file = wicked.pdf_from_string( 
+          ActionController::Base.new().render_to_string(
+              :template   => 'dynamic_forms_engine/dynamic_form_entries/show_application.pdf.erb', 
+              :locals     => { 
+                  :aggregation => self,
+                  :dynamic_form_entry => dynamic_form_entry,
+                  :building_apartments => building_apartments
+              } 
+          ),
+          :pdf => "show_application_pdf_#{self.id}",
+          :layout => 'pdf.html',
+          :page_size => 'Letter',
+          :wkhtmltopdf => '/usr/local/bin/wkhtmltopdf',
+          :margin => {
+              :top      => '0.5in',
+              :bottom   => '1in',
+              :left     => '0in',
+              :right    => '0in'
+          }
+      )
+
+      # Write it to tempfile
+      tempfile = Tempfile.new(['show_application', '.pdf'], Rails.root.join('tmp'))
+      tempfile.binmode
+      tempfile.write pdf_file
+      tempfile.close
+
+      # # Attach that tempfile to dynamic form entry
+      unless pdf_file.blank?
+        self.update_attribute(:application_pdf, tempfile)
+      end
+    end
+
 
     def validate_on_draft
-      # dynamic_form_type.fields.each do |field|
-      #   if !self.properties[field.id.to_s].blank?
-      #     if field.field_type == "email_validation"
-      #       errors.add(field.name,'Not a valid email!') unless valid_email?(self.properties[field.id.to_s])
-      #     elsif field.field_type == "phone_validation"
-      #       errors.add(field.name,'Enter a valid phone number including area code!') unless valid_phone?(self.properties[field.id.to_s])
-      #     elsif field.field_type == "currency"
-      #       errors.add(field.name, 'Enter a valid amount!') unless valid_currency?(self.properties[field.id.to_s])
-      #     elsif field.field_type == "password"
-      #       errors.add(field.name, 'Please enter social security with only numbers') unless valid_social_security?(self.properties[field.id.to_s])
-      #     end
-      #   end
-      # end
+      dynamic_form_type.fields.each do |field|
+        if !self.properties[field.id.to_s].blank?
+          if field.field_type == "email_validation"
+            errors.add(field.name,'Not a valid email!') unless valid_email?(self.properties[field.id.to_s])
+          elsif field.field_type == "phone_validation"
+            errors.add(field.name,'Enter a valid phone number including area code!') unless valid_phone?(self.properties[field.id.to_s])
+          elsif field.field_type == "currency"
+            errors.add(field.name, 'Enter a valid amount!') unless valid_currency?(self.properties[field.id.to_s])
+          elsif field.field_type == "social-security"
+            errors.add(field.name, 'Please enter social security with only numbers') unless valid_social_security?(self.properties[field.id.to_s])
+          end
+        end
+      end
     end
 
 
@@ -97,7 +134,7 @@ module DynamicFormsEngine
             errors.add(field.name, 'Enter a valid amount!') unless valid_currency?(self.properties[field.id.to_s])
           elsif field.field_type == "agreement"
             errors.add(field.name, 'You must agree to the form before you can submit!') unless valid_agreement?(self.properties[field.id.to_s])
-          elsif field.field_type == "password"
+          elsif field.field_type == "social-security"
             errors.add(field.name, 'Please enter social security with only numbers') unless valid_social_security?(self.properties[field.id.to_s])
           else
             errors.add field.name, 'must not be blank'
@@ -106,29 +143,10 @@ module DynamicFormsEngine
       end
     end
 
-    # def validate_on_submit
-    #   dynamic_form_type.fields.each do |field|
-    #     if !self.properties[field.id.to_s].blank? || field.required? && !DynamicFormsEngine::DynamicFormField.default_width.include?(field.field_type)
-    #       if field.field_type == "email_validation"
-    #         errors.add(field.name,'Not a valid email!') unless valid_email?(self.properties[field.id.to_s])
-    #       elsif field.field_type == "phone_validation"
-    #         errors.add(field.name,'Enter a valid phone number including area code!') unless valid_phone?(self.properties[field.id.to_s])
-    #       elsif field.field_type == "currency"
-    #         errors.add(field.name, 'Enter a valid amount!') unless valid_currency?(self.properties[field.id.to_s])
-    #       elsif field.field_type == "agreement"
-    #         errors.add(field.name, 'You must agree to the form before you can submit!') unless valid_agreement?(self.properties[field.id.to_s])
-    #       elsif field.field_type == "password"
-    #         errors.add(field.name, 'Please enter social security with only numbers') unless valid_social_security?(self.properties[field.id.to_s])
-    #       elsif field.field_type == "check_box" && field.required? || field.field_type =="agreement" && field.required?
-    #         errors.add field.name, 'check box must be checked!' unless self.properties[field.id.to_s] == "1"
-    #       elsif field.field_type == "signature" && field.required? &&  self.signature.size < 25
-    #         errors.add field.name, 'must not be blank'
-    #       elsif  field.required? && properties[field.id.to_s].blank?
-    #         errors.add field.name, 'must not be blank'
-    #       end
-    #     end
-    #   end
-    # end
+    def decrypt_ss
+      social_security.decrypt 'cashrules'
+    end
+
 
     def file_upload_error_msgs
       if self.errors.size >= 1
@@ -154,6 +172,8 @@ module DynamicFormsEngine
     # end
 
     def each_field_with_value
+      non_value_fields = DynamicFormField.class_variable_get(:@@field_with_null_value).delete_if{ |field| field == "field_group"}
+      
       properties.each do |index, field|
         if field[:type].to_s == 'file_upload'
           attachment_field_id = field[:id]
@@ -161,11 +181,11 @@ module DynamicFormsEngine
           field[:attachment] = attachment
           yield attachment, field
         else
+          next if non_value_fields.include?(field[:type])
           yield index, field
         end
       end
     end
-
     
 
     def self.search(terms)
@@ -284,30 +304,38 @@ module DynamicFormsEngine
     #  This function transmutes the properties to a form that doesn't rely on the original field object
     # Should be run as before_create filter
     def format_properties
-      old_properties = self.properties
-      old_entry = DynamicFormEntry.find(self.id) if !self.new_record?
-      new_properties = {}
-      old_properties.each_with_index do |(field_id, field_value), index|
-        
-        field = DynamicFormField.find(field_id.to_i)
-        
-        # Prepend "Other: " to options_select_with_other field types
-        if field.field_type == "options_select_with_other" && !field.content_meta.include?(field_value)
-          field_value = "Other: " + field_value
-        end
-        new_properties[index] = {name: field.name, type: field.field_type, value: field_value, id: field_id}
-      end
-      # this re-submits the file upload file without the user to re-submit the file again
+      
+        old_properties = self.properties
+        old_entry = DynamicFormEntry.find(self.id) if !self.new_record?
+        new_properties = {}
+        old_properties.each_with_index do |(field_id, field_value), index|
+          
+          field = DynamicFormField.find(field_id.to_i)
 
-      # if old_entry && self.errors.size == 0 
-      #   old_entry.each_field_with_value do |index_val, field|
-      #     if field[:type] == "file_upload" && !old_properties.has_key?(field[:id])
-      #       last_property = new_properties.size
-      #       new_properties[last_property] = { name: field[:name], type: field[:type], value: field[:value], id: field[:id] } 
-      #     end
-      #   end
-      # end
-      self.properties = new_properties
+          
+          # Store other field choices in a hash
+          if field.field_type == "options_select_with_other" && !field.content_meta.include?(field_value)
+            field_value = { "Other" => field_value }
+            # encrypts social security field
+          elsif field.field_type == "social_security"
+            self.social_security = field_value
+            field_value = ''
+            # new_properties[index] = {name: field.name, type: field.field_type,  id: field_id}
+          end
+          new_properties[index] = {name: field.name, type: field.field_type, value: field_value, id: field_id}
+        end
+        # this re-submits the file upload file without the user to re-submit the file again
+
+        # if old_entry && self.errors.size == 0 
+        #   old_entry.each_field_with_value do |index_val, field|
+        #     if field[:type] == "file_upload" && !old_properties.has_key?(field[:id])
+        #       last_property = new_properties.size
+        #       new_properties[last_property] = { name: field[:name], type: field[:type], value: field[:value], id: field[:id] } 
+        #     end
+        #   end
+        # end
+        self.properties = new_properties
+    
     end
 
     def generate_uuid

@@ -1,5 +1,6 @@
 // following this guide: http://railsapps.github.io/twitter-bootstrap-rails.html
 // This separates any bootstrap style changes to this file
+// Host app style-sheet can also overide
 // @import "bootstrap";
 
 .breadcrumb.header{
@@ -50,6 +51,7 @@
     }
 }
 */
+
 body { padding-top: 70px; }
 
 //@import "bootstrap-responsive";
@@ -60,18 +62,12 @@ h1, h2, h3, h4, h5, h6{
 	font-weight: normal;
 	margin-top: 0px;
 }
-.navbar-collapse, .navbar-default .navbar-form {
-	border-color: #e7e7e7;
-	font-size: 13px;
+
+/*next and previous pager*/
+
+.pager li > a:visited{
+	background-color: #428BC9;
 }
-
-.navbar-default{
-	box-shadow: 0 0 20px #999;
-}
-
-
-
-
 
 fieldset {
 	border: 1px solid #c0c0c0;
@@ -149,16 +145,6 @@ legend {
 /* auth icons */
 .btn-fb-auth i, .btn-google-auth i{ padding-top: 0.2em; padding-left: 0.6em; }
 
-
-
-
-/* home */
-.home-icon{
-	font-size: 150px;
-	display: block;
-	margin: 0 auto;
-}
-
 /* table */
 .table-hover tbody tr:hover > td, .table-hover tbody tr:hover > th{
 	background-color: #DFDFDF;
@@ -208,4 +194,11 @@ fieldset.field-group{
 	color: #428BC9;
 }
 
+/*option field other*/
 
+/*@media screen and (min-width: 1092px){
+	.option-field{
+		margin-top: 35px;
+		margin-left: -87px;
+	}
+}*/

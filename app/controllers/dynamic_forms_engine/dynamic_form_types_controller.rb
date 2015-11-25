@@ -79,7 +79,7 @@ module DynamicFormsEngine
 
       def non_editable_dynamic_forms
         if current_user.id != @dynamic_form_type.user_id 
-          redirect_to(root_path, alert: 'Error: You can only view your own Dynamic forms' )
+          redirect_to(dynamic_form_entries_path, alert: 'Error: You can only view your own Dynamic forms' )
         end
       end
       # Never trust parameters from the scary internet, only allow the white list through.

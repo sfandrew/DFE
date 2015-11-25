@@ -82,6 +82,7 @@ module DynamicFormsEngine
     end
 
     # builds date select
+    # needs more refactoring when multiple date selects
     def date_select(f,field_id, field_value = nil)
 
       date_options = { "month_#{field_id}" => (1..12).map { |month| [Date::MONTHNAMES[month], month] }, 

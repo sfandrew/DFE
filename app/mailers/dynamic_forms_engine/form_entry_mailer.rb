@@ -9,7 +9,7 @@ module DynamicFormsEngine
 	  		else
 	  			@domain_name = "https://tenant-application.herokuapp.com"
 	  		end
-	  		mail(to: "#{form_entry.user.email}", subject: form_entry.in_progress ? 'Your Tenant applicaton has been saved' : 'Your Tenant application has been submitted')
+	  		mail(to: "#{form_entry.user.email}", subject: form_entry.in_progress ? 'Your Applicaton has been saved' : 'Your Application has been submitted')
 	  	end
 
 	end

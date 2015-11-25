@@ -52,6 +52,7 @@ module DynamicFormsEngine
     end
 
     def create
+      #non public form
       if current_user
         @dynamic_form_entry = current_user.dynamic_form_entries.new(dynamic_form_entry_params)
       else
@@ -71,6 +72,7 @@ module DynamicFormsEngine
 
       if @dynamic_form_entry.save
         if params[:submit_entry]
+          @dynamic_form_entry.create_pdf(@dynamic_form_entry, @building_apartments)
           FormEntryMailer.email_entry(@dynamic_form_entry).deliver
           redirect_to dynamic_form_entry_path(@dynamic_form_entry) + "?iframe=" + (params[:iframe] == "1" ? "1" : "0"), notice: "<strong>You have submitted your form entry!</strong>".html_safe
         else
@@ -85,7 +87,7 @@ module DynamicFormsEngine
     end
 
     def edit
-      redirect_to root_path, alert: 'You cannot edit your application once submitted' unless @dynamic_form_entry.in_progress
+      redirect_to dynamic_form_entries_path, alert: 'You cannot edit your application once submitted' unless @dynamic_form_entry.in_progress
       @file_upload = current_user.dynamic_form_entries.where(:id => params[:id]).first
     end
 
@@ -110,7 +112,9 @@ module DynamicFormsEngine
                 @dynamic_form_entry.attachments.find(value[:id]).delete
               end
             end
+
             if params[:submit_entry]
+              @dynamic_form_entry.create_pdf(@dynamic_form_entry, @building_apartments)
               FormEntryMailer.email_entry(@dynamic_form_entry).deliver
               redirect_to @dynamic_form_entry, notice: 'Below is your curent Form Entry Submission!'
             else
@@ -175,7 +179,7 @@ module DynamicFormsEngine
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def dynamic_form_entry_params
-      params.require(:dynamic_form_entry).permit(:dynamic_form_type_id,:signature,:last_section_saved, :in_progress,:attachments_attributes => [:id, :content_name,:filename, :filename_cache, :remove_filename,:content_meta],
+      params.require(:dynamic_form_entry).permit(:dynamic_form_type_id,:signature,:last_section_saved, :in_progress, :application_pdf, :attachments_attributes => [:id, :content_name,:filename, :filename_cache, :remove_filename,:content_meta],
         :contacts_attributes => [:phone, :contact_type,:user_id, :first_name, :company,:email,:uuid]).tap do |whitelisted|
         whitelisted[:properties] = params[:dynamic_form_entry][:properties]
       end

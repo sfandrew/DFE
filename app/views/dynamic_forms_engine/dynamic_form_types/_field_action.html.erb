@@ -1,5 +1,18 @@
 <script type="text/javascript">
 
+window.textAreaExpand = function(){
+  var $text_box = $('.long-description');
+  $text_box.on({
+    click: function(){
+      $(this).find('textarea').addClass('expand-input');
+    },
+    mouseleave: function(){
+      $(this).find('textarea').removeClass('expand-input');
+    }
+  });
+
+}
+
 window.fieldGroupValidation = function(){
 
   var myFunction = function() {
@@ -313,7 +326,11 @@ $(document).ready(window.fieldGroupValidation);
 $(document).ready(window.formFieldGroupErrors);
 $(document).ready(window.publicFormValidation);
 $(document).ready(window.contactFieldLimit);
+$(document).ready(window.textAreaExpand);
 $('.public').popover({trigger: 'hover'});
+$('.include-checkbox').popover({trigger: 'hover'});
+$('.required-checkbox').popover({trigger: 'hover'});
+$('.field-size').popover({trigger: 'hover'});
 
 
 // // Turbo links rdy (http://stackoverflow.com/questions/18770517/rails-4-how-to-use-document-ready-with-turbo-links)

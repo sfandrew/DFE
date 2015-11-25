@@ -4,7 +4,7 @@
   <%= f.label field.id, field.name.humanize, :class => "col-md-3 control-label" %>
   <div class="col-md-7">
 
-      <%= f.text_field field.id, value: field_value, :class => "form-control datepicker", :data => {:provide => 'datepicker'} %>
+      <%= f.text_field field.id, value: field_value, :class => "form-control datepicker" %>
 
     <% if defined?(errors) and errors.present? %>
 		  <small  class= "error-msg" style="color:red"><%= errors.join(', ') %></small>
@@ -16,6 +16,11 @@
 </div>
 
 <script type="text/javascript">
-$('.datepicker').datepicker();
-
+$('.datepicker').datepicker({
+  changeMonth: true,
+  changeYear: true,
+  yearRange: "1905:2050",
+  showAnim: "blind"
+});
 </script>
+
