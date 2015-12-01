@@ -21,7 +21,8 @@ $(document).ready(function(){
 
 		// Build out the buidling select menu
 		$.each(buildings["buildings"], function(key,value){
-			$building_dropdown.append($("<option></option>").attr("value",value["id"]).text(value["name"]));
+			var building_address = (value["address1"] + ' ' + value["city"] + ', ' + value["state"] + ' ' + value["zip"]);
+			$building_dropdown.append($("<option></option>").attr("value",value["id"]).text(building_address));
 		});
 		// Set the active option of the building select if one was specified by data-id
 		if($building_dropdown.attr("data-id")){
