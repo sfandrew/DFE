@@ -3,6 +3,8 @@ module DynamicFormsEngine
   	has_many :fields, class_name: "DynamicFormField",  :dependent => :destroy
     has_many :entries, class_name: "DynamicFormEntry"
 
+    belongs_to :user
+
     accepts_nested_attributes_for :fields, allow_destroy: true
 
     validates :name, :description, :fields, presence: true

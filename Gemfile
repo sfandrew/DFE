@@ -13,6 +13,7 @@ gem "sass-rails", '~> 4.0.2'
 gem "therubyracer"
 gem 'bootstrap-datepicker-rails'
 gem 'ransack'
+gem 'brakeman', :require => false
 
 
 # Declare any dependencies that are still in development here instead of in
