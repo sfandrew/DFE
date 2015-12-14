@@ -25,7 +25,7 @@
 					<%= field[:name] %>
 				</label>
 				<div class="col-sm-9">
-					<%= dynamic_form_entry.building_name(field[:value], building_apartments) %>
+					<%= dynamic_form_entry.get_building_name(building_apartments) %>
 				</div>
 			<% elsif field[:type] == "currency" %>
 				<label class="col-sm-3 control-label">

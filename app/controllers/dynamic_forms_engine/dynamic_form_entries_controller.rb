@@ -152,15 +152,12 @@ module DynamicFormsEngine
     end
 
     def public_form
-      set_dynamic_form_type if !@dynamic_form_type
-      if !@dynamic_form_type.is_public
-        redirect_to(root_path, alert: 'You must be signed in!')
-      end
+      set_dynamic_form_type unless @dynamic_form_type
     end
 
     # Since dynamic_form_type_id is set in different places depending on the action, we have to check a few places
     def set_dynamic_form_type
-      set_dynamic_form_entry if !@dynamic_form_entry
+      set_dynamic_form_entry unless @dynamic_form_entry
       if params[:dynamic_form_type_id]
         @dynamic_form_type = DynamicFormType.find(params[:dynamic_form_type_id])
       elsif params[:dynamic_form_entry] && params[:dynamic_form_entry][:dynamic_form_type_id]
