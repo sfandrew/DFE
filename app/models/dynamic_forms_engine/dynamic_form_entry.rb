@@ -2,6 +2,7 @@ module DynamicFormsEngine
   class DynamicFormEntry < ActiveRecord::Base
   	belongs_to :dynamic_form_type
     belongs_to :user
+    validates_presence_of :user
 
     serialize :properties, Hash
     
