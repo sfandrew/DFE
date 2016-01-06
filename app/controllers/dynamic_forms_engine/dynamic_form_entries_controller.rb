@@ -3,8 +3,7 @@ require_dependency "dynamic_forms_engine/application_controller"
 module DynamicFormsEngine
   class DynamicFormEntriesController < ApplicationController
     before_action :set_dynamic_form_entry, only: [:show, :edit, :update, :destroy]
-    before_filter :authenticate_user!, only: [:index,:destroy, :edit, :update, :form_entries]
-    before_action :public_form, only: [:new, :create, :show], if: -> { current_user.nil? }
+    # before_action :public_form, only: [:new, :create, :show], if: -> { current_user.nil? }
     before_action :set_dynamic_form_type, only: [:new, :create, :show, :form_entries, :edit, :update]
 
     def index

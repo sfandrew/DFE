@@ -124,7 +124,7 @@ module DynamicFormsEngine
 
     def validate_on_submit
       dynamic_form_type.fields.each do |field|
-        if field.field_type == "file_upload" && field.required? && !attachments_uploaded.include?(properties[field.id.to_s])
+        if field.field_type == "file_upload" && field.required? 
             errors.add(field.name, 'Please upload file')
         elsif properties[field.id.to_s].blank? && field.required? #|| (properties[field.id.to_s].blank? && field.required?) || (!properties[field.id.to_s].blank? && !field.required?)
           if field.field_type == "email_validation"
