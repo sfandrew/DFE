@@ -65,14 +65,7 @@ module DynamicFormsEngine
 
       params[:save_draft] ? @dynamic_form_entry.in_progress = true : @dynamic_form_entry.in_progress = false
 
-      #builds attachments
-      dynamic_form_entry_params[:attachments_attributes].each do |key, value|
-        next if value['filename_cache'].blank?
-        attachment = @dynamic_form_entry.attachments.build(value)
-        if value['filename_cache'].present?
-          attachment.filename = File.open(File.join(Rails.root, "public", value['filename_cache']))
-        end
-      end
+      build_attachments_and_delete
 
       if @dynamic_form_entry.save
         if params[:submit_entry]
@@ -109,14 +102,9 @@ module DynamicFormsEngine
             @dynamic_form_entry.in_progress = false
           end
 
-          if @dynamic_form_entry.update_attributes(dynamic_form_entry_params)
-            #deletes saved attachments
-            dynamic_form_entry_params[:attachments_attributes].each do |key, value|
-              if value['remove_filename'] == "1"
-                @dynamic_form_entry.attachments.find(value[:id]).delete
-              end
-            end
+          build_attachments_and_delete
 
+          if @dynamic_form_entry.update_attributes(dynamic_form_entry_params)
             if params[:submit_entry]
               @dynamic_form_entry.create_pdf(@dynamic_form_entry, @building_apartments)
               FormEntryMailer.email_entry(@dynamic_form_entry).deliver
@@ -144,6 +132,26 @@ module DynamicFormsEngine
     end
 
     private
+
+    def build_attachments_and_delete
+    # builds new attachments
+      dynamic_form_entry_params[:attachments_attributes].each do |key, value|
+        next if value[:filename_cache].blank?
+        if value[:id].empty?
+          attachment = @dynamic_form_entry.attachments.build(value)
+          attachment.filename = File.open(File.join(Rails.root, "public", value[:filename_cache]))
+        end
+        # deletes attachments
+        if value[:remove_filename] == "1"
+          if value[:id].empty?
+            attachment.remove_filename!
+          else
+            @dynamic_form_entry.attachments.find(value[:id]).delete #deletes from attachments
+            params[:dynamic_form_entry][:attachments_attributes].delete(key) #deletes from params
+          end
+        end
+      end
+    end
 
     def update_section_tab_via_ajax
        @dynamic_form_entry.last_section_saved =  dynamic_form_entry_params[:last_section_saved]
