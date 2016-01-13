@@ -14,12 +14,14 @@
 
 /* for nav bar collapse break point */
 /*this was used for dynamic forms host app*/
-/*@media (max-width: 990px) {
+
+
+/*@media (min-width: 500px) and (max-width: 800px) {
     .navbar-header {
         float: none;
-    }
+    }*/
 
-    .navbar-collapse .nav > li.divider{
+/*    .navbar-collapse .nav > li.divider{
    		*width: 100%;
    		height: 1px;
    		margin: 9px 1px;
@@ -48,9 +50,10 @@
     .navbar-nav>li>a {
         padding-top: 10px;
         padding-bottom: 10px;
-    }
-}
+    }*/
+/*}
 */
+
 
 body { padding-top: 70px; }
 

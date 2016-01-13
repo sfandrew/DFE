@@ -78,13 +78,13 @@
 
           <td>
             <% if dynamic_form_entry.in_progress %>
-              <%= link_to edit_dynamic_form_entry_path(dynamic_form_entry), :class => 'btn btn-danger' do %>
-                <i class="fa fa-pencil-square-o"></i> IN DRAFT
+              <% if current_user.admin? && current_user != dynamic_form_entry.user %>
+                <%=  link_to 'IN DRAFT', dynamic_form_entry, :class => 'btn btn-danger' %>
+              <% else %>
+                <%=link_to 'IN DRAFT', edit_dynamic_form_entry_path(dynamic_form_entry), :class => 'btn btn-danger' %>
               <% end %>
             <% else %>
-              <%= link_to dynamic_form_entry, :class => 'btn btn-success' do %>
-                <i class="fa fa-check"></i> SUBMITTED
-              <% end %>
+              <%= link_to 'SUBMITTED', dynamic_form_entry, :class => 'btn btn-success' %> 
             <% end %>
           </td>
           <td><%= dynamic_form_entry.get_building_name(@building_apartments) %></td>

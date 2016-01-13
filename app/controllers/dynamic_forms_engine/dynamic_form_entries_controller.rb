@@ -9,12 +9,10 @@ module DynamicFormsEngine
     def index
       if !params[:search].blank?
         @dynamic_form_entries = current_user.dynamic_form_entries.search(params[:search])
+      elsif current_user.admin? && params[:user].present?
+        @dynamic_form_entries = DynamicFormEntry.where(:user => params[:user])
       else
-        if current_user.admin? && params[:user].present?
-          @dynamic_form_entries = DynamicFormEntry.where(:user => params[:user])
-        else
-           @dynamic_form_entries = current_user.dynamic_form_entries.all
-        end
+        @dynamic_form_entries = current_user.dynamic_form_entries.all
       end
       @dynamic_form_entries = @dynamic_form_entries.includes(:dynamic_form_type)
       @entries_name = @dynamic_form_entries.map { |form_entry| [form_entry.dynamic_form_type.name, form_entry.dynamic_form_type.id] }.uniq unless @Dynamic_form_entries.blank?
@@ -39,6 +37,7 @@ module DynamicFormsEngine
     end
 
     def show
+
       respond_to do |format|
         format.html
         format.print { render "show.html.erb" }
@@ -178,7 +177,7 @@ module DynamicFormsEngine
 
     # Use callbacks to share common setup or constraints between actions.
     def set_dynamic_form_entry
-      if current_user.nil?
+      if current_user.admin?
         @dynamic_form_entry = DynamicFormEntry.where(:id => params[:id]).first
       else
         @dynamic_form_entry = current_user.dynamic_form_entries.where( :id => params[:id] ).first || DynamicFormEntry.find_by_uuid(params[:id])
