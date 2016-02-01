@@ -66,6 +66,20 @@ module DynamicFormsEngine
 
     end
 
+    def payment_status(dynamic_form_entry)
+      if dynamic_form_entry.unpaid_app?
+        link_to main_app.new_transaction_path(dynamic_form_entry), :class => 'btn btn-danger', :title => 'Need to pay App fee', :rel => 'tooltip' do
+          content_tag :i, '' , :class => 'fa fa-exclamation-triangle fa-lg'
+        end
+      elsif dynamic_form_entry.payment
+        link_to '#', :class => 'btn btn-success', :title =>  "Paid on #{dynamic_form_entry.payment.created_at.strftime('%-m/%-d/%y')}", :rel => 'tooltip' do
+          content_tag :i, '' , :class => 'fa fa-check-square-o fa-lg'
+        end
+      else
+        content_tag :mark, 'Submit Application' 
+      end
+    end
+
     # Handles logic and rendering of individual field when creating dynamic form entries
     def render_field_with_value(field, errors, builder, dynamic_form_entry)
       field_value = nil

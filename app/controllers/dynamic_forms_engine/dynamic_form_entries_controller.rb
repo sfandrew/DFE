@@ -153,8 +153,7 @@ module DynamicFormsEngine
     end
 
     def update_section_tab_via_ajax
-       @dynamic_form_entry.last_section_saved =  dynamic_form_entry_params[:last_section_saved]
-       @dynamic_form_entry.save(:validate => false)
+       @dynamic_form_entry.update_column(:last_section_saved, dynamic_form_entry_params[:last_section_saved])
     end
 
     def public_form

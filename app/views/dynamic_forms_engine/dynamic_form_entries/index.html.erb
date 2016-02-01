@@ -53,13 +53,11 @@
       <th>Type</th>
       <!-- <th>Properties</th> WAS USED TO SHOW WHAT FIELDS WERE INCLUDED -->
       <th>Status</th>
+      <th>Applcation fee Paid?</th>
       <th>Building</th>
       <th>Unit</th>
       <th>Submitted</th>
-      <th width="1%"></th>
-      <th width="1%"></th>
-      <th width="1%"></th>
-      <th width="1%"></th>
+
     </tr>
   </thead>
 
@@ -87,11 +85,13 @@
               <%= link_to 'SUBMITTED', dynamic_form_entry, :class => 'btn btn-success' %> 
             <% end %>
           </td>
+          <td><%= payment_status dynamic_form_entry %></td>
           <td><%= dynamic_form_entry.get_building_name(@building_apartments) %></td>
           <td><%= dynamic_form_entry.try(:get_building_size) %></td>
           <td>
             <%= dynamic_form_entry.created_at.strftime(" %l:%M %p %b. %d, %Y") %>
           </td>
+
 
           <!-- <td>
             <%= link_to 'CSV', dynamic_form_entry_path(dynamic_form_entry, format: :csv), :class => 'btn btn-default' %>
@@ -116,3 +116,5 @@
   <% if request.original_url =~ /(.print)/ %>
     <%= javascript_tag "window.print()" %>
   <% end %>
+
+<%= javascript_tag "$('.fa-lg').tooltip();" %>

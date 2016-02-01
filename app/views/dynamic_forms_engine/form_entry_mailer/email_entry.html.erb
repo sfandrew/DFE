@@ -8,4 +8,10 @@
 	<br>
 	<br> 
 		<%= link_to @form_entry.dynamic_form_type.name, @form_entry.application_pdf.url %>
+
+	<br>
+	<br>
+	If you have not already, please pay your Application Processing fee. Your application will not be fully completed until the Application Processing fee is paid.
+	<br>
+	<%= link_to 'Pay Application Processing Fee', "#{domain_name}/dynamic_forms_engine/dynamic_form_entries" %>
 <% end %>

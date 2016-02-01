@@ -33,6 +33,10 @@ module DynamicFormsEngine
     #   return nil
     # end
 
+    def form_type_name
+      dynamic_form_type.name
+    end
+
     def is_tenant_app?
       dynamic_form_type.name == "Tenant Application"
     end

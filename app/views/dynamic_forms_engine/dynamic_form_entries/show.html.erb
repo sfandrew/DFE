@@ -10,8 +10,14 @@
 	<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
 		<% if params[:iframe] != "1" %>
 			<div class="btn-group pull-right hide-print">
+				<% if @dynamic_form_entry.unpaid_app? %>
+					<%= link_to main_app.new_transaction_path(@dynamic_form_entry), :rel => 'tooltip', :title => 'Paying the application fee ensures your application is complete', 
+																													:id => 'app-fee', :class => 'btn btn-danger' do %>
+						<i class="fa fa-usd"></i> PAY APPLICATION FEE
+					<% end %>
+				<% end %>
 				<%= link_to dynamic_form_entry_path(@dynamic_form_entry, format: :print),:class => 'print-index btn btn-success' do %>
-            	<i class="fa fa-print"></i> Print Entry
+            	<i class="fa fa-print"></i> Print Application
           		<% end %>
 			</div>
 		<% end %>
@@ -19,6 +25,10 @@
 </div>
 
 <%= render partial: 'show_application', locals: { dynamic_form_entry: @dynamic_form_entry, building_apartments: @building_apartments } %>
+
+<script type="text/javascript">
+	$('#app-fee').tooltip();
+</script>
 
 <% if request.original_url =~ /(.print)/ %>
     <%= javascript_tag "window.print()" %>

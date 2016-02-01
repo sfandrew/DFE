@@ -8,7 +8,9 @@
     <div class="btn-group btn-breadcrumb">
       <% @dynamic_form_type.ordered_fields.each do |type| %>
         <% if type.field_type == "field_group" %>
-          <a href="#" class="btn btn-default" data-step-id="step_<%= type.id %>" data-remote="true" data-field-group-name="<%= type.name %>"><%= type.name %> <span class=""></span></a>
+            <%= link_to '#', :class => 'btn btn-default', :data => { :step_id => 'step_' +type.id.to_s, :field_group_name => type.name, :remote => true } do %>
+            <%= type.name %><span></span>
+          <% end %>
         <% end %>
       <% end %>
     </div>
@@ -45,7 +47,9 @@
     <% end %>
     
 
-    <%= f.hidden_field  :dynamic_form_type_id, :value => @dynamic_form_type.id %>
+    <%= f.hidden_field  :dynamic_form_type_id, :value => @dynamic_form_type.id  %>
+    <%= f.hidden_field  :last_section_saved, :id => 'section-saved' if dynamic_form_entry.new_record? %>
+    
     <%= f.fields_for :properties, OpenStruct.new(Hash[dynamic_form_entry.properties.map{|k,v| [k.to_s, v]}]) do |builder| %>
         <%= render_fields(dynamic_form_entry, builder) %>
     <% end %>
