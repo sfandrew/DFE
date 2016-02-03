@@ -5,7 +5,7 @@ module DynamicFormsEngine
     
     before_filter :authenticate_user!
     before_action :set_dynamic_form_type, only: [:show, :edit, :update, :destroy]
-    before_filter :non_editable_dynamic_forms, only: [:show, :edit, :update, :destroy]
+    # before_filter :non_editable_dynamic_forms, only: [:show, :edit, :update, :destroy]
 
     def index
       @dynamic_form_types = DynamicFormType.where(:user_id => current_user.id)
