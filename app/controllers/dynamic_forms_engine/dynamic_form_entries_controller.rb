@@ -9,7 +9,7 @@ module DynamicFormsEngine
     def index
       if !params[:search].blank?
         @dynamic_form_entries = current_user.dynamic_form_entries.search(params[:search])
-      elsif current_user.admin? && params[:user].present?
+      elsif current_user.authorized_users? && params[:user].present?
         @dynamic_form_entries = DynamicFormEntry.where(:user => params[:user])
       else
         @dynamic_form_entries = current_user.dynamic_form_entries.all
@@ -176,7 +176,7 @@ module DynamicFormsEngine
 
     # Use callbacks to share common setup or constraints between actions.
     def set_dynamic_form_entry
-      if current_user.admin?
+      if current_user.authorized_users?
         @dynamic_form_entry = DynamicFormEntry.where(:id => params[:id]).first
       else
         @dynamic_form_entry = current_user.dynamic_form_entries.where( :id => params[:id] ).first || DynamicFormEntry.find_by_uuid(params[:id])
