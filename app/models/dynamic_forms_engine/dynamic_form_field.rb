@@ -10,7 +10,7 @@ module DynamicFormsEngine
     @@field_width_choices = ["false","3","4","5","6","8","12"]
     @@field_with_null_value = ["short_description","divider","field_group","large_header","long_description","medium_header","spacer"]
 
-  	belongs_to :dynamic_form_type
+    belongs_to :dynamic_form_type
     # has_many :attachments, :as => :attachable, :dependent => :destroy
     # accepts_nested_attributes_for :attachments, :allow_destroy => :true, reject_if: proc { |attributes| attributes["filename"].nil? }
 
@@ -71,6 +71,10 @@ module DynamicFormsEngine
           self.content_meta << ",Other"
         end
       end
+    end
+
+    def type_field_group?
+      field_type == 'field_group'
     end
 
     def attachment?
