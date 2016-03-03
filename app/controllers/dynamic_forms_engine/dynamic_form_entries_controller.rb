@@ -8,11 +8,11 @@ module DynamicFormsEngine
 
     def index
       if !params[:search].blank?
-        @dynamic_form_entries = current_user.dynamic_form_entries.search(params[:search])
+        @dynamic_form_entries = current_user.dynamic_form_entries.search(params[:search]).order(updated_at: :desc)
       elsif current_user.authorized_users? && params[:user].present?
-        @dynamic_form_entries = DynamicFormEntry.where(:user => params[:user])
+        @dynamic_form_entries = DynamicFormEntry.where(:user => params[:user]).order(updated_at: :desc)
       else
-        @dynamic_form_entries = current_user.dynamic_form_entries.all
+        @dynamic_form_entries = current_user.dynamic_form_entries.order(updated_at: :desc)
       end
       @dynamic_form_entries = @dynamic_form_entries.includes(:dynamic_form_type)
       @entries_name = @dynamic_form_entries.map { |form_entry| [form_entry.dynamic_form_type.name, form_entry.dynamic_form_type.id] }.uniq unless @Dynamic_form_entries.blank?
