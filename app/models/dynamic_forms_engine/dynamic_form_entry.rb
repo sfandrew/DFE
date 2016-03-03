@@ -72,7 +72,7 @@ module DynamicFormsEngine
       attachments.map(&:content_meta)
     end
 
-    def create_pdf(dynamic_form_entry, building_apartments)
+    def create_pdf(dynamic_form_entry, building_apartments = nil)
       wicked = WickedPdf.new
       # Make a PDF in memory
       pdf_file = wicked.pdf_from_string( 

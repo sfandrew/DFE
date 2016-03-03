@@ -1,14 +1,19 @@
 <% if @form_entry.in_progress %>
-	Your current application is in progress and can accessed thru this url 
+	Your current application is in progress and can be accessed thru this link
 	<br>
 	<br>
-		<%= link_to "#{@domain_name}/dynamic_forms_engine/dynamic_form_entries/#{@form_entry.uuid}", "#{@domain_name}/dynamic_forms_engine/dynamic_form_entries/#{@form_entry.uuid}/edit" %>
+		<%= link_to "#{@form_entry.dynamic_form_type.name}", "#{@domain_name}/dynamic_forms_engine/dynamic_form_entries/#{@form_entry.id}/edit" %>
+	<br>
+	<br>
+	And can be downloaded here
+	<br>
+	<br>
+		<%= link_to 'Download current Application',  @form_entry.application_pdf.url %>
 <% else %>
 	Thank you for submitting your application, your application can be downloaded below,
 	<br>
 	<br> 
 		<%= link_to @form_entry.dynamic_form_type.name, @form_entry.application_pdf.url %>
-
 	<br>
 	<br>
 	If you have not already, please pay your Application Processing fee. Your application will not be fully completed until the Application Processing fee is paid.
