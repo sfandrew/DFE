@@ -9,10 +9,12 @@
 		display: none;
 	}
 	.print-title, .print-title-size{
-		display: block;
+		
 		text-align: center;
 	}
-
-
+	.print-table label{
+    	font-weight: bolder;
+  	}
+  	
 }
 

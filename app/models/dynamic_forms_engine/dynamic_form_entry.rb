@@ -68,6 +68,10 @@ module DynamicFormsEngine
       field_value == "1"
     end
 
+    def options_field_value(field)
+      field[:value].is_a?(Hash) ? field[:value].keys[0] + ': ' + field[:value].values[0] : field[:value]
+    end
+
     def attachments_uploaded
       attachments.map(&:content_meta)
     end

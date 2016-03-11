@@ -1,0 +1,5 @@
+
+<%= render  'print_pdf_css.html.erb' %>
+<div id="print-page">
+	<%= render partial: 'show_application.html.erb', locals: { dynamic_form_entry: @dynamic_form_entry, building_apartments: @building_apartments } %>
+</div>

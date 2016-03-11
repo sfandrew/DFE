@@ -1,15 +1,4 @@
-<style type="text/css">
-	table, th,td, .print-table{
-		border: 1px solid black;
-	}
-	th:nth-child(n+5), td:nth-child(n+5){
-		display: none;
-	}
-	.print-title, .print-title-size{
-		display: block;
-		text-align: center;
-	}
-</style>
 
-<%= render partial: 'dynamic_forms_engine/dynamic_form_entries/show_application', locals: { dynamic_form_entry: dynamic_form_entry, building_apartments:building_apartments } %>
+<%= render partial: 'dynamic_forms_engine/dynamic_form_entries/print_pdf_css' %>
+<%= render partial: 'dynamic_forms_engine/dynamic_form_entries/show_application', locals: { dynamic_form_entry: dynamic_form_entry, building_apartments: building_apartments } %>
 

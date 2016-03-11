@@ -40,7 +40,7 @@ module DynamicFormsEngine
 
       respond_to do |format|
         format.html
-        format.print { render "show.html.erb" }
+        format.print { render "show_application.print" }
         format.csv { render text: @dynamic_form_entry.to_csv }
         format.xml { @array_for_xml = @dynamic_form_entry.to_array}
       end
