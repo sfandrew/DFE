@@ -68,12 +68,12 @@ module DynamicFormsEngine
 
     def payment_status(dynamic_form_entry)
       if dynamic_form_entry.unpaid_app?
-        link_to main_app.new_transaction_path(dynamic_form_entry), :class => 'btn btn-danger', :title => 'Need to pay App fee', :rel => 'tooltip' do
+        link_to main_app.new_transaction_path(dynamic_form_entry), :class => 'btn btn-info', :title => 'Pay App fee if recent payment within 6 months', :rel => 'tooltip' do
           content_tag :i, '' , :class => 'fa fa-exclamation-triangle fa-lg'
         end
       elsif dynamic_form_entry.payment
-        link_to '#', :class => 'btn btn-success', :title =>  "Paid on #{dynamic_form_entry.payment.created_at.strftime('%-m/%-d/%y')}", :rel => 'tooltip' do
-          content_tag :i, '' , :class => 'fa fa-check-square-o fa-lg'
+        link_to '#', :class => 'btn btn-success' do
+          content_tag :i, " Paid on #{dynamic_form_entry.payment.created_at.strftime('%-m/%-d/%y')}" , :class => 'fa fa-check-square-o fa-lg'
         end
       else
         content_tag :mark, 'Submit Application' 

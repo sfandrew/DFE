@@ -52,7 +52,8 @@
       <tr class="info">
         <th>Type</th>
         <th>Status</th>
-        <th>Applcation fee Paid?</th>
+        <th>Application fee Paid on<br><small>Covers up to 6 months</small>
+        </th>
         <th>Building</th>
         <th>Unit</th>
         <th>Submitted</th>
@@ -65,13 +66,6 @@
         <% @dynamic_form_entries.each do |dynamic_form_entry| %>
           <tr>
             <td><strong><%= dynamic_form_entry.dynamic_form_type.try(:name) %></strong></td>
-
-            <!-- <td class="form-properties">
-                <% dynamic_form_entry.properties.first(5).each do |key,value| %>
-                  <li><%= value[:type] %> field</li>
-                <% end %>
-            </td> -->
-
             <td>
               <% if dynamic_form_entry.in_progress %>
                 <% if current_user.authorized_users? && current_user != dynamic_form_entry.user %>
@@ -87,20 +81,8 @@
             <td><%= dynamic_form_entry.get_building_name(@building_apartments) %></td>
             <td><%= dynamic_form_entry.try(:get_building_size) %></td>
             <td>
-              <%= dynamic_form_entry.created_at.strftime(" %l:%M %p %b. %d, %Y") %>
+              <%= dynamic_form_entry.updated_at.strftime(" %l:%M %p %b. %d, %Y") %>
             </td>
-
-
-            <!-- <td>
-              <%= link_to 'CSV', dynamic_form_entry_path(dynamic_form_entry, format: :csv), :class => 'btn btn-default' %>
-            </td>
-            <td>
-              <%= link_to 'XML', dynamic_form_entry_path(dynamic_form_entry, format: :xml), :class => 'btn btn-default'%>
-            </td>
-            <td>
-              <%= link_to 'View', dynamic_form_entry, :class => 'btn btn-info' %>
-            </td> -->
-
           </tr>
         <% end %>
       <% else %>
