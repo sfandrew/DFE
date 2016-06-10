@@ -1,5 +1,11 @@
 <div align="center">
 	<h1 id="main-header"><strong><%= @dynamic_form_entry.dynamic_form_type.name %></strong></h1>
+	<% if @dynamic_form_entry.is_claridge_app? %>
+			<address>
+				<strong>634 15th street</strong><br>
+				Oakland, CA 94612<br>
+			</address>
+		<% end %>
 	<h4><%= @dynamic_form_entry.dynamic_form_type.description %></h4>
 </div>
 
