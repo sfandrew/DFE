@@ -70,6 +70,7 @@ module DynamicFormsEngine
         if params[:submit_entry]
           @dynamic_form_entry.create_pdf(@dynamic_form_entry, @building_apartments)
           FormEntryMailer.email_entry(@dynamic_form_entry).deliver
+          FormEntryMailer.claridge_notification.deliver if @dynamic_form_entry.is_claridge_app?
           redirect_to dynamic_form_entry_path(@dynamic_form_entry) + "?iframe=" + (params[:iframe] == "1" ? "1" : "0"), notice: "<strong>You have submitted your form entry!</strong>".html_safe
         else
           if params[:email_recipient]
@@ -110,6 +111,7 @@ module DynamicFormsEngine
             if params[:submit_entry]
               @dynamic_form_entry.create_pdf(@dynamic_form_entry, @building_apartments)
               FormEntryMailer.email_entry(@dynamic_form_entry).deliver
+              FormEntryMailer.claridge_notification.deliver if @dynamic_form_entry.is_claridge_app?
               redirect_to @dynamic_form_entry, notice: 'Below is your curent Form Entry Submission!'
             else
               if params[:email_recipient]

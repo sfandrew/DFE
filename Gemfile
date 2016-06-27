@@ -16,6 +16,7 @@ gem 'ransack'
 gem 'brakeman', :require => false
 
 
+
 # Declare any dependencies that are still in development here instead of in
 # your gemspec. These might include edge Rails or gems from your path or
 # Git. Remember to move these dependencies to your gemspec before releasing
@@ -24,5 +25,5 @@ gem 'brakeman', :require => false
 group :development do 
 	# To use debugger
 	gem 'pry'
-	gem 'pry-debugger'
+	gem 'pry-byebug'
 end

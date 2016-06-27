@@ -12,5 +12,9 @@ module DynamicFormsEngine
 	  		mail(to: "#{form_entry.user.email}", subject: form_entry.in_progress ? 'Your Applicaton has been saved' : 'Your Application has been submitted')
 	  	end
 
+	  	def claridge_notification
+	  		mail(to: '63415th@sfrent.net', subject: 'New Claridge Application Submitted')
+	  	end
+
 	end
 end
