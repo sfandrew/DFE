@@ -46,6 +46,8 @@
 <%= content_tag :div, nil, class: 'clear spacer' %>
 <% end %>
 
+
+
 <div class="table">
   <table class="table table-striped table-hover entries-table">
     <thead>
@@ -93,6 +95,8 @@
     </tbody>
   </table>
 </div>
+
+<%= will_paginate @entries, renderer: BootstrapPagination::Rails %>
 
   <% if request.original_url =~ /(.print)/ %>
     <%= javascript_tag "window.print()" %>

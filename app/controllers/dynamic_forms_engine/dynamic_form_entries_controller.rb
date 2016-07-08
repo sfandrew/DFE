@@ -14,7 +14,7 @@ module DynamicFormsEngine
       else
         @dynamic_form_entries = current_user.dynamic_form_entries.order(updated_at: :desc)
       end
-      @dynamic_form_entries = @dynamic_form_entries.includes(:dynamic_form_type)
+      @dynamic_form_entries = @dynamic_form_entries.includes(:dynamic_form_type).paginate(:page => params[:page], :per_page => 30)
       @entries_name = @dynamic_form_entries.map { |form_entry| [form_entry.dynamic_form_type.name, form_entry.dynamic_form_type.id] }.uniq unless @Dynamic_form_entries.blank?
       respond_to do |format|
         format.print { render "index.html.erb" }

@@ -208,17 +208,22 @@ module DynamicFormsEngine
         search_query = DynamicFormsEngine::DynamicFormEntry.includes(:dynamic_form_type).order("#{terms[:order_by]} #{terms[:order]}")
       end
 
-      if !terms[:name].blank?
-        search_query = search_query.where(:dynamic_form_type_id => terms[:name].to_i)
+      if !terms[:application_type].blank?
+        search_query = search_query.where(:dynamic_form_type_id => terms[:application_type].to_i)
       end
 
-      if !terms[:properties].blank?
-        search_query = search_query.where("properties like ?", "%#{terms[:properties]}%")
+      if !terms[:status].blank?
+         search_query = search_query.where(:in_progress => terms[:status])
       end
+
+      # if !terms[:properties].blank?
+      #   search_query = search_query.where("properties like ?", "%#{terms[:properties]}%")
+      # end
 
       if !terms[:start].blank? && !terms[:end].blank?
           date_start = Date.strptime(terms[:start], '%m/%d/%Y')
           date_end = Date.strptime(terms[:end], '%m/%d/%Y')
+          
           search_query = search_query.where("created_at" => date_start..date_end)
       end
       return search_query
