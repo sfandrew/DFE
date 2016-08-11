@@ -13,7 +13,7 @@ module DynamicFormsEngine
 	  	end
 
 	  	def claridge_notification
-	  		mail(to: '63415th@sfrent.net', subject: 'New Claridge Application Submitted')
+	  		mail(to: '63415th@sfrent.net, nicole@sfrent.net', subject: 'New Claridge Application Submitted')
 	  	end
 
 	end
